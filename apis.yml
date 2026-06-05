@@ -1,0 +1,68 @@
+aid: limble-cmms
+name: Limble CMMS
+description: >-
+  Limble CMMS is a cloud-based computerized maintenance management system (CMMS) for
+  manufacturing, facilities, and fleet maintenance teams. The Limble REST API V2 provides
+  programmatic access to assets, locations, work orders, preventive maintenance schedules,
+  parts inventory, purchase orders, vendors, users, and webhooks across regionally
+  distributed endpoints covering North America, Canada, Australia, and Europe.
+type: Index
+url: https://raw.githubusercontent.com/api-evangelist/limble-cmms/refs/heads/main/apis.yml
+tags:
+  - CMMS
+  - Maintenance Management
+  - Asset Management
+  - Manufacturing
+  - Facility Management
+  - Work Orders
+created: '2026-06-05'
+modified: '2026-06-05'
+specificationVersion: '0.19'
+apis:
+  - aid: limble-cmms:limble-api-v2
+    name: Limble API V2
+    description: >-
+      The Limble CMMS REST API V2 provides HTTPS access to maintenance management
+      data including assets, locations, work orders, preventive maintenance tasks, parts,
+      purchase orders, users, vendors, teams, roles, budgets, and webhooks. Uses Basic
+      authentication. Regional endpoints available for US, Canada, Australia, and Europe,
+      plus a dedicated 21 CFR Part 11 compliant endpoint for pharmaceutical and life
+      sciences manufacturing.
+    humanURL: https://apidocs.limblecmms.com/
+    baseURL: https://api.limblecmms.com
+    tags:
+      - CMMS
+      - Maintenance Management
+      - Work Orders
+      - Preventive Maintenance
+      - Asset Management
+      - REST
+    properties:
+      - url: https://apidocs.limblecmms.com/
+        type: Documentation
+      - url: https://www.postman.com/limbleapiqa/limble-solutions-llc-s-public-workspace/documentation/zskh2o7/limble-api-v2
+        type: Example
+common:
+  - type: Website
+    url: https://limble.com
+  - type: Documentation
+    url: https://apidocs.limblecmms.com/
+  - type: Portal
+    url: https://help.limblecmms.com/en/collections/3322827-api
+  - type: Blog
+    url: https://limble.com/blog/
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/limble-cmms
+  - type: YouTube
+    url: https://www.youtube.com/@LimbleCMMS
+  - type: Pricing
+    url: https://limble.com/pricing/
+  - type: About
+    url: https://limble.com/company/
+  - type: Integrations
+    url: https://limble.com/integrations/
+  - type: SignUp
+    url: https://limble.com/register/
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
