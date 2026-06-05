@@ -1,0 +1,9 @@
+{
+  "operation": "POST /v2/assets",
+  "response": {
+    "status": 201,
+    "body": {
+      "assetID": "10728"
+    }
+  }
+}

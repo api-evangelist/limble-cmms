@@ -1,0 +1,144 @@
+{
+  "name": "Task",
+  "description": "Limble CMMS Task field structure",
+  "source": "https://api.limblecmms.com/openapi.json",
+  "fields": {
+    "meta": {
+      "_type": "object",
+      "_fields": {
+        "invoices": {
+          "type": "string"
+        },
+        "labor": {
+          "type": "string"
+        },
+        "partsUsage": {
+          "type": "string"
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "taskID": {
+      "type": "integer"
+    },
+    "poIDs": {
+      "type": "array"
+    },
+    "name": {
+      "type": "string"
+    },
+    "userID": {
+      "type": "integer"
+    },
+    "teamID": {
+      "type": "integer"
+    },
+    "locationID": {
+      "type": "integer"
+    },
+    "template": {
+      "type": "boolean"
+    },
+    "createdDate": {
+      "type": "integer"
+    },
+    "scheduledStart": {
+      "type": "integer"
+    },
+    "scheduledEnd": {
+      "type": "integer"
+    },
+    "due": {
+      "type": "integer"
+    },
+    "description": {
+      "type": "string"
+    },
+    "dateCompleted": {
+      "type": "integer"
+    },
+    "lastEdited": {
+      "type": "integer"
+    },
+    "lastEditedByUser": {
+      "type": "integer"
+    },
+    "completedByUser": {
+      "type": "integer"
+    },
+    "assetID": {
+      "type": "integer"
+    },
+    "completedUserWage": {
+      "type": "integer"
+    },
+    "priority": {
+      "type": "integer"
+    },
+    "priorityID": {
+      "type": "integer"
+    },
+    "downtime": {
+      "type": "integer"
+    },
+    "completionNotes": {
+      "type": "null"
+    },
+    "requestorName": {
+      "type": "null"
+    },
+    "requestorEmail": {
+      "type": "null"
+    },
+    "requestorPhone": {
+      "type": "null"
+    },
+    "requestTitle": {
+      "type": "null"
+    },
+    "requestField1": {
+      "type": "null"
+    },
+    "requestField2": {
+      "type": "null"
+    },
+    "requestField3": {
+      "type": "null"
+    },
+    "requestDropdown1": {
+      "type": "null"
+    },
+    "requestDropdown2": {
+      "type": "null"
+    },
+    "requestDropdown3": {
+      "type": "null"
+    },
+    "requestorDescription": {
+      "type": "null"
+    },
+    "meta1": {
+      "type": "null"
+    },
+    "meta2": {
+      "type": "null"
+    },
+    "meta3": {
+      "type": "null"
+    },
+    "statusID": {
+      "type": "integer"
+    },
+    "type": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "integer"
+    }
+  }
+}

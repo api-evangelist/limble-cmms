@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.limblecmms.com/schemas/user",
+  "title": "User",
+  "description": "Limble CMMS User object schema",
+  "type": "object",
+  "properties": {
+    "userID": {
+      "type": "integer"
+    },
+    "username": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string",
+      "format": "utc-millisec"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "wage": {
+      "type": "integer"
+    },
+    "active": {
+      "type": "string"
+    },
+    "emailNotificationActive": {
+      "type": "string"
+    },
+    "pushNotificationActive": {
+      "type": "string"
+    },
+    "workdayHours": {
+      "type": "integer"
+    },
+    "dateAdded": {
+      "type": "integer"
+    },
+    "teams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "teamID": {
+            "type": "integer"
+          },
+          "locationID": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "roleID": {
+            "type": "integer"
+          },
+          "locationID": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

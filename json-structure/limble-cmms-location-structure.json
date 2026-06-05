@@ -1,0 +1,50 @@
+{
+  "name": "Location",
+  "description": "Limble CMMS Location field structure",
+  "source": "https://api.limblecmms.com/openapi.json",
+  "fields": {
+    "locationID": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "regionID": {
+      "type": "integer"
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "weeklyOperationHours": {
+      "type": "integer"
+    },
+    "address": {
+      "type": "null"
+    },
+    "address2": {
+      "type": "null"
+    },
+    "phone": {
+      "type": "null"
+    },
+    "metaField1": {
+      "type": "null"
+    },
+    "metaField2": {
+      "type": "null"
+    },
+    "metaField3": {
+      "type": "null"
+    },
+    "geoLocation": {
+      "type": "null"
+    },
+    "workRequestPortal": {
+      "type": "string",
+      "format": "uri"
+    },
+    "currencyCode": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "operation": "GET /v2/parts",
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "partID": 159,
+        "number": "25x25x1 - Vendor b - location 2",
+        "name": "Filter",
+        "generalStock": -14,
+        "unitCode": "each",
+        "generalPrice": 5.99,
+        "category": "Air Filters",
+        "categoryID": 7,
+        "locationID": 163,
+        "location": "Bin 002",
+        "minQtyStatus": 1,
+        "minQtyThreshold": 10,
+        "maxQtyThreshold": -1,
+        "staleThreshold": -1,
+        "staleStatus": 0,
+        "lastEdited": 1636670374,
+        "userID": 0,
+        "teamID": 436,
+        "stockOnHand": -11,
+        "pos": [
+          {
+            "quantity": 2,
+            "quantityUsed": 2,
+            "price": 5.99,
+            "poItemID": 8
+          },
+          {
+            "quantity": 8,
+            "quantityUsed": 5,
+            "price": 5.99,
+            "poItemID": 11
+          }
+        ],
+        "image": []
+      }
+    ]
+  }
+}

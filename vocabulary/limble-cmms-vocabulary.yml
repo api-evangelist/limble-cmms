@@ -1,0 +1,151 @@
+name: Limble CMMS API Vocabulary
+description: >-
+  Key terms and concepts used in the Limble CMMS REST API V2, covering
+  computerized maintenance management systems (CMMS), industrial asset
+  management, preventive maintenance, work orders, parts inventory, and
+  related manufacturing/facilities management vocabulary.
+version: "1.0"
+terms:
+  - term: Asset
+    definition: >-
+      A physical piece of equipment, machinery, or infrastructure item tracked
+      within Limble CMMS. Assets can have custom fields, associated tasks,
+      parts, logs, and images. Assets are hierarchical (parentAssetID) and
+      always belong to a location.
+    tags:
+      - asset-management
+      - core-resource
+
+  - term: Task
+    definition: >-
+      A unit of maintenance work in Limble CMMS. Tasks encompass work orders
+      (reactive maintenance), preventive maintenance (PM) schedules, and work
+      requests. A task has an assignee (userID), optional asset and location
+      associations, priority, due date, and completion tracking.
+    tags:
+      - work-orders
+      - preventive-maintenance
+      - core-resource
+
+  - term: Work Order
+    definition: >-
+      A task representing reactive or corrective maintenance — unplanned work
+      triggered by equipment failure or a reported problem. In the API, work
+      orders are tasks without a recurring PM schedule attached.
+    tags:
+      - work-orders
+      - maintenance
+
+  - term: Preventive Maintenance (PM)
+    definition: >-
+      Scheduled, recurring maintenance tasks designed to prevent equipment
+      failures. In Limble CMMS, PM tasks are created from templates and can
+      recur on calendar intervals, meter readings, or time-based triggers.
+    tags:
+      - preventive-maintenance
+      - scheduling
+
+  - term: Work Request
+    definition: >-
+      A maintenance request submitted by a non-technician user or external
+      party through a work request portal URL. Work requests appear as
+      WorkRequestSubmission objects pending approval before becoming tasks.
+    tags:
+      - work-requests
+      - external-submissions
+
+  - term: Location
+    definition: >-
+      A physical site, facility, plant, or building managed in Limble CMMS.
+      Locations serve as the top-level organizational container for assets,
+      tasks, users, teams, and parts. Each location can have a timezone,
+      address, regional currency, and operational hours.
+    tags:
+      - facilities
+      - core-resource
+
+  - term: Part
+    definition: >-
+      A spare part or consumable inventory item tracked in Limble CMMS.
+      Parts have stock quantities (generalStock, stockOnHand), pricing,
+      min/max quantity thresholds, categories, and can be associated with
+      vendors and purchase orders.
+    tags:
+      - parts-inventory
+      - maintenance-materials
+
+  - term: Purchase Order (PO)
+    definition: >-
+      A formal document used to procure parts or services from a vendor.
+      In Limble CMMS, POs have line items (POItems), approval state
+      transitions, associations with tasks and budgets, and can include
+      notes to the vendor, ship-to/bill-to addresses, and custom fields.
+    tags:
+      - procurement
+      - purchase-orders
+
+  - term: Vendor
+    definition: >-
+      A supplier or service provider from whom parts or maintenance services
+      are sourced. Vendors have contact details, location associations, custom
+      fields, and log entries for purchase history.
+    tags:
+      - vendors
+      - procurement
+
+  - term: Preventive Maintenance Schedule
+    definition: >-
+      The recurrence configuration attached to a PM task template that
+      determines when new work orders are automatically generated —
+      e.g., every 30 days, every 500 operating hours, or based on
+      meter readings from asset fields.
+    tags:
+      - preventive-maintenance
+      - scheduling
+
+  - term: Budget
+    definition: >-
+      A financial allocation in Limble CMMS that can be associated with
+      purchase orders and tasks to track maintenance spending against
+      approved limits. Budgets have steps representing approval thresholds.
+    tags:
+      - budgets
+      - financial
+
+  - term: Webhook
+    definition: >-
+      An HTTP callback registered in Limble CMMS to receive real-time
+      event notifications when resources (tasks, assets, parts, POs) are
+      created, updated, or deleted. Configured via POST /v2/webhooks.
+    tags:
+      - webhooks
+      - integrations
+      - events
+
+  - term: Region
+    definition: >-
+      A geographic or organizational grouping above location used to
+      segment multi-site operations. Regions help organize multiple
+      locations across large enterprise deployments.
+    tags:
+      - multi-site
+      - organizational
+
+  - term: Unit of Measure (UOM)
+    definition: >-
+      A standard unit used to quantify parts inventory (e.g., each, box,
+      liter, meter). UOMs are managed via /v2/uom and referenced by
+      the unitCode field on Part objects.
+    tags:
+      - inventory
+      - parts
+
+  - term: Downtime
+    definition: >-
+      The duration (in minutes or hours) that an asset was non-operational
+      due to a maintenance event. Recorded on Task objects as the downtime
+      field and used in reporting to calculate asset availability and OEE.
+    tags:
+      - asset-management
+      - kpi
+      - reporting

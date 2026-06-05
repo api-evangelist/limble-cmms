@@ -1,0 +1,10 @@
+{
+  "operation": "POST /v2/webhooks",
+  "request": {
+    "body": {
+      "endpoint": "https://hello.com",
+      "type": "assetField",
+      "enabled": 0
+    }
+  }
+}

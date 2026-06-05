@@ -1,0 +1,14 @@
+{
+  "operation": "POST /v2/tasks",
+  "request": {
+    "body": {
+      "name": "Priority Test",
+      "locationID": 34190,
+      "type": 2,
+      "due": 1748656599,
+      "priority": 3,
+      "scheduledStart": 1748650000,
+      "scheduledEnd": 1748660000
+    }
+  }
+}

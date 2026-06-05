@@ -1,0 +1,9 @@
+{
+  "operation": "POST /v2/parts",
+  "response": {
+    "status": 201,
+    "body": {
+      "partID": 2941
+    }
+  }
+}

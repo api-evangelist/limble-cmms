@@ -1,0 +1,55 @@
+{
+  "name": "Vendor",
+  "description": "Limble CMMS Vendor field structure",
+  "source": "https://api.limblecmms.com/openapi.json",
+  "fields": {
+    "meta": {
+      "_type": "object",
+      "_fields": {
+        "fields": {
+          "type": "string"
+        }
+      }
+    },
+    "vendorID": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "contact": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "locationID": {
+      "type": "integer"
+    },
+    "startedOn": {
+      "type": "integer"
+    },
+    "lastEdited": {
+      "type": "integer"
+    },
+    "image": {
+      "_type": "array",
+      "_items": {
+        "fileName": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    }
+  }
+}

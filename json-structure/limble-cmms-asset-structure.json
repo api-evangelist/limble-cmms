@@ -1,0 +1,46 @@
+{
+  "name": "Asset",
+  "description": "Limble CMMS Asset field structure",
+  "source": "https://api.limblecmms.com/openapi.json",
+  "fields": {
+    "assetID": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "startedOn": {
+      "type": "integer"
+    },
+    "lastEdited": {
+      "type": "integer"
+    },
+    "parentAssetID": {
+      "type": "integer"
+    },
+    "locationID": {
+      "type": "integer"
+    },
+    "hoursPerWeek": {
+      "type": "integer"
+    },
+    "meta": {
+      "_type": "object",
+      "_fields": {
+        "fields": {
+          "type": "string"
+        },
+        "tasks": {
+          "type": "string"
+        }
+      }
+    },
+    "workRequestPortal": {
+      "type": "string",
+      "format": "uri"
+    },
+    "image": {
+      "type": "array"
+    }
+  }
+}

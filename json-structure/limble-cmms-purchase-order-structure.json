@@ -1,0 +1,132 @@
+{
+  "name": "PurchaseOrder",
+  "description": "Limble CMMS PurchaseOrder field structure",
+  "source": "https://api.limblecmms.com/openapi.json",
+  "fields": {
+    "poID": {
+      "type": "integer"
+    },
+    "taskID": {
+      "type": "integer"
+    },
+    "budgetID": {
+      "type": "integer"
+    },
+    "poNumber": {
+      "type": "integer"
+    },
+    "vendorID": {
+      "type": "integer"
+    },
+    "locationID": {
+      "type": "integer"
+    },
+    "userIDStarted": {
+      "type": "integer"
+    },
+    "userID": {
+      "type": "integer"
+    },
+    "teamID": {
+      "type": "integer"
+    },
+    "requestedByUserID": {
+      "type": "integer"
+    },
+    "date": {
+      "type": "integer"
+    },
+    "expectedDate": {
+      "type": "null"
+    },
+    "notesToVendor": {
+      "type": "string"
+    },
+    "billTo": {
+      "type": "null"
+    },
+    "shipTo": {
+      "type": "null"
+    },
+    "status": {
+      "type": "integer"
+    },
+    "customField1": {
+      "type": "null"
+    },
+    "customField2": {
+      "type": "null"
+    },
+    "customField3": {
+      "type": "null"
+    },
+    "customField4": {
+      "type": "null"
+    },
+    "customField5": {
+      "type": "null"
+    },
+    "customField6": {
+      "type": "null"
+    },
+    "lastEdited": {
+      "type": "integer"
+    },
+    "poPrefix": {
+      "type": "null"
+    },
+    "meta": {
+      "_type": "object",
+      "_fields": {
+        "items": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "stateTransitions": {
+          "type": "string"
+        },
+        "budget": {
+          "type": "string"
+        },
+        "budgetSteps": {
+          "type": "string"
+        }
+      }
+    },
+    "stateDetails": {
+      "_type": "object",
+      "_fields": {
+        "current": {
+          "_type": "object",
+          "_fields": {
+            "number": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            },
+            "canModify": {
+              "type": "boolean"
+            }
+          }
+        },
+        "transitions": {
+          "_type": "object",
+          "_fields": {
+            "available": {
+              "type": "array"
+            }
+          }
+        }
+      }
+    },
+    "state": {
+      "type": "integer"
+    }
+  }
+}

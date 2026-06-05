@@ -1,0 +1,83 @@
+{
+  "operation": "GET /v2/assets",
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "assetID": 10836,
+        "name": "Health Berkshire",
+        "startedOn": 1632949149,
+        "lastEdited": 1632949149,
+        "parentAssetID": 0,
+        "locationID": 205,
+        "hoursPerWeek": 40,
+        "meta": {
+          "fields": "/v2/assets/fields/?assets=10836",
+          "tasks": "/v2/tasks/?assets=10836"
+        },
+        "workRequestPortal": "https://app.limblestaging.com/#!/problem/fdle6w36/205/10836",
+        "image": []
+      },
+      {
+        "assetID": 10835,
+        "name": "Walks",
+        "startedOn": 1632949148,
+        "lastEdited": 1632949149,
+        "parentAssetID": 0,
+        "locationID": 205,
+        "hoursPerWeek": 40,
+        "meta": {
+          "fields": "/v2/assets/fields/?assets=10835",
+          "tasks": "/v2/tasks/?assets=10835"
+        },
+        "workRequestPortal": "https://app.limblestaging.com/#!/problem/fdle6w36/205/10835",
+        "image": []
+      },
+      {
+        "assetID": 10834,
+        "name": "Executive Springs Phased",
+        "startedOn": 1632949148,
+        "lastEdited": 1632949148,
+        "parentAssetID": 0,
+        "locationID": 205,
+        "hoursPerWeek": 40,
+        "meta": {
+          "fields": "/v2/assets/fields/?assets=10834",
+          "tasks": "/v2/tasks/?assets=10834"
+        },
+        "workRequestPortal": "https://app.limblestaging.com/#!/problem/fdle6w36/205/10834",
+        "image": []
+      },
+      {
+        "assetID": 10833,
+        "name": "functionalities",
+        "startedOn": 1632949148,
+        "lastEdited": 1632949148,
+        "parentAssetID": 0,
+        "locationID": 205,
+        "hoursPerWeek": 40,
+        "meta": {
+          "fields": "/v2/assets/fields/?assets=10833",
+          "tasks": "/v2/tasks/?assets=10833"
+        },
+        "workRequestPortal": "https://app.limblestaging.com/#!/problem/fdle6w36/205/10833",
+        "image": []
+      },
+      {
+        "assetID": 10832,
+        "name": "AGP magnetic Handmade",
+        "startedOn": 1632949148,
+        "lastEdited": 1632949148,
+        "parentAssetID": 0,
+        "locationID": 205,
+        "hoursPerWeek": 40,
+        "meta": {
+          "fields": "/v2/assets/fields/?assets=10832",
+          "tasks": "/v2/tasks/?assets=10832"
+        },
+        "workRequestPortal": "https://app.limblestaging.com/#!/problem/fdle6w36/205/10832",
+        "image": []
+      }
+    ]
+  }
+}

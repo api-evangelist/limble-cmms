@@ -1,0 +1,239 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "schema": "https://schema.org/",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "limble": "https://api.limblecmms.com/v2/",
+    "cmms": "https://apidocs.limblecmms.com/vocab#",
+
+    "LimbleCMMS": {
+      "@id": "schema:SoftwareApplication",
+      "@type": "@id"
+    },
+    "name": "schema:name",
+    "description": "schema:description",
+    "url": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "email": "schema:email",
+    "phone": "schema:telephone",
+    "address": "schema:streetAddress",
+    "locationID": {
+      "@id": "limble:locationID",
+      "@type": "xsd:integer"
+    },
+
+    "Asset": {
+      "@id": "cmms:Asset",
+      "@type": "@id"
+    },
+    "assetID": {
+      "@id": "limble:assetID",
+      "@type": "xsd:integer"
+    },
+    "parentAssetID": {
+      "@id": "limble:parentAssetID",
+      "@type": "xsd:integer"
+    },
+    "hoursPerWeek": {
+      "@id": "cmms:hoursPerWeek",
+      "@type": "xsd:integer"
+    },
+    "workRequestPortal": {
+      "@id": "cmms:workRequestPortal",
+      "@type": "@id"
+    },
+    "startedOn": {
+      "@id": "schema:startDate",
+      "@type": "xsd:integer"
+    },
+    "lastEdited": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:integer"
+    },
+
+    "Task": {
+      "@id": "cmms:MaintenanceTask",
+      "@type": "@id"
+    },
+    "taskID": {
+      "@id": "limble:taskID",
+      "@type": "xsd:integer"
+    },
+    "template": {
+      "@id": "cmms:isTemplate",
+      "@type": "xsd:boolean"
+    },
+    "due": {
+      "@id": "schema:deadline",
+      "@type": "xsd:integer"
+    },
+    "scheduledStart": {
+      "@id": "schema:startDate",
+      "@type": "xsd:integer"
+    },
+    "scheduledEnd": {
+      "@id": "schema:endDate",
+      "@type": "xsd:integer"
+    },
+    "dateCompleted": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:integer"
+    },
+    "downtime": {
+      "@id": "cmms:downtime",
+      "@type": "xsd:integer"
+    },
+    "completionNotes": "cmms:completionNotes",
+    "priorityID": {
+      "@id": "cmms:priorityID",
+      "@type": "xsd:integer"
+    },
+
+    "Part": {
+      "@id": "cmms:SparePart",
+      "@type": "@id"
+    },
+    "partID": {
+      "@id": "limble:partID",
+      "@type": "xsd:integer"
+    },
+    "number": "schema:productID",
+    "generalStock": {
+      "@id": "cmms:generalStock",
+      "@type": "xsd:integer"
+    },
+    "stockOnHand": {
+      "@id": "cmms:stockOnHand",
+      "@type": "xsd:integer"
+    },
+    "generalPrice": {
+      "@id": "schema:price",
+      "@type": "xsd:decimal"
+    },
+    "unitCode": "schema:unitCode",
+    "minQtyThreshold": {
+      "@id": "cmms:minimumQuantityThreshold",
+      "@type": "xsd:integer"
+    },
+    "maxQtyThreshold": {
+      "@id": "cmms:maximumQuantityThreshold",
+      "@type": "xsd:integer"
+    },
+    "categoryID": {
+      "@id": "limble:categoryID",
+      "@type": "xsd:integer"
+    },
+
+    "PurchaseOrder": {
+      "@id": "schema:Order",
+      "@type": "@id"
+    },
+    "poID": {
+      "@id": "limble:poID",
+      "@type": "xsd:integer"
+    },
+    "poNumber": {
+      "@id": "schema:orderNumber",
+      "@type": "xsd:integer"
+    },
+    "vendorID": {
+      "@id": "limble:vendorID",
+      "@type": "xsd:integer"
+    },
+    "notesToVendor": "cmms:notesToVendor",
+    "budgetID": {
+      "@id": "limble:budgetID",
+      "@type": "xsd:integer"
+    },
+
+    "Vendor": {
+      "@id": "schema:Organization",
+      "@type": "@id"
+    },
+    "contact": "schema:contactPoint",
+
+    "User": {
+      "@id": "schema:Person",
+      "@type": "@id"
+    },
+    "userID": {
+      "@id": "limble:userID",
+      "@type": "xsd:integer"
+    },
+    "username": "schema:identifier",
+    "firstName": "schema:givenName",
+    "lastName": "schema:familyName",
+    "wage": {
+      "@id": "schema:baseSalary",
+      "@type": "xsd:integer"
+    },
+    "active": "cmms:active",
+    "workdayHours": {
+      "@id": "cmms:workdayHours",
+      "@type": "xsd:integer"
+    },
+
+    "Location": {
+      "@id": "schema:Place",
+      "@type": "@id"
+    },
+    "timezone": "schema:timezone",
+    "currencyCode": "schema:currency",
+    "weeklyOperationHours": {
+      "@id": "cmms:weeklyOperationHours",
+      "@type": "xsd:integer"
+    },
+    "regionID": {
+      "@id": "limble:regionID",
+      "@type": "xsd:integer"
+    },
+
+    "Webhook": {
+      "@id": "cmms:Webhook",
+      "@type": "@id"
+    },
+    "webhookID": {
+      "@id": "limble:webhookID",
+      "@type": "xsd:integer"
+    },
+
+    "WorkRequestSubmission": {
+      "@id": "cmms:WorkRequestSubmission",
+      "@type": "@id"
+    },
+
+    "Budget": {
+      "@id": "cmms:Budget",
+      "@type": "@id"
+    },
+
+    "teams": {
+      "@id": "schema:memberOf",
+      "@container": "@set"
+    },
+    "roles": {
+      "@id": "cmms:roles",
+      "@container": "@set"
+    },
+    "teamID": {
+      "@id": "limble:teamID",
+      "@type": "xsd:integer"
+    },
+    "roleID": {
+      "@id": "limble:roleID",
+      "@type": "xsd:integer"
+    },
+    "image": {
+      "@id": "schema:image",
+      "@container": "@set"
+    },
+    "fileName": "cmms:fileName",
+    "link": {
+      "@id": "schema:contentUrl",
+      "@type": "@id"
+    }
+  }
+}

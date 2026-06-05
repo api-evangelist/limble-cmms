@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.limblecmms.com/schemas/part",
+  "title": "Part",
+  "description": "Limble CMMS Part object schema",
+  "type": "object",
+  "properties": {
+    "partID": {
+      "type": "integer"
+    },
+    "number": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "generalStock": {
+      "type": "integer"
+    },
+    "unitCode": {
+      "type": "string"
+    },
+    "generalPrice": {
+      "type": "number"
+    },
+    "category": {
+      "type": "string"
+    },
+    "categoryID": {
+      "type": "integer"
+    },
+    "locationID": {
+      "type": "integer"
+    },
+    "location": {
+      "type": "string"
+    },
+    "minQtyStatus": {
+      "type": "integer"
+    },
+    "minQtyThreshold": {
+      "type": "integer"
+    },
+    "maxQtyThreshold": {
+      "type": "integer"
+    },
+    "staleThreshold": {
+      "type": "integer"
+    },
+    "staleStatus": {
+      "type": "integer"
+    },
+    "lastEdited": {
+      "type": "integer"
+    },
+    "userID": {
+      "type": "integer"
+    },
+    "teamID": {
+      "type": "integer"
+    },
+    "stockOnHand": {
+      "type": "integer"
+    },
+    "pos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "integer"
+          },
+          "quantityUsed": {
+            "type": "integer"
+          },
+          "price": {
+            "type": "number"
+          },
+          "poItemID": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "image": {
+      "type": "array"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "operation": "GET /v2/vendors",
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "meta": {
+          "fields": "/v2/vendors/fields/?vendors=1"
+        },
+        "vendorID": 1,
+        "name": "bryan's IT shop",
+        "email": "bob@limblecmms.com",
+        "phone": "801-123-1234",
+        "contact": "Bryan Christiansen",
+        "address": "123 Test Rd",
+        "locationID": 330,
+        "startedOn": 1555085498,
+        "lastEdited": 1566925530,
+        "image": [
+          {
+            "fileName": "41372537_10157931415578298_3719969727385174016_n.jpg",
+            "link": "https://content.limblecmms.com/upload-36/vendors/330/1/41372537_10157931415578298_3719969727385174016_n.jpg?Expires=1572386698&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jb250ZW50LmxpbWJsZWNtbXMuY29tL3VwbG9hZC0zNi92ZW5kb3JzLzMzMC8xLzQxMzcyNTM3XzEwMTU3OTMxNDE1NTc4Mjk4XzM3MTk5Njk3MjczODUxNzQwMTZfbi5qcGciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE1NzIzODY2OTh9fX1dfQ__&Signature=Os2lzvCLIJOteYIgc-NgodzrLdjNAYdncy0e~kKtv0qwvZJJr1feiDdJGMt~CIgdCHpLwqlajpK2-GpZIv6SDkVJ5Cl2MoOld64Uy6M1K~wLe1U75aCLqyRRVi~PzpWUpJxF2cf0OwMdYXJfeYhGl74PsvJB1AjeNsxV8aM4hDzILKeJpQVwlsRoXydfyCKe1Ese43kHtEy~Mpb4xZNBeOUaC2d6yR8MigtGFSgwPA1A9mKy8WknmjD7YkLaIl9MaMV4tj2QTDDWilbfps0WSYCzxqqtORoGfLV65kGmYXvOAEmVW3XX~Bkc9xsma~p2V8N0ngqg~ngLF8WEp8ooPw__&Key-Pair-Id=APKAIH5A42E3EPKJRHFQ"
+          }
+        ]
+      }
+    ]
+  }
+}

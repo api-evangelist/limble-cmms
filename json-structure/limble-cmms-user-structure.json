@@ -1,0 +1,73 @@
+{
+  "name": "User",
+  "description": "Limble CMMS User field structure",
+  "source": "https://api.limblecmms.com/openapi.json",
+  "fields": {
+    "userID": {
+      "type": "integer"
+    },
+    "username": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string",
+      "format": "utc-millisec"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "wage": {
+      "type": "integer"
+    },
+    "active": {
+      "type": "string"
+    },
+    "emailNotificationActive": {
+      "type": "string"
+    },
+    "pushNotificationActive": {
+      "type": "string"
+    },
+    "workdayHours": {
+      "type": "integer"
+    },
+    "dateAdded": {
+      "type": "integer"
+    },
+    "teams": {
+      "_type": "array",
+      "_items": {
+        "teamID": {
+          "type": "integer"
+        },
+        "locationID": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "roles": {
+      "_type": "array",
+      "_items": {
+        "roleID": {
+          "type": "integer"
+        },
+        "locationID": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

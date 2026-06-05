@@ -1,0 +1,83 @@
+formats:
+  - oas3
+
+rules:
+  limble-operation-tags:
+    description: Every operation should have at least one tag for grouping in docs.
+    message: "Operation '{{property}}' is missing tags."
+    severity: warn
+    given: "$.paths[*][get,post,patch,put,delete]"
+    then:
+      field: tags
+      function: truthy
+
+  limble-operation-summary:
+    description: Every operation should have a summary for clarity.
+    message: "Operation is missing a summary."
+    severity: warn
+    given: "$.paths[*][get,post,patch,put,delete]"
+    then:
+      field: summary
+      function: truthy
+
+  limble-response-200-or-201:
+    description: Every operation must define at least one success response (200 or 201).
+    message: "Operation must define a 200 or 201 response."
+    severity: error
+    given: "$.paths[*][get,post,patch,put,delete].responses"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          anyOf:
+            - required: ["200"]
+            - required: ["201"]
+
+  limble-id-field-integer:
+    description: >-
+      Limble resource ID fields (e.g. assetID, taskID, partID) should be typed
+      as integer to match the API's convention.
+    message: "ID field '{{property}}' should be type integer."
+    severity: warn
+    given: "$.components.schemas[*].properties[*ID]"
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values:
+          - integer
+
+  limble-basic-auth-security:
+    description: >-
+      Limble API uses HTTP Basic authentication; every operation should either
+      inherit the global security scheme or declare it explicitly.
+    message: "API should declare a BasicAuth security scheme."
+    severity: warn
+    given: "$.components.securitySchemes"
+    then:
+      function: truthy
+
+  limble-pagination-params:
+    description: >-
+      Collection GET endpoints (listing resources) should support pagination
+      parameters (page, limit or offset) to allow clients to page through large
+      result sets.
+    message: "Collection GET endpoint appears to be missing pagination query parameters."
+    severity: info
+    given: "$.paths[*].get.parameters[*]"
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        match: "^(page|limit|offset|pageSize|per_page)$"
+
+  limble-location-header-on-create:
+    description: >-
+      POST operations that return 201 Created should include a Location response
+      header pointing to the new resource, per the Limble API convention.
+    message: "POST 201 response should define a Location header."
+    severity: info
+    given: "$.paths[*].post.responses.201.headers"
+    then:
+      field: Location
+      function: truthy

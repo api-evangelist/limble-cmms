@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.limblecmms.com/schemas/vendor",
+  "title": "Vendor",
+  "description": "Limble CMMS Vendor object schema",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "string"
+        }
+      }
+    },
+    "vendorID": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "contact": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "locationID": {
+      "type": "integer"
+    },
+    "startedOn": {
+      "type": "integer"
+    },
+    "lastEdited": {
+      "type": "integer"
+    },
+    "image": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "fileName": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    }
+  }
+}

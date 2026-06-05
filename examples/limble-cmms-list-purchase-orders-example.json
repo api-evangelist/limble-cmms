@@ -1,0 +1,109 @@
+{
+  "operation": "GET /v2/po",
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "poID": 1,
+        "taskID": 16,
+        "budgetID": 1,
+        "poNumber": 1,
+        "vendorID": 9,
+        "locationID": 163,
+        "userIDStarted": 340,
+        "userID": 341,
+        "teamID": 0,
+        "requestedByUserID": 0,
+        "date": 1565902331,
+        "expectedDate": null,
+        "notesToVendor": "",
+        "billTo": null,
+        "shipTo": null,
+        "status": 99,
+        "customField1": null,
+        "customField2": null,
+        "customField3": null,
+        "customField4": null,
+        "customField5": null,
+        "customField6": null,
+        "lastEdited": 1629737835,
+        "poPrefix": null,
+        "meta": {
+          "items": "/v2/po/items?pos=1",
+          "state": "/v2/po/1/state",
+          "stateTransitions": "/v2/po/1/state/transitions",
+          "budget": "/v2/po/budgets?budgets=1",
+          "budgetSteps": "/v2/budgets/steps?budgets=1"
+        },
+        "stateDetails": {
+          "current": {
+            "number": 99,
+            "name": "fully_received",
+            "label": "Fully Received",
+            "canModify": false
+          },
+          "transitions": {
+            "available": [
+              {
+                "state": 100,
+                "name": "closed",
+                "label": "Closed"
+              }
+            ]
+          }
+        },
+        "state": 99
+      },
+      {
+        "poID": 4,
+        "budgetID": 1,
+        "poNumber": 4,
+        "vendorID": 9,
+        "locationID": 163,
+        "userIDStarted": 340,
+        "userID": 656,
+        "teamID": 0,
+        "requestedByUserID": 0,
+        "date": 1565903115,
+        "expectedDate": null,
+        "notesToVendor": "",
+        "billTo": null,
+        "shipTo": null,
+        "status": 99,
+        "customField1": null,
+        "customField2": null,
+        "customField3": null,
+        "customField4": null,
+        "customField5": null,
+        "customField6": null,
+        "lastEdited": 1743190786,
+        "poPrefix": null,
+        "meta": {
+          "items": "/v2/po/items?pos=4",
+          "state": "/v2/po/4/state",
+          "stateTransitions": "/v2/po/4/state/transitions",
+          "budget": "/v2/po/budgets?budgets=1",
+          "budgetSteps": "/v2/budgets/steps?budgets=1"
+        },
+        "stateDetails": {
+          "current": {
+            "number": 99,
+            "name": "fully_received",
+            "label": "Fully Received",
+            "canModify": false
+          },
+          "transitions": {
+            "available": [
+              {
+                "state": 100,
+                "name": "closed",
+                "label": "Closed"
+              }
+            ]
+          }
+        },
+        "state": 99
+      }
+    ]
+  }
+}

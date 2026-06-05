@@ -1,0 +1,84 @@
+{
+  "name": "Part",
+  "description": "Limble CMMS Part field structure",
+  "source": "https://api.limblecmms.com/openapi.json",
+  "fields": {
+    "partID": {
+      "type": "integer"
+    },
+    "number": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "generalStock": {
+      "type": "integer"
+    },
+    "unitCode": {
+      "type": "string"
+    },
+    "generalPrice": {
+      "type": "number"
+    },
+    "category": {
+      "type": "string"
+    },
+    "categoryID": {
+      "type": "integer"
+    },
+    "locationID": {
+      "type": "integer"
+    },
+    "location": {
+      "type": "string"
+    },
+    "minQtyStatus": {
+      "type": "integer"
+    },
+    "minQtyThreshold": {
+      "type": "integer"
+    },
+    "maxQtyThreshold": {
+      "type": "integer"
+    },
+    "staleThreshold": {
+      "type": "integer"
+    },
+    "staleStatus": {
+      "type": "integer"
+    },
+    "lastEdited": {
+      "type": "integer"
+    },
+    "userID": {
+      "type": "integer"
+    },
+    "teamID": {
+      "type": "integer"
+    },
+    "stockOnHand": {
+      "type": "integer"
+    },
+    "pos": {
+      "_type": "array",
+      "_items": {
+        "quantity": {
+          "type": "integer"
+        },
+        "quantityUsed": {
+          "type": "integer"
+        },
+        "price": {
+          "type": "number"
+        },
+        "poItemID": {
+          "type": "integer"
+        }
+      }
+    },
+    "image": {
+      "type": "array"
+    }
+  }
+}

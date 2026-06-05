@@ -1,0 +1,75 @@
+{
+  "name": "WorkRequestSubmission",
+  "description": "Limble CMMS WorkRequestSubmission field structure",
+  "source": "https://api.limblecmms.com/openapi.json",
+  "fields": {
+    "workRequestSubmissionId": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Approved",
+        "Rejected"
+      ]
+    },
+    "createdByUserId": {
+      "type": "integer"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "deletedAt": {
+      "type": "string/null"
+    },
+    "reviewedByUserId": {
+      "type": "integer/null"
+    },
+    "reviewedAt": {
+      "type": "string/null"
+    },
+    "reviewedReason": {
+      "type": "string/null"
+    },
+    "additionalNotes": {
+      "type": "string/null"
+    },
+    "locationId": {
+      "type": "integer"
+    },
+    "assetId": {
+      "type": "integer/null"
+    },
+    "priorityId": {
+      "type": "integer/null"
+    },
+    "dueDateUnit": {
+      "type": "string/null"
+    },
+    "requestInformation": {
+      "type": "object"
+    },
+    "customerID": {
+      "type": "integer"
+    },
+    "requestTitle": {
+      "type": "string"
+    },
+    "assignedToProfileId": {
+      "type": "integer/null"
+    },
+    "requestDescription": {
+      "type": "string/null"
+    },
+    "checklistID": {
+      "type": "integer/null"
+    },
+    "requesterName": {
+      "type": "string"
+    }
+  }
+}

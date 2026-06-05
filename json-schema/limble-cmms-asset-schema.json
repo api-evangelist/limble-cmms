@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.limblecmms.com/schemas/asset",
+  "title": "Asset",
+  "description": "Limble CMMS Asset object schema",
+  "type": "object",
+  "properties": {
+    "assetID": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "startedOn": {
+      "type": "integer"
+    },
+    "lastEdited": {
+      "type": "integer"
+    },
+    "parentAssetID": {
+      "type": "integer"
+    },
+    "locationID": {
+      "type": "integer"
+    },
+    "hoursPerWeek": {
+      "type": "integer"
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "string"
+        },
+        "tasks": {
+          "type": "string"
+        }
+      }
+    },
+    "workRequestPortal": {
+      "type": "string",
+      "format": "uri"
+    },
+    "image": {
+      "type": "array"
+    }
+  }
+}

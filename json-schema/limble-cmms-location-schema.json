@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.limblecmms.com/schemas/location",
+  "title": "Location",
+  "description": "Limble CMMS Location object schema",
+  "type": "object",
+  "properties": {
+    "locationID": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "regionID": {
+      "type": "integer"
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "weeklyOperationHours": {
+      "type": "integer"
+    },
+    "address": {
+      "type": "null"
+    },
+    "address2": {
+      "type": "null"
+    },
+    "phone": {
+      "type": "null"
+    },
+    "metaField1": {
+      "type": "null"
+    },
+    "metaField2": {
+      "type": "null"
+    },
+    "metaField3": {
+      "type": "null"
+    },
+    "geoLocation": {
+      "type": "null"
+    },
+    "workRequestPortal": {
+      "type": "string",
+      "format": "uri"
+    },
+    "currencyCode": {
+      "type": "string"
+    }
+  }
+}
