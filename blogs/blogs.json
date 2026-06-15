@@ -1,0 +1,21 @@
+{
+  "repo": "limble-cmms",
+  "feeds": [
+    {
+      "source": "https://limble.com/blog/",
+      "feed_url": "https://limble.com/blog/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
+      "source": "https://help.limblecmms.com/en/collections/3322827-api",
+      "feed_url": "https://help.limblecmms.com/en/collections/3322827-api",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 1,
+  "fetched": "2026-06-14T20:42:17Z"
+}
