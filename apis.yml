@@ -41,7 +41,7 @@ apis:
       - url: https://apidocs.limblecmms.com/
         type: Documentation
       - url: https://www.postman.com/limbleapiqa/limble-solutions-llc-s-public-workspace/documentation/zskh2o7/limble-api-v2
-        type: Example
+        type: Examples
 common:
   - type: Website
     url: https://limble.com
@@ -61,7 +61,7 @@ common:
     url: https://limble.com/company/
   - type: Integrations
     url: https://limble.com/integrations/
-  - type: SignUp
+  - type: Signup
     url: https://limble.com/register/
 maintainers:
   - FN: Kin Lane
