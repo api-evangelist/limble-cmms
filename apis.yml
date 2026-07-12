@@ -43,6 +43,12 @@ apis:
       - url: https://www.postman.com/limbleapiqa/limble-solutions-llc-s-public-workspace/documentation/zskh2o7/limble-api-v2
         type: Examples
 common:
+  - type: TrustCenter
+    url: security/limble-cmms-trust-center.yml
+  - type: DomainSecurity
+    url: security/limble-cmms-domain-security.yml
+  - type: Authentication
+    url: authentication/limble-cmms-authentication.yml
   - type: Website
     url: https://limble.com
   - type: Documentation

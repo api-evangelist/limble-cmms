@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: searched
+probe: true
+source: https://trust.limble.com/
+url: https://trust.limble.com/
+certifications:
+- SOC 2
+- GDPR
+evidence:
+- source: https://trust.limble.com/
+  keywords:
+  - soc 2
+  - trust center
+  - gdpr

@@ -1,0 +1,12 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/limble-cmms-limble-api-v2.yaml
+summary:
+  types:
+  - http
+schemes:
+- name: BasicAuth
+  type: http
+  scheme: basic
+  sources:
+  - openapi/limble-cmms-limble-api-v2.yaml
