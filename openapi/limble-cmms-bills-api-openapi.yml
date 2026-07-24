@@ -1,0 +1,888 @@
+openapi: 3.0.3
+info:
+  title: Limble API V2 Assets Bills API
+  version: 1.0.0
+  description: "Getting Started!\n\nWelcome to Limble CMMS’s API documentation.\n\nYou can use this documentation to configure connections to the Limble CMMS API over https using RESTful standards.\n\nUsing the API you can get information about the following portions of your system:\n\n- Assets\n\n- Locations\n\n- Parts (Current quantities and Usage)\n\n- Tasks (Work Orders, Preventive Maintenance, Work Requests, etc.)\n\n- Users\n\n- Vendors\n\n- Roles\n\n- Teams\n\n- Purchase Orders\n\n- General Ledgers\n\n- Budgets\n\n- Priorities\n\n- Tags\n\n- Statuses\n\n- Bills\n\n- Regions\n\n- Webhooks\n\n- Units of Measure(UOM)\n\nPlease use the correct Limble API URL to connect to our API based on the region or the type of your Limble Account.\n\n| **Limble Account (Region/Type)** | **Limble API URL** |\n| --- | --- |\n| Default | api.limblecmms.com |\n| Canada | ca-api.limblecmms.com |\n| Australia | au-api.limblecmms.com |\n| Europe | eu-api.limblecmms.com |\n| 21CFR | 21cfr-api.limblecmms.com |\n\n---\n\n# Authentication\n\nTo protect your information the Limble CMMS API uses BASIC authorization standards.\n\nEvery call to the API must include an authorization header with your base 64 encoded id and secret.\n\nClient ID\n\nYour Client ID is your unique customer identification.\n\nClient Secret\n\nYour Client Secret is used to authenticate the Client ID on each API call. This is something that must be kept secret.\n\n> How do I get my Client ID and Client Secret? \n\nTo obtain your Client ID and Client Secret login to your Limble account as a **Super Administrator** and go to **Settings** -> **Configuration**, on this page scroll down to the **API Settings** section and click **Generate API Keys**. Keep this information **secret**, you will only be able to see your Client Secret once upon initial generation. If you lose your secret you will need to regenerate it and update your integration accordingly.\n\n> Example Header \nAuthorization: Basic \\[BASE64 ENCODED YOUR_CLIENT_ID:YOUR_CLIENT_SECRET \n\nBelow is a code example for PHP:\n\n```\n$curl = curl_init();\n$id = 'your_client_id';\n$secret = 'your_client_id';\n$headers = array(\n'Content-Type:application/json',\n'Authorization: Basic '. base64_encode($id.':'.$secret)\n);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, $headers);\ncurl_setopt_array($curl, array(\nCURLOPT_URL => 'https://api.limblecmms.com:443/v2/tasks/',\nCURLOPT_RETURNTRANSFER => true,\nCURLOPT_ENCODING => \"\",\nCURLOPT_MAXREDIRS => 10,\nCURLOPT_TIMEOUT => 0,\nCURLOPT_FOLLOWLOCATION => false,\nCURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\nCURLOPT_CUSTOMREQUEST => \"GET\",\n));\n$response = curl_exec($curl);\n$err = curl_error($curl);\ncurl_close($curl);\nif ($err) {\necho \"cURL Error #:\" . $err;\n} else {\necho $response;\n} ?>\n\n```\n\nBelow is a code example for NodeJS:\n\n```\nconst https = require('https');\nconst id = 'your_client_id';\nconst secret = 'your_client_secret';\nconst options = {\n'method': 'GET',\n'hostname': 'api.limblecmms.com',\n'path': '/v2/tasks/?',\n'headers': {\n'Authorization': 'Basic ' + Buffer.from(`${credentials.id}:${credentials.secret}`).toString('base64')\n}\n};\nconst req = https.request(options, function (res) {\nconst chunks = [];\nres.on(\"data\", function (chunk) {\nchunks.push(chunk);\n});\nres.on(\"end\", function (chunk) {\nconst body = Buffer.concat(chunks);\nconsole.log(body.toString());\n});\nres.on(\"error\", function (error) {\nconsole.error(error);\n});\n});\nreq.end();\n\n```\n\n---\n\n# Error Codes\n\n- HTTP 400 - Data Validation Error - Malformed JSON input or incorrect data type.\n\n- HTTP 403 - Forbidden - The resource cannot be accessed.\n\n- HTTP 404 - Resource not found - The resource you are targeting does not exist.\n\n- HTTP 409 - Resource Conflict - A resource already exists with those parameters.\n\n- HTTP 422 - Unprocessable Entity - The syntax of the request is correct but cannot be processed due to semantic errors.\n\n- HTTP 429 - Too Many Requests - See the rate limiting section below.\n\n- HTTP 500 - Internal Server Error - Contact Limble for assistance.\n\n- HTTP 501 - Method Not Support - Limble's API only supports GET, POST, PATCH, PUT, and DELETE.\n\n---\n\n# Success Codes\n\n- HTTP 200 - OK - Everything was successful. PUTs, PATCHs and DELETEs on success always return an empty 200 OK.\n\n- HTTP 201 - CREATED - This is used on POST calls when new resouces are created. If a new resource was created Limble will always pass back a GET URL in the location header so a developer can easily GET the new resource.\n\n---\n\n# Overriding HTTP methods\n\nSome systems may support only the `POST` and `GET` HTTP methods. This restriction prevents using other HTTP methods such as `PUT`, `PATCH` and `DELETE`. RESTful web API implementations can work around this restriction by letting the client override the HTTP method via the custom HTTP headers.\n\nThe Limble API supports **Method Overrides** by using a `POST` request and setting the `X-HTTP-Method-Override` header with a method string value. The header value can be `PATCH` or `PUT`. This will allow Limble API users to use `PATCH` and `PUT` endpoints by sending `POST` requests to these endpoints and overriding them with the respective HTTP method.\n\n# Webhooks\n\nReceive data on certain events such as Tasks being completed.\n\nLimble's webhooks allow you to receive data whenever specific events occur.\n\nFor example, you may need to run your own script whenever a Task is completed.\n\nLimble supports adding multiple webhooks that can be triggered when actions are carried out on:\n\n- Tasks\n\n- Assets\n\n- Asset Fields\n\n- Purchase Orders\n\n- Purchase Order Items\n\nWhen an event occurs, Limble sends an HTTP POST request to a URL endpoint you configure.\n\nYou can configure this URL in the Limble Web App under:\n\n**Settings → Configuration → API Settings**\n\nAll data sent is JSON-encoded, and Limble includes the following fields in the request headers for validation:\n\n- `signature`\n\n- `timestamp`\n\n- `token`\n\nYou may register multiple webhooks for the same event type.\n\n### Important: API Key Requirement for Webhooks\n\nTo receive webhooks, the customer must have at least one active **limbleAPI key** created in API Settings.\n\n- Webhooks **will not function** without at least one valid `limbleAPI` key.\n\n- Limble uses the **first-created** **`limbleAPI`** **key** (by creation date) to generate the **signature** included in webhook headers.\n\n- The receiving system must use this key to verify the authenticity of incoming webhook requests.\n\nIf a customer has multiple `limbleAPI` keys, **only the oldest one** will be used for signing webhook requests.\n\n### Response Time and Retry Behavior\n\nYour server must respond to webhook POST requests within **10 seconds**.\n\nIf it does not, Limble will attempt to retry the webhook request.\n\nLimble handles server responses as follows:\n\n- If the server returns **200 OK**, Limble considers the webhook successful and will not retry.\n\n- If the server returns **406 Not Acceptable**, Limble considers the webhook received but intentionally ignored — no retry will occur.\n\n- For any other response (e.g., 500, timeout, etc.), Limble will retry the request.\n\n**Retry schedule:**\n\n- After 10 minutes\n\n- After 1 hour\n\n- After 2 hours\n\n- After 4 hours\n\nAfter the final retry attempt, the webhook will be **automatically disabled**.\n\n### Re-enabling a Disabled Webhook\n\nTo re-enable a disabled webhook:\n\n1. Go to **Settings → Configuration → API Settings** in the Limble Web App. \nFind the webhook and use the option to **Re-enable** the API endpoint.\n\n2. Alternatively, send a `PATCH` request using the **Update Webhook** endpoint and set `enabled = true`.\n\n### Assets\n\nBelow is an example payload you might be sent when an event occurs on an asset:\n\n```\n{\n\"assetID\": 10748, \n\"status\": \"CREATED\",\n\"category\": \"asset\", \n\"user\": \"bob@limblecmms.com\" \n}\n\n```\n\nOnce the Payload is received you can use the Get Assets API call to get the most recent Asset data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | An Asset is created\nDELETED | An Asset was deleted\nCHANGED ASSET NAME | An asset has been renamed\n\n### Asset Field\n\nBelow is an example payload you might be sent when an event occurs on an asset field:\n\n```\n{\n\"valueID\": 46490,\n\"status\": \"DELETED\",\n\"category\": \"assetField\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Asset Field API call to get the most recent Asset Field data. The following is a list of all the possible statuses that a webhook might be set to:\n\nADDED | An Asset Field was added to an Asset\nDELETED | An Asset Field was deleted from an Asset\nUPDATED | An Asset Field was updated on an Asset\n\n### Location\n\nBelow is an example payload you might be sent when an event occurs on an location field:\n\n```\n{\n\"valueID\": 46490,\n\"status\": \"DELETED\",\n\"category\": \"location\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Location API call to get the most recent Location data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | An Location was added\nDELETED | An Location was deleted\nUPDATED | An Location was updated\n\n### Parts\n\nFor Parts, you may receive a webhook that looks like this:\n\n```\n{ \n\"partID\": 3456,\n\"status\": \"CREATED\",\n\"category\": \"part\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nAll possible statuses for Parts webhooks are as follows:\n\nCREATED | A Part was created.\nDELETED | A Part was deleted.\nLOCATION UPDATED | A Part had its location updated.\nSUPPLIER UPDATED | A Part had its supplier updated.\nPRICE UPDATED | A Part had its price updated.\nNAME UPDATED | A Part had its name updated.\nQUANTITY INCREASED | The quantity of a part increased.\nQUANTITY DECREASED | The quantity of a part decreased.\n\n### Purchase Order\n\nIf you have enabled purchasing webhooks, you may receive a webhook for POs that looks like this:\n\n```\n{ \n\"poID\": 8203,\n\"status\": \"READY TO RECEIVE\",\n\"category\": \"po\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nPossible statuses for PO webhooks are:\n\nCREATED | A PO was created.\nSETUP | A PO has been reset and now has the setup status.\nCHANGE STATUS | A PO has been approved and now has a custom status.\nREADY TO RECEIVE | A PO now has the Ready to Receive status.\nPARTIALLY RECEIVED | A PO has received any number of items and now has the Partially Received status.\nFULLY RECEIVED | A PO has received all of its items and now has the Fully Received status.\nCLOSED | A PO has had all items received and all bills paid and now has the Closed status.\nDELETED | A PO was deleted.\nCHANGE BUDGET | A PO has been assigned a new budget.\nCHANGE VENDOR | A PO has been assigned a new vendor.\nCHANGE NUMBER | A PO's PO Number has been modified.\nCHANGE BILL-TO | A PO's bill-to field has been modified.\nCHANGE SHIP-TO | A PO's ship-to field has been modified.\nCHANGE NOTES TO VENDOR | A PO's \"Notes to Vendor\" field has been modified.\nCHANGE CUSTOM FIELD | Any of a PO's custom fields has been modified.\nCHANGE ASSIGNMENT | A PO has had its assignment (user, team, multi-user) modified.\nCHANGE DATE | A PO's created date has been modified.\nCHANGE DELIVERY DATE | A PO's expected delivery date has been modified.\nDISAPPROVED PURCHASE REQUEST | A Purchase Request PO has been disapproved.\nREOPENED PURCHASE REQUEST | A disapproved Purchase Request PO has been reopened.\nDISAPPROVED STEP | A PO has had its workflow step disapproved and been sent back a step.\n\n### Purchase Order Items\n\nFor PO Items, you may receive a webhook that looks like this:\n\n```\n{ \n\"poItemID\": 8203,\n\"status\": \"RECEIVED\",\n\"category\": \"poItem\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nAll possible statuses for PO Item webhooks are as follows:\n\nCREATED | A PO Item was created.\nDELETED | A PO Item was deleted.\nRECEIVED | Some quantity of a PO Item was marked as received.\nCHANGE GL | A PO Item has been assigned a new GL or its GL has been removed.\nCHANGE DESCRIPTION | A PO Item has had its description modified.\nCHANGE QUANTITY | A PO Item has had its quantity modified.\nCHANGE RATE | A PO Item has had its rate (price) modified.\nCHANGE TAX | A PO Item has had its tax percentage modified.\nCHANGE DISCOUNT | A PO Item has had its discount percentage modified.\nCHANGE SHIPPING | A PO Item has had its shipping cost modified.\n\n### Tasks\n\nBelow is an example payload you might be sent when an event occurs on a Task:\n\n```\n{\n\"taskID\": 8203, // The unique identifier for the item the webhook event describes\n\"status\": \"COMPLETE\", // The status (e.g. task created, task complete, etc.) -- see below for a full list of possible statuses.\n\"category\": \"task\", // The category of item that triggered the webhook to fire (e.g. task, po, poItem).\n\"user\": \"bob@limblecmms.com\" // The user whose action caused the webhook to fire.\n}\n\n```\n\nOnce the Payload is received you can use the Get Tasks API call to get the most recent Task data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | A Task was created\nDELETED | A Task was deleted\nCHANGED DUE DATE | A Task changed due date\nCHANGED ASSIGNMENT | A Task changed assignment\nCOMPLETE | A Task was completed.\nCHANGED COMPLETED TASK | A Task that is completed was changed.\nCOMPLETED TASK REOPENED | A task that was completed was reopened and is now open.\nCHANGED TASK NAME | A task has been renamed.\nCHANGED TASK DESCRIPTION | The description of a task has been changed.\nADDED COMMENT TO TASK | A comment was added to a task.\nCUSTOM TAG ADDED TO TASK | A custom tag was added to a task.\nCUSTOM TAG REMOVED FROM TASK | A custom tag was removed from task.\nLOGGED TIME ON TASK | A time entry was added to a task.\n\n### Task Instruction\n\nBelow is an example payload you might be sent when an event occurs on an location field:\n\n```\n{\n\"instructionID\": 46490,\n\"status\": \"Updated\",\n\"category\": \"instruction\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Instruction API call to get the task instruction data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | A Task Instruction was added\nDELETED | A Task Instruction was deleted\nUPDATED | A Task Instruction was updated\nLABEL UPDATED | A Task Instruction's label was updated\nDESCRIPTION UPDATED | A Task Instruction's description was updated\nPARENT RESPONSE UPDATED | The response of a Task Instruction's parent item was updated\nSORT ORDER UPDATED | The sort order of a Task Instruction was updated.\n\n## Securing Webhooks\n\nTo ensure the authenticity and integrity of webhook events each webhook is \nsigned with a signature as well as some other data described below:\n\ntimestamp | int | A standard unix time stamp\ntoken | string | , randomly generated string that is an integrity check of the, payload.,\nsignature | String | A string generated by the HMAC algorithm\n\nTo verify the webhook is originating from LimbleCMMS you will need to:\n\n- Concatenate the timestamp and token\n\n- Encode your private API key (oldest Limble API Key) with the SHA256 algorithm\n\n- Encode the timestamp and token value with the HMAC algorithm using your hashed private key and the SHA256 method.\n\n- Compare the resulting digest to the signature provided in your webhook \nheader\n\n## Validation Code Examples\n\nCode samples to verify webhook data.\n\nPHP\n\n```\nfunction verify($timestamp, $signature, $apiKey, $token)\n//hash private key\n$apiKey = hash('sha256', $apiKey);\n$generated_signature = hash_hmac('sha256', $timestamp . $token, $apiKey);\nif($generated_signature === $signature) {\nreturn true;\n} else {\nreturn false;\n}\n} \n\n```\n\nNodeJS\n\n```\nvar crypto = require('crypto');\nconst verify = (apiKey, token, timestamp, signature) => {\n//hash private key\nconst apiKey = crypto.createHash('sha256').update(apiKey).digest('hex');\nconst value = timestamp+token;\nconst generated_signature = crypto.createHmac('sha256',apiKey).update(value).digest('hex');\nif(signature === generated_signature){\nreturn true;\n} else {\nreturn false;\n}\n};\n\n```\n\n---\n\n# Rate limit\n\nTo help protect against run-away scripts, clients who make an inordinate \nnumber of calls over a period of time may be temporarily blocked from \naccessing the service. The limits are defined in the table below. If you \nreceive an error indicating that you have exceeded the call limit, please \nwait and try again later. If you need higher limits please reach out to your dedicated account manager.\n\n## Per Hour\n\nGET | 4000 calls per hour. | 360 calls per minute.\nPATCH | 2000 calls per hour. | 240 calls per minute.\nPOST | 1000 calls per hour. | 240 calls per minute.\nPUT | 1000 calls per hour. | 240 calls per minute.\nDELETE | 100 calls per hour. | 60 calls per minute.\nBATCH REQUEST | 20 calls per hour | 5 calls per minute\n\nEvery API response is accompanied by the following set of headers to identify the status of your consumption. API calls are rate-limited on two windows of time: per-minute and per-hour. For example, if you made a request at 13:42:42, that request will expire from your per-minute window at 13:43:42 and from your per-hour window at 14:42:42.\n\nX-RateLimit-Limit | The maximum number of requests that the consumer is permitted to make per hour.\nX-RateLimit-Remaining | The number of requests remaining in the current per-hour window.\nX-RateLimit-First-Call | The time your first call was made in the current per-hour window.\nX-RateLimit-TTL | The time until more request resources become available (This only displays when you've hit your limit).\nX-RateLimit-Minute-Limit | The maximum number of requests that the consumer is permitted to make per minute.\nX-RateLimit-Minute-Remaining | The number of requests remaining in the current per-minute window.\nX-RateLimit-Minute-First-Call | The time your first call was made in the current per-minute window.\nX-RateLimit-Minute-TTL | The time until more request resources become available (This only displays when you've hit your limit).\n\n# Pagination\n\nCurrently pagination using OrderBy and cursor is supported only by **GET Tasks** and **GET Assets**. Pagination using Limit and Page is supported by many other GET endpoints including **GET Tasks** and **GET Assets**.\n\nPagination can be implemented by using the orderBy, cursor, limit and page query parameters. \n**Note: cursor and page cannot be used simultaneously for pagination.**\n\n## Pagination using Limit and Page\n\nThis uses limit and page query parameters. For a given limit and page results will be paginated. If orderBy query parameter is given the results will be ordered and paginated accordingly.\n\nThe page parameter is **required** and can be greater than or equal to 1 for this pagination method. The default limit is 100 but can be changed. The max limit is 1000.\n\nThe response headers contain information about the Previous, Next and Last Page of the result based on the limit.\n\nThe result will be empty when for a given limit, the given page does not exist. For example, if there are 100 Assets in total and limit is set at 10, only pages 1-10 are possible. An empty result will be given for page numbers greater than 10.\n\nThis pagination method is supported by various GET endpoints. Please refer to the examples for those GET endpoints for more information.\n\n## Pagination using OrderBy and Cursor\n\n**Note**: If you're implementing pagination for the first time for **GET Tasks** or **GET Assets** please follow **Pagination Using Limit and Page** as the use of **Cursor** will be deprecated in the next API version.\n\nThis uses orderBy and cursor query parameters. Generally, in all of our GET endpoints, the cursor parameter ensures that the ID will be greater than the value of cursor. This makes sense when we're ordering the results ascending by ID.\n\nIn GET Assets, when we're fetching a set of assets and ordering by lastEdited (ascending) or -lastEdited (descending), the cursor parameter will instead ensure that we're returning a set of results that begin at the next asset in the order, regardless of whether its **ID is greater or less than the value of cursor**.\n\nIf the value of cursor does not match an existing assetID, then the result set will be empty, because there is no lastEdited value to compare to. **When providing orderBy and cursor, the value of cursor must be a real assetID or the result set will be empty.**\n\nThe same applies for GET Tasks when using cursor and ordering by createdDate, dateCompleted and due."
+servers:
+- url: https://api.limblecmms.com
+  description: US (Default)
+- url: https://ca-api.limblecmms.com
+  description: Canada
+- url: https://au-api.limblecmms.com
+  description: Australia
+- url: https://eu-api.limblecmms.com
+  description: Europe
+- url: https://21cfr-api.limblecmms.com
+  description: 21 CFR Part 11 (Pharma/Life Sciences)
+security:
+- BasicAuth: []
+tags:
+- name: Bills
+paths:
+  /v2/bills/{billID}/transactions:
+    parameters:
+    - name: billID
+      in: path
+      required: true
+      description: The ID of the bill for which an item needs to be added.
+      schema:
+        type: integer
+      example: 425
+    post:
+      operationId: postBillsByBillIDTransactions
+      summary: Add Bill Item
+      responses:
+        '201':
+          description: Add Bill Item
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactionID:
+                    type: integer
+              example:
+                transactionID: 399
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      description: 'This request creates a Bill transaction by adding a Bill Item to an unclosed Bill.
+
+
+        Parameter: poItemID, Type: Int, Required?: Required, Description: The ID of the item that has to be added to the Bill.
+
+        Parameter: qtyReceived, Type: Int, Required?: Required, Description: The item quantity received on this Bill.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                poItemID:
+                  type: integer
+                qtyReceived:
+                  type: integer
+            example:
+              poItemID: 358
+              qtyReceived: 2
+  /v2/bills/transactions:
+    get:
+      operationId: getBillsTransactions
+      summary: Bill Transactions
+      parameters:
+      - name: bills
+        in: query
+        description: This parameter is used to only get specific Bill Transactions by billID. This parameter expects a comma delimited list of billIDs.
+        schema:
+          type: integer
+        example: 423
+      - name: items
+        in: query
+        description: This parameter is used to only get specific Bill Transactions by items in a Bill. This parameter expects a comma delimited list of poItem IDs.
+        schema:
+          type: integer
+        example: 358
+      - name: start
+        in: query
+        description: 'This parameter is used to only get Bill Transactions that were created after or on the unix timestamp passed into it. '
+        schema:
+          type: integer
+        example: 1630611650
+      - name: end
+        in: query
+        description: 'This parameter is used to only get Bill transactions that were created before or on the unix timestamp passed into it. '
+        schema:
+          type: integer
+        example: 1630611660
+      - name: transactions
+        in: query
+        description: This parameter is used to only get specific Bill Transactions. This parameter expects a comma delimited list of transactionIDs.
+        schema:
+          type: integer
+        example: 397
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 10
+      - name: locations
+        in: query
+        description: This parameter is used to only get Bill Transactions at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs.
+        schema:
+          type: integer
+        example: 163
+      responses:
+        '200':
+          description: Bill Transaction
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    transactionID:
+                      type: integer
+                    billID:
+                      type: integer
+                    poItemID:
+                      type: integer
+                    qtyReceived:
+                      type: integer
+                    dateReceived:
+                      type: integer
+                    meta:
+                      type: object
+                      properties:
+                        bills:
+                          type: string
+              example:
+              - transactionID: 397
+                billID: 423
+                poItemID: 358
+                qtyReceived: 1
+                dateReceived: 1630611659
+                meta:
+                  bills: /v2/bills?bills=423
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      description: This request gets information about the transactions made for a Bill.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+  /v2/bills/{billID}/transactions/{transactionID}:
+    parameters:
+    - name: billID
+      in: path
+      required: true
+      description: The ID of the Bill for which the transaction needs to be updated.
+      schema:
+        type: integer
+      example: 425
+    - name: transactionID
+      in: path
+      required: true
+      description: The ID of the transaction which needs ot be updated.
+      schema:
+        type: integer
+      example: 399
+    patch:
+      operationId: patchBillsByBillIDTransactionsByTransactionID
+      summary: Update Bill Transaction
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                poItemID:
+                  type: integer
+                qtyReceived:
+                  type: integer
+            example:
+              poItemID: 358
+              qtyReceived: 100
+  /v2/bills/transactions/{transactionID}:
+    parameters:
+    - name: transactionID
+      in: path
+      required: true
+      description: The ID of the Bill Transaction to be deleted.
+      schema:
+        type: integer
+      example: 399
+    delete:
+      operationId: deleteBillsTransactionsByTransactionID
+      summary: Bill Transaction
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+  /v2/bills/{billID}/comments:
+    parameters:
+    - name: billID
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 2001
+    get:
+      operationId: getBillsByBillIDComments
+      summary: Bill Comments
+      parameters:
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what commentID you want to start receiving results at. e.g. passing 100 here will only get you comments with an id greater than 100
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Bill Comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    commentID:
+                      type: integer
+                    comment:
+                      type: string
+                    timestamp:
+                      type: integer
+                    userID:
+                      type: integer
+                    commentFiles:
+                      type: array
+                    commentEmailAddress:
+                      type: string
+              example:
+              - commentID: 47
+                comment: Bill marked as paid
+                timestamp: 1688165716
+                userID: 340
+                commentFiles: []
+                commentEmailAddress: ''
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      description: 'This request gets all Bill Comments associated with a Bill.
+
+
+        Return data description
+
+
+        commentID | This is the commentID of comment.
+
+        comment | The text comment that was entered by the user.
+
+        timestamp | The date this comment was created. This is a unix timestamp.
+
+        userID | The ID of the user that made the comment.
+
+        commentEmailAddress | The email address of the external user that made this comment. This is only populated if the comment was made by an external user via the comment reply system.
+
+        commentFiles | Array containing fileName and link properties.'
+    post:
+      operationId: postBillsByBillIDComments
+      summary: Create Bill Comment
+      responses:
+        '201':
+          description: 201 Created
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      description: 'Adds a comment to a Bill.
+
+
+        Parameters:
+
+
+        | Parameter | In | Type | Required | Default | Description |
+
+        |---|---|---|---|---|---|
+
+        | billID | path | integer | yes |  | Bill identifier |
+
+        | comment | body | string | yes |  | Comment text |
+
+        | showExternalUsers | body | boolean | no | true | Visible to external users |
+
+
+        Responses:
+
+        - 201 Created: Returns commentID.'
+  /v2/bills/{billID}/comments/{commentID}/file:
+    parameters:
+    - name: billID
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 2001
+    - name: commentID
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 12
+    put:
+      operationId: putBillsByBillIDCommentsByCommentIDFile
+      summary: Upload Bill Comment File
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      description: 'Uploads a file to a Bill comment.
+
+
+        Parameters:
+
+
+        | Parameter | In | Type | Required | Default | Description |
+
+        |---|---|---|---|---|---|
+
+        | billID | path | integer | yes |  | Bill identifier |
+
+        | commentID | path | integer | yes |  | Comment identifier |
+
+        | file | form-data | file | yes |  | File to upload (max 50MB). Same types as PO comment files |'
+    delete:
+      operationId: deleteBillsByBillIDCommentsByCommentIDFile
+      summary: Delete Bill Comment File
+      parameters:
+      - name: filename
+        in: query
+        schema:
+          type: string
+        example: receipt.png
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      description: 'Deletes a file from a Bill comment.
+
+
+        Parameters:
+
+
+        | Parameter | In | Type | Required | Default | Description |
+
+        |---|---|---|---|---|---|
+
+        | billID | path | integer | yes |  | Bill identifier |
+
+        | commentID | path | integer | yes |  | Comment identifier |
+
+        | filename | query | string | yes |  | Exact filename to remove |
+
+
+        Responses:
+
+        - 200 OK: Deleted.
+
+        - 404 Not Found: File not found.'
+  /v2/bills/{billID}/comments/{commentID}:
+    parameters:
+    - name: billID
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 2001
+    - name: commentID
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 12
+    delete:
+      operationId: deleteBillsByBillIDCommentsByCommentID
+      summary: Delete Bill Comment
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      description: 'Deletes a Bill comment.
+
+
+        Parameters:
+
+
+        | Parameter | In | Type | Required | Default | Description |
+
+        |---|---|---|---|---|---|
+
+        | billID | path | integer | yes |  | Bill identifier |
+
+        | commentID | path | integer | yes |  | Comment identifier |
+
+
+        Responses:
+
+        - 200 OK: Deleted.
+
+        - 404 Not Found: Comment not found.'
+  /v2/bills:
+    get:
+      operationId: getBills
+      summary: Get Bills
+      parameters:
+      - name: bills
+        in: query
+        description: This parameter is used to only get specific Bills. This parameter expects a comma delimited list of billIDs.
+        schema:
+          type: integer
+        example: 1
+      - name: numbers
+        in: query
+        description: This parameter is used to only get specific Bills by Number. This parameter expects a comma delimited list of billNumbers.
+        schema:
+          type: integer
+        example: 1
+      - name: status
+        in: query
+        description: 'This parameter is used to only get specific Bills by their status. The bill status could be 0,1 or 2
+
+          '
+        schema:
+          type: string
+        example: 0,1
+      - name: end
+        in: query
+        description: 'This parameter is used to only get Bills that were created before or on the unix timestamp passed into it. '
+        schema:
+          type: integer
+        example: 1697443800
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 2
+      - name: pos
+        in: query
+        description: This parameter is used to only get specific Bills by POs. This parameter expects a comma delimited list of PO IDs.
+        schema:
+          type: integer
+        example: 5
+      - name: start
+        in: query
+        description: 'This parameter is used to only get Bills that were created after or on the unix timestamp passed into it. '
+        schema:
+          type: integer
+        example: 1597443703
+      - name: locations
+        in: query
+        description: This parameter is used to only get Bills at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs.
+        schema:
+          type: integer
+        example: 163
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what billID you want to start receiving results at. e.g. passing 130 here will only get you bills with an id greater than 130.
+        schema:
+          type: integer
+        example: 0
+      - name: page
+        in: query
+        description: This parameter is used to paginate results based on the limit. Refer to Pagination section for more information.
+        schema:
+          type: integer
+        example: 2
+      responses:
+        '200':
+          description: Get Bills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bill'
+              example:
+              - billID: 1
+                poID: 5
+                status: 1
+                userID: 340
+                userIDStarted: 340
+                userIDMarkPaid: 0
+                billNumber: 1
+                locationID: 163
+                date: 1597443703
+                meta:
+                  items: /v2/po/items?pos=5
+                  po: /v2/po?pos=5
+                  transactions: /v2/bills/transactions?bills=1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      description: 'This request gets information such as Bill IDs, Bill Numbers, etc.
+
+
+        This call returns a "meta" object containing URLs that can be used to get data related to the Bill.
+
+
+        Note: this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information.
+
+
+        Return data description
+
+
+        Property: meta, Description: useful links relating to this Bill
+
+        Property: billID, Description: The unique ID of the Bill.
+
+        Property: billNumber, Description: The bill number assigned to the Bill.
+
+        Property: poID, Description: The poID of which the Bill was made.
+
+        Property: locationID, Description: The unique ID of the location associated with this Bill.
+
+        Property: date, Description: The date this Bill was created as a UNIX timestamp.
+
+        Property: status, Description: The status of this Bill. The status can be as follows: 0: The bill is setup. 1: The bill is submitted. 2: The bill is closed i.e. Marked as Paid
+
+        Property: userID, Description: The Id of the user this Bill was assigned to.
+
+        Property: userIDStarted, Description: The ID of the user this Bill was created by.
+
+        Property: userIDMarkPaid, Description: The ID of the user this Bill was marked paid by.'
+    post:
+      operationId: postBills
+      summary: New Bill
+      responses:
+        '201':
+          description: New Bill
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  billID:
+                    type: integer
+              example:
+                billID: 423
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      description: 'This request creates a new Bill for a Purchase Order.
+
+
+        Parameter: poID, Type: Int, Required?: Required, Description: The poID for which the Bill is made.
+
+        Parameter: userID, Type: Int, Required?: Optional, Description: The ID of the user that this Bill will be assigned to.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                poID:
+                  type: integer
+                userID:
+                  type: integer
+            example:
+              poID: 381
+              userID: 340
+  /v2/bills/{billID}:
+    parameters:
+    - name: billID
+      in: path
+      required: true
+      description: The ID of the Bill to be deleted.
+      schema:
+        type: integer
+      example: 226
+    patch:
+      operationId: patchBillsByBillID
+      summary: Update Bill
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      description: "This request updates a Bill. \n\nParameter: userID, Type: Int, Required?: Optional, Description: The ID of the user that this Bill will be assigned to.\nParameter: status, Type: Int, Required?: Optional, Description: The status of this Bill. Refer to GET Bill to understand what values status can be. A bill status cannot be reduced once it is changed."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userID:
+                  type: integer
+                status:
+                  type: integer
+            example:
+              userID: 340
+              status: 2
+    delete:
+      operationId: deleteBillsByBillID
+      summary: Delete Bill
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Bills
+      description: This request deletes a Bill. This will also delete any Bill transactions for PO Items that were received on this Bill. The qty and price of the PO Items on the Bill will be recalculated.
+components:
+  responses:
+    Forbidden:
+      description: The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    TooManyRequests:
+      description: The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: No `Authorization` header was provided on the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    EmptySuccess:
+      description: The operation completed successfully. The response body is empty.
+    NotFound:
+      description: The referenced resource does not exist or is not visible to the authenticated customer.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      description: 'Error response body. The API emits two shapes today: the standard `{ message }` shape returned by the central error handler and most controllers, and the legacy `{ error, success, msg }` shape returned by the auth middleware. Some controllers also include extra fields (e.g. `success`, conflict metadata).'
+      oneOf:
+      - type: object
+        required:
+        - message
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          raw:
+            description: Optional raw error object (validation errors).
+      - type: object
+        required:
+        - error
+        - msg
+        properties:
+          error:
+            type: integer
+            description: Numeric HTTP status echoed in the body.
+          success:
+            type: boolean
+          msg:
+            type: string
+    Bill:
+      type: object
+      properties:
+        billID:
+          type: integer
+        poID:
+          type: integer
+        status:
+          type: integer
+        userID:
+          type: integer
+        userIDStarted:
+          type: integer
+        userIDMarkPaid:
+          type: integer
+        billNumber:
+          type: integer
+        locationID:
+          type: integer
+        date:
+          type: integer
+        meta:
+          type: object
+          properties:
+            items:
+              type: string
+            po:
+              type: string
+            transactions:
+              type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,2354 @@
+openapi: 3.0.3
+info:
+  title: Limble API V2 Assets Parts API
+  version: 1.0.0
+  description: "Getting Started!\n\nWelcome to Limble CMMS’s API documentation.\n\nYou can use this documentation to configure connections to the Limble CMMS API over https using RESTful standards.\n\nUsing the API you can get information about the following portions of your system:\n\n- Assets\n\n- Locations\n\n- Parts (Current quantities and Usage)\n\n- Tasks (Work Orders, Preventive Maintenance, Work Requests, etc.)\n\n- Users\n\n- Vendors\n\n- Roles\n\n- Teams\n\n- Purchase Orders\n\n- General Ledgers\n\n- Budgets\n\n- Priorities\n\n- Tags\n\n- Statuses\n\n- Bills\n\n- Regions\n\n- Webhooks\n\n- Units of Measure(UOM)\n\nPlease use the correct Limble API URL to connect to our API based on the region or the type of your Limble Account.\n\n| **Limble Account (Region/Type)** | **Limble API URL** |\n| --- | --- |\n| Default | api.limblecmms.com |\n| Canada | ca-api.limblecmms.com |\n| Australia | au-api.limblecmms.com |\n| Europe | eu-api.limblecmms.com |\n| 21CFR | 21cfr-api.limblecmms.com |\n\n---\n\n# Authentication\n\nTo protect your information the Limble CMMS API uses BASIC authorization standards.\n\nEvery call to the API must include an authorization header with your base 64 encoded id and secret.\n\nClient ID\n\nYour Client ID is your unique customer identification.\n\nClient Secret\n\nYour Client Secret is used to authenticate the Client ID on each API call. This is something that must be kept secret.\n\n> How do I get my Client ID and Client Secret? \n\nTo obtain your Client ID and Client Secret login to your Limble account as a **Super Administrator** and go to **Settings** -> **Configuration**, on this page scroll down to the **API Settings** section and click **Generate API Keys**. Keep this information **secret**, you will only be able to see your Client Secret once upon initial generation. If you lose your secret you will need to regenerate it and update your integration accordingly.\n\n> Example Header \nAuthorization: Basic \\[BASE64 ENCODED YOUR_CLIENT_ID:YOUR_CLIENT_SECRET \n\nBelow is a code example for PHP:\n\n```\n$curl = curl_init();\n$id = 'your_client_id';\n$secret = 'your_client_id';\n$headers = array(\n'Content-Type:application/json',\n'Authorization: Basic '. base64_encode($id.':'.$secret)\n);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, $headers);\ncurl_setopt_array($curl, array(\nCURLOPT_URL => 'https://api.limblecmms.com:443/v2/tasks/',\nCURLOPT_RETURNTRANSFER => true,\nCURLOPT_ENCODING => \"\",\nCURLOPT_MAXREDIRS => 10,\nCURLOPT_TIMEOUT => 0,\nCURLOPT_FOLLOWLOCATION => false,\nCURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\nCURLOPT_CUSTOMREQUEST => \"GET\",\n));\n$response = curl_exec($curl);\n$err = curl_error($curl);\ncurl_close($curl);\nif ($err) {\necho \"cURL Error #:\" . $err;\n} else {\necho $response;\n} ?>\n\n```\n\nBelow is a code example for NodeJS:\n\n```\nconst https = require('https');\nconst id = 'your_client_id';\nconst secret = 'your_client_secret';\nconst options = {\n'method': 'GET',\n'hostname': 'api.limblecmms.com',\n'path': '/v2/tasks/?',\n'headers': {\n'Authorization': 'Basic ' + Buffer.from(`${credentials.id}:${credentials.secret}`).toString('base64')\n}\n};\nconst req = https.request(options, function (res) {\nconst chunks = [];\nres.on(\"data\", function (chunk) {\nchunks.push(chunk);\n});\nres.on(\"end\", function (chunk) {\nconst body = Buffer.concat(chunks);\nconsole.log(body.toString());\n});\nres.on(\"error\", function (error) {\nconsole.error(error);\n});\n});\nreq.end();\n\n```\n\n---\n\n# Error Codes\n\n- HTTP 400 - Data Validation Error - Malformed JSON input or incorrect data type.\n\n- HTTP 403 - Forbidden - The resource cannot be accessed.\n\n- HTTP 404 - Resource not found - The resource you are targeting does not exist.\n\n- HTTP 409 - Resource Conflict - A resource already exists with those parameters.\n\n- HTTP 422 - Unprocessable Entity - The syntax of the request is correct but cannot be processed due to semantic errors.\n\n- HTTP 429 - Too Many Requests - See the rate limiting section below.\n\n- HTTP 500 - Internal Server Error - Contact Limble for assistance.\n\n- HTTP 501 - Method Not Support - Limble's API only supports GET, POST, PATCH, PUT, and DELETE.\n\n---\n\n# Success Codes\n\n- HTTP 200 - OK - Everything was successful. PUTs, PATCHs and DELETEs on success always return an empty 200 OK.\n\n- HTTP 201 - CREATED - This is used on POST calls when new resouces are created. If a new resource was created Limble will always pass back a GET URL in the location header so a developer can easily GET the new resource.\n\n---\n\n# Overriding HTTP methods\n\nSome systems may support only the `POST` and `GET` HTTP methods. This restriction prevents using other HTTP methods such as `PUT`, `PATCH` and `DELETE`. RESTful web API implementations can work around this restriction by letting the client override the HTTP method via the custom HTTP headers.\n\nThe Limble API supports **Method Overrides** by using a `POST` request and setting the `X-HTTP-Method-Override` header with a method string value. The header value can be `PATCH` or `PUT`. This will allow Limble API users to use `PATCH` and `PUT` endpoints by sending `POST` requests to these endpoints and overriding them with the respective HTTP method.\n\n# Webhooks\n\nReceive data on certain events such as Tasks being completed.\n\nLimble's webhooks allow you to receive data whenever specific events occur.\n\nFor example, you may need to run your own script whenever a Task is completed.\n\nLimble supports adding multiple webhooks that can be triggered when actions are carried out on:\n\n- Tasks\n\n- Assets\n\n- Asset Fields\n\n- Purchase Orders\n\n- Purchase Order Items\n\nWhen an event occurs, Limble sends an HTTP POST request to a URL endpoint you configure.\n\nYou can configure this URL in the Limble Web App under:\n\n**Settings → Configuration → API Settings**\n\nAll data sent is JSON-encoded, and Limble includes the following fields in the request headers for validation:\n\n- `signature`\n\n- `timestamp`\n\n- `token`\n\nYou may register multiple webhooks for the same event type.\n\n### Important: API Key Requirement for Webhooks\n\nTo receive webhooks, the customer must have at least one active **limbleAPI key** created in API Settings.\n\n- Webhooks **will not function** without at least one valid `limbleAPI` key.\n\n- Limble uses the **first-created** **`limbleAPI`** **key** (by creation date) to generate the **signature** included in webhook headers.\n\n- The receiving system must use this key to verify the authenticity of incoming webhook requests.\n\nIf a customer has multiple `limbleAPI` keys, **only the oldest one** will be used for signing webhook requests.\n\n### Response Time and Retry Behavior\n\nYour server must respond to webhook POST requests within **10 seconds**.\n\nIf it does not, Limble will attempt to retry the webhook request.\n\nLimble handles server responses as follows:\n\n- If the server returns **200 OK**, Limble considers the webhook successful and will not retry.\n\n- If the server returns **406 Not Acceptable**, Limble considers the webhook received but intentionally ignored — no retry will occur.\n\n- For any other response (e.g., 500, timeout, etc.), Limble will retry the request.\n\n**Retry schedule:**\n\n- After 10 minutes\n\n- After 1 hour\n\n- After 2 hours\n\n- After 4 hours\n\nAfter the final retry attempt, the webhook will be **automatically disabled**.\n\n### Re-enabling a Disabled Webhook\n\nTo re-enable a disabled webhook:\n\n1. Go to **Settings → Configuration → API Settings** in the Limble Web App. \nFind the webhook and use the option to **Re-enable** the API endpoint.\n\n2. Alternatively, send a `PATCH` request using the **Update Webhook** endpoint and set `enabled = true`.\n\n### Assets\n\nBelow is an example payload you might be sent when an event occurs on an asset:\n\n```\n{\n\"assetID\": 10748, \n\"status\": \"CREATED\",\n\"category\": \"asset\", \n\"user\": \"bob@limblecmms.com\" \n}\n\n```\n\nOnce the Payload is received you can use the Get Assets API call to get the most recent Asset data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | An Asset is created\nDELETED | An Asset was deleted\nCHANGED ASSET NAME | An asset has been renamed\n\n### Asset Field\n\nBelow is an example payload you might be sent when an event occurs on an asset field:\n\n```\n{\n\"valueID\": 46490,\n\"status\": \"DELETED\",\n\"category\": \"assetField\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Asset Field API call to get the most recent Asset Field data. The following is a list of all the possible statuses that a webhook might be set to:\n\nADDED | An Asset Field was added to an Asset\nDELETED | An Asset Field was deleted from an Asset\nUPDATED | An Asset Field was updated on an Asset\n\n### Location\n\nBelow is an example payload you might be sent when an event occurs on an location field:\n\n```\n{\n\"valueID\": 46490,\n\"status\": \"DELETED\",\n\"category\": \"location\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Location API call to get the most recent Location data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | An Location was added\nDELETED | An Location was deleted\nUPDATED | An Location was updated\n\n### Parts\n\nFor Parts, you may receive a webhook that looks like this:\n\n```\n{ \n\"partID\": 3456,\n\"status\": \"CREATED\",\n\"category\": \"part\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nAll possible statuses for Parts webhooks are as follows:\n\nCREATED | A Part was created.\nDELETED | A Part was deleted.\nLOCATION UPDATED | A Part had its location updated.\nSUPPLIER UPDATED | A Part had its supplier updated.\nPRICE UPDATED | A Part had its price updated.\nNAME UPDATED | A Part had its name updated.\nQUANTITY INCREASED | The quantity of a part increased.\nQUANTITY DECREASED | The quantity of a part decreased.\n\n### Purchase Order\n\nIf you have enabled purchasing webhooks, you may receive a webhook for POs that looks like this:\n\n```\n{ \n\"poID\": 8203,\n\"status\": \"READY TO RECEIVE\",\n\"category\": \"po\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nPossible statuses for PO webhooks are:\n\nCREATED | A PO was created.\nSETUP | A PO has been reset and now has the setup status.\nCHANGE STATUS | A PO has been approved and now has a custom status.\nREADY TO RECEIVE | A PO now has the Ready to Receive status.\nPARTIALLY RECEIVED | A PO has received any number of items and now has the Partially Received status.\nFULLY RECEIVED | A PO has received all of its items and now has the Fully Received status.\nCLOSED | A PO has had all items received and all bills paid and now has the Closed status.\nDELETED | A PO was deleted.\nCHANGE BUDGET | A PO has been assigned a new budget.\nCHANGE VENDOR | A PO has been assigned a new vendor.\nCHANGE NUMBER | A PO's PO Number has been modified.\nCHANGE BILL-TO | A PO's bill-to field has been modified.\nCHANGE SHIP-TO | A PO's ship-to field has been modified.\nCHANGE NOTES TO VENDOR | A PO's \"Notes to Vendor\" field has been modified.\nCHANGE CUSTOM FIELD | Any of a PO's custom fields has been modified.\nCHANGE ASSIGNMENT | A PO has had its assignment (user, team, multi-user) modified.\nCHANGE DATE | A PO's created date has been modified.\nCHANGE DELIVERY DATE | A PO's expected delivery date has been modified.\nDISAPPROVED PURCHASE REQUEST | A Purchase Request PO has been disapproved.\nREOPENED PURCHASE REQUEST | A disapproved Purchase Request PO has been reopened.\nDISAPPROVED STEP | A PO has had its workflow step disapproved and been sent back a step.\n\n### Purchase Order Items\n\nFor PO Items, you may receive a webhook that looks like this:\n\n```\n{ \n\"poItemID\": 8203,\n\"status\": \"RECEIVED\",\n\"category\": \"poItem\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nAll possible statuses for PO Item webhooks are as follows:\n\nCREATED | A PO Item was created.\nDELETED | A PO Item was deleted.\nRECEIVED | Some quantity of a PO Item was marked as received.\nCHANGE GL | A PO Item has been assigned a new GL or its GL has been removed.\nCHANGE DESCRIPTION | A PO Item has had its description modified.\nCHANGE QUANTITY | A PO Item has had its quantity modified.\nCHANGE RATE | A PO Item has had its rate (price) modified.\nCHANGE TAX | A PO Item has had its tax percentage modified.\nCHANGE DISCOUNT | A PO Item has had its discount percentage modified.\nCHANGE SHIPPING | A PO Item has had its shipping cost modified.\n\n### Tasks\n\nBelow is an example payload you might be sent when an event occurs on a Task:\n\n```\n{\n\"taskID\": 8203, // The unique identifier for the item the webhook event describes\n\"status\": \"COMPLETE\", // The status (e.g. task created, task complete, etc.) -- see below for a full list of possible statuses.\n\"category\": \"task\", // The category of item that triggered the webhook to fire (e.g. task, po, poItem).\n\"user\": \"bob@limblecmms.com\" // The user whose action caused the webhook to fire.\n}\n\n```\n\nOnce the Payload is received you can use the Get Tasks API call to get the most recent Task data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | A Task was created\nDELETED | A Task was deleted\nCHANGED DUE DATE | A Task changed due date\nCHANGED ASSIGNMENT | A Task changed assignment\nCOMPLETE | A Task was completed.\nCHANGED COMPLETED TASK | A Task that is completed was changed.\nCOMPLETED TASK REOPENED | A task that was completed was reopened and is now open.\nCHANGED TASK NAME | A task has been renamed.\nCHANGED TASK DESCRIPTION | The description of a task has been changed.\nADDED COMMENT TO TASK | A comment was added to a task.\nCUSTOM TAG ADDED TO TASK | A custom tag was added to a task.\nCUSTOM TAG REMOVED FROM TASK | A custom tag was removed from task.\nLOGGED TIME ON TASK | A time entry was added to a task.\n\n### Task Instruction\n\nBelow is an example payload you might be sent when an event occurs on an location field:\n\n```\n{\n\"instructionID\": 46490,\n\"status\": \"Updated\",\n\"category\": \"instruction\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Instruction API call to get the task instruction data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | A Task Instruction was added\nDELETED | A Task Instruction was deleted\nUPDATED | A Task Instruction was updated\nLABEL UPDATED | A Task Instruction's label was updated\nDESCRIPTION UPDATED | A Task Instruction's description was updated\nPARENT RESPONSE UPDATED | The response of a Task Instruction's parent item was updated\nSORT ORDER UPDATED | The sort order of a Task Instruction was updated.\n\n## Securing Webhooks\n\nTo ensure the authenticity and integrity of webhook events each webhook is \nsigned with a signature as well as some other data described below:\n\ntimestamp | int | A standard unix time stamp\ntoken | string | , randomly generated string that is an integrity check of the, payload.,\nsignature | String | A string generated by the HMAC algorithm\n\nTo verify the webhook is originating from LimbleCMMS you will need to:\n\n- Concatenate the timestamp and token\n\n- Encode your private API key (oldest Limble API Key) with the SHA256 algorithm\n\n- Encode the timestamp and token value with the HMAC algorithm using your hashed private key and the SHA256 method.\n\n- Compare the resulting digest to the signature provided in your webhook \nheader\n\n## Validation Code Examples\n\nCode samples to verify webhook data.\n\nPHP\n\n```\nfunction verify($timestamp, $signature, $apiKey, $token)\n//hash private key\n$apiKey = hash('sha256', $apiKey);\n$generated_signature = hash_hmac('sha256', $timestamp . $token, $apiKey);\nif($generated_signature === $signature) {\nreturn true;\n} else {\nreturn false;\n}\n} \n\n```\n\nNodeJS\n\n```\nvar crypto = require('crypto');\nconst verify = (apiKey, token, timestamp, signature) => {\n//hash private key\nconst apiKey = crypto.createHash('sha256').update(apiKey).digest('hex');\nconst value = timestamp+token;\nconst generated_signature = crypto.createHmac('sha256',apiKey).update(value).digest('hex');\nif(signature === generated_signature){\nreturn true;\n} else {\nreturn false;\n}\n};\n\n```\n\n---\n\n# Rate limit\n\nTo help protect against run-away scripts, clients who make an inordinate \nnumber of calls over a period of time may be temporarily blocked from \naccessing the service. The limits are defined in the table below. If you \nreceive an error indicating that you have exceeded the call limit, please \nwait and try again later. If you need higher limits please reach out to your dedicated account manager.\n\n## Per Hour\n\nGET | 4000 calls per hour. | 360 calls per minute.\nPATCH | 2000 calls per hour. | 240 calls per minute.\nPOST | 1000 calls per hour. | 240 calls per minute.\nPUT | 1000 calls per hour. | 240 calls per minute.\nDELETE | 100 calls per hour. | 60 calls per minute.\nBATCH REQUEST | 20 calls per hour | 5 calls per minute\n\nEvery API response is accompanied by the following set of headers to identify the status of your consumption. API calls are rate-limited on two windows of time: per-minute and per-hour. For example, if you made a request at 13:42:42, that request will expire from your per-minute window at 13:43:42 and from your per-hour window at 14:42:42.\n\nX-RateLimit-Limit | The maximum number of requests that the consumer is permitted to make per hour.\nX-RateLimit-Remaining | The number of requests remaining in the current per-hour window.\nX-RateLimit-First-Call | The time your first call was made in the current per-hour window.\nX-RateLimit-TTL | The time until more request resources become available (This only displays when you've hit your limit).\nX-RateLimit-Minute-Limit | The maximum number of requests that the consumer is permitted to make per minute.\nX-RateLimit-Minute-Remaining | The number of requests remaining in the current per-minute window.\nX-RateLimit-Minute-First-Call | The time your first call was made in the current per-minute window.\nX-RateLimit-Minute-TTL | The time until more request resources become available (This only displays when you've hit your limit).\n\n# Pagination\n\nCurrently pagination using OrderBy and cursor is supported only by **GET Tasks** and **GET Assets**. Pagination using Limit and Page is supported by many other GET endpoints including **GET Tasks** and **GET Assets**.\n\nPagination can be implemented by using the orderBy, cursor, limit and page query parameters. \n**Note: cursor and page cannot be used simultaneously for pagination.**\n\n## Pagination using Limit and Page\n\nThis uses limit and page query parameters. For a given limit and page results will be paginated. If orderBy query parameter is given the results will be ordered and paginated accordingly.\n\nThe page parameter is **required** and can be greater than or equal to 1 for this pagination method. The default limit is 100 but can be changed. The max limit is 1000.\n\nThe response headers contain information about the Previous, Next and Last Page of the result based on the limit.\n\nThe result will be empty when for a given limit, the given page does not exist. For example, if there are 100 Assets in total and limit is set at 10, only pages 1-10 are possible. An empty result will be given for page numbers greater than 10.\n\nThis pagination method is supported by various GET endpoints. Please refer to the examples for those GET endpoints for more information.\n\n## Pagination using OrderBy and Cursor\n\n**Note**: If you're implementing pagination for the first time for **GET Tasks** or **GET Assets** please follow **Pagination Using Limit and Page** as the use of **Cursor** will be deprecated in the next API version.\n\nThis uses orderBy and cursor query parameters. Generally, in all of our GET endpoints, the cursor parameter ensures that the ID will be greater than the value of cursor. This makes sense when we're ordering the results ascending by ID.\n\nIn GET Assets, when we're fetching a set of assets and ordering by lastEdited (ascending) or -lastEdited (descending), the cursor parameter will instead ensure that we're returning a set of results that begin at the next asset in the order, regardless of whether its **ID is greater or less than the value of cursor**.\n\nIf the value of cursor does not match an existing assetID, then the result set will be empty, because there is no lastEdited value to compare to. **When providing orderBy and cursor, the value of cursor must be a real assetID or the result set will be empty.**\n\nThe same applies for GET Tasks when using cursor and ordering by createdDate, dateCompleted and due."
+servers:
+- url: https://api.limblecmms.com
+  description: US (Default)
+- url: https://ca-api.limblecmms.com
+  description: Canada
+- url: https://au-api.limblecmms.com
+  description: Australia
+- url: https://eu-api.limblecmms.com
+  description: Europe
+- url: https://21cfr-api.limblecmms.com
+  description: 21 CFR Part 11 (Pharma/Life Sciences)
+security:
+- BasicAuth: []
+tags:
+- name: Parts
+paths:
+  /v2/assets/parts:
+    get:
+      operationId: getAssetsParts
+      summary: Asset Parts
+      parameters:
+      - name: assets
+        in: query
+        description: This parameter is used to only get specific Assets. This parameter expects a comma delimited list of Asset IDs.
+        schema:
+          type: string
+        example: 172,253
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 3
+      - name: page
+        in: query
+        description: This parameter is used to paginate results based on the limit. Refer to Pagination section for more information.
+        schema:
+          type: integer
+        example: 3
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what ID you want to start receiving results at. Without ordering, this will return results with an ID greater than the value of cursor. With ordering, this will return results starting at the next item in the order, regardless of whether its ID is greater than or lesser than the value of cursor.
+        schema:
+          type: integer
+        example: 49
+      - name: parts
+        in: query
+        description: This parameter is used to only get specific Parts. This parameter accepts a comma delimited list of part IDs.
+        schema:
+          type: string
+        example: 46,172
+      - name: relations
+        in: query
+        description: This parameter is used to only get specific relations. This parameter expects a comma delimited list of relation IDs.
+        schema:
+          type: string
+        example: 1,10
+      - name: start
+        in: query
+        description: This parameter is used to only get relations that were last edited after the unix timestamp passed into the start parameter. For example, all relations that were last edited after April 18th, 2018.
+        schema:
+          type: integer
+        example: 1334570141
+      - name: end
+        in: query
+        description: This parameter is used to only get relations that were last edited *before* the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1784570141
+      responses:
+        '200':
+          description: Asset Parts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssetPart'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request returns a list of Part Asset Relations with top level information such as part, asset, qty, last edited, etc.
+
+
+        **Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.
+
+
+        Return data description
+
+
+        relationID | The Relations ID. e.g. 1
+
+        partID | The ID of the Part in this Relation
+
+        assetID | The ID of the Asset in this Relation
+
+        qty | The qty of the Part related to this Asset
+
+        createdAt | The unix timestamp at which this Relation was created
+
+        lastEdited | The unix timestamp at which this Relation last saw a change
+
+        associationType | The method used to create this Relation. At this time, only "manual" is supported'
+  /v2/parts/{partID}/image:
+    parameters:
+    - name: partID
+      in: path
+      required: true
+      description: partID of the part you are removing the image for.
+      schema:
+        type: string
+      example: '{{partID}}'
+    put:
+      operationId: putPartsByPartIDImage
+      summary: Add Part Image
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: This request adds the main image for a Part.
+    delete:
+      operationId: deletePartsByPartIDImage
+      summary: Delete Part Image
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: This request removes the main image from a Part.
+  /v2/parts/categories:
+    post:
+      operationId: postPartsCategories
+      summary: Create Part Category
+      responses:
+        '201':
+          description: Create Part Category
+          headers:
+            Location:
+              schema:
+                type: string
+              example: /v2/parts/categories/?categories=21
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categoryID:
+                    type: integer
+              example:
+                categoryID: 21
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'Creates a part category to help you organize your parts.
+
+
+        Parameter: name, Type: string, Required?: Required, Description: The name of your new part category (i.e. "Lawn Mower Parts")'
+    get:
+      operationId: getPartsCategories
+      summary: Get Categories
+      parameters:
+      - name: categories
+        in: query
+        description: This parameter is used to only get specific part categories. This parameter accepts a comma delimited list of categoryIDs.
+        schema:
+          type: integer
+        example: 1
+      - name: name
+        in: query
+        description: This parameter is used to string search part categories names either partial or full name with the wildcard %.
+        schema:
+          type: string
+        example: Electronics
+      responses:
+        '200':
+          description: Get Categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    categoryID:
+                      type: integer
+                    name:
+                      type: string
+              example:
+              - categoryID: 1
+                name: Electronics
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+  /v2/parts/categories/{categoryID}:
+    parameters:
+    - name: categoryID
+      in: path
+      required: true
+      description: categoryID of the category you wish to remove.
+      schema:
+        type: string
+      example: '{{categoryID}}'
+    patch:
+      operationId: patchPartsCategoriesByCategoryID
+      summary: Update Part Category
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request updates a Part Category''s name.
+
+
+        Parameter: name, Type: string, Required?: Required, Description: The name of your new part category (i.e. "Filters")'
+    delete:
+      operationId: deletePartsCategoriesByCategoryID
+      summary: Delete Part Category
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: This request will remove the Part Category from all Parts and from possible Categories.
+  /v2/parts/fields:
+    get:
+      operationId: getPartsFields
+      summary: Part Fields
+      parameters:
+      - name: fields
+        in: query
+        description: This parameter is used to only get specific fields by ID. This parameter expects a comma delimited list of fieldIDs.
+        schema:
+          type: string
+        example: 1,2
+      - name: name
+        in: query
+        description: This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %.
+        schema:
+          type: string
+        example: '%text%'
+      - name: parts
+        in: query
+        description: This parameter is used to only get part fields for a specific Part. This parameter expects a partID.
+        schema:
+          type: integer
+        example: 2992
+      - name: start
+        in: query
+        description: This parameter is used to only get part fields for parts that were last edited after the unix timestamp passed into the start parameter.
+        schema:
+          type: integer
+        example: 1580016200
+      - name: end
+        in: query
+        description: This parameter is used to only get parts fields for part fields that were last edited *before* the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1610602900
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what fieldID you want to start receiving results at. e.g. passing 137 here will only get you vendor fields with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 5
+      - name: value
+        in: query
+        description: This parameter is used to only get specific field by value. This parameter expects a string full name of a field or partial name with the wildcard %.
+        schema:
+          type: string
+        example: '%3%'
+      - name: locations
+        in: query
+        description: This parameter is used to paginate results based on the limit. Refer to Pagination section for more information.
+        schema:
+          type: string
+        example: 38469,38472
+      - name: values
+        in: query
+        description: This parameter is used to get part fields by their valueID. This parameter expects a comma delimited list of Value IDs.
+        schema:
+          type: integer
+        example: 27
+      - name: page
+        in: query
+        schema:
+          type: integer
+        example: 1
+      responses:
+        '200':
+          description: Part Fields
+          headers:
+            x-ratelimit-limit:
+              schema:
+                type: integer
+              example: '4000'
+            x-ratelimit-minute-limit:
+              schema:
+                type: integer
+              example: '360'
+            x-ratelimit-remaining:
+              schema:
+                type: integer
+              example: '3987'
+            x-ratelimit-first-call:
+              schema:
+                type: integer
+              example: '1719246455'
+            x-ratelimit-minute-remaining:
+              schema:
+                type: integer
+              example: '359'
+            x-ratelimit-minute-first-call:
+              schema:
+                type: integer
+              example: '1719247579'
+            Cache-Control:
+              schema:
+                type: string
+              example: no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    fieldID:
+                      type: integer
+                    partID:
+                      type: integer
+                    fieldName:
+                      type: string
+                    value:
+                      type: string
+                      nullable: true
+                    valueID:
+                      type: integer
+                    fieldType:
+                      type: string
+                    lastEdited:
+                      type: integer
+                    locationID:
+                      type: integer
+                    files:
+                      type: array
+              example:
+              - fieldID: 16706
+                partID: 1
+                fieldName: newFields-Part
+                value: null
+                valueID: 6048543
+                fieldType: Text
+                lastEdited: 1718405951
+                locationID: 38469
+                files: []
+              - fieldID: 30021
+                partID: 1
+                fieldName: height
+                value: null
+                valueID: 11328670
+                fieldType: Number
+                lastEdited: 1718405951
+                locationID: 38469
+                files: []
+              - fieldID: 30022
+                partID: 1
+                fieldName: width
+                value: null
+                valueID: 11328671
+                fieldType: Number
+                lastEdited: 1718405951
+                locationID: 38469
+                files: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request gets detailed information about custom set Part Fields.
+
+
+        This request will return an array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link.
+
+
+        **Note:** this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information.'
+    post:
+      operationId: postPartsFields
+      summary: New Part Suggested Field
+      responses:
+        '201':
+          description: New Vendor Suggested Field
+          headers:
+            Location:
+              schema:
+                type: string
+              example: /v2/vendors/fields/?fields=5
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fieldID:
+                    type: string
+                    format: utc-millisec
+              example:
+                fieldID: '5'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request adds a new Field to the list of Suggested Fields that can later be attached to Parts.
+
+
+        Parameter: locationID, Type: Int, Required?: Required, Description: The location ID of the Location to add the new Field to.
+
+        Parameter: name, Type: String, Required?: Required, Description: The name of the new Field. Some custom field names such as "Part Name" are not allowed and reserved for internal use. This will result in a 409 error.
+
+        Parameter: fieldType, Type: Int, Required?: Required, Description: The type of the new Field. You can choose from Text (1), Date (2), Pictures (3), Documents (4), Number (5), Currency (6).'
+  /v2/parts/fields/suggested:
+    get:
+      operationId: getPartsFieldsSuggested
+      summary: Part Suggested Fields
+      parameters:
+      - name: fields
+        in: query
+        description: This parameter can be used to get a single Part Fields or a list of Part Fields in a comma-separated list.
+        schema:
+          type: string
+        example: 1,2
+      - name: name
+        in: query
+        description: This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %.
+        schema:
+          type: string
+        example: '%text%'
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what fieldID you want to start receiving results at. e.g. passing 137 here will only get you vendor fields with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 100
+      responses:
+        '200':
+          description: Vendor Suggested Fields
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    fieldID:
+                      type: integer
+                    fieldType:
+                      type: string
+                    fieldName:
+                      type: string
+                    locationID:
+                      type: integer
+              example:
+              - fieldID: 1
+                fieldType: Pictures
+                fieldName: pic
+                locationID: 330
+              - fieldID: 2
+                fieldType: Text
+                fieldName: testText
+                locationID: 330
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: This request gets all possible fields a Part can pick from when deciding which fields it should have.
+  /v2/parts/fields/{valueID}:
+    parameters:
+    - name: valueID
+      in: path
+      required: true
+      description: valueID of the field you are removing.
+      schema:
+        type: integer
+      example: 172
+    patch:
+      operationId: patchPartsFieldsByValueID
+      summary: Update Part Field Value
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request updates a Part''s field value.
+
+
+        Parameter: value, Type: Depends on fieldType, Required?: Required, Description: The value that will be written to the field. "value" must correspond to the fieldType of the field. For example, if the field is a "number" fieldType, then "value" must be a number.'
+    delete:
+      operationId: deletePartsFieldsByValueID
+      summary: Delete Part Field
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: This request deletes a custom field attached to a Part.
+  /v2/parts/{partID}/fields:
+    parameters:
+    - name: partID
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 1030
+    put:
+      operationId: putPartsByPartIDFields
+      summary: Attach Field to Part
+      responses:
+        '201':
+          description: Attach Field to Vendor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valueID:
+                    type: string
+                    format: utc-millisec
+              example:
+                valueID: '4'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: This request attaches a Suggested Field to a Part.
+  /v2/parts/{partID}/logs:
+    parameters:
+    - name: partID
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 159
+    get:
+      operationId: getPartsByPartIDLogs
+      summary: Part Logs
+      parameters:
+      - name: logs
+        in: query
+        description: This parameter is used to only get specific logs. This parameter accepts a comma delimited list of logIDs.
+        schema:
+          type: integer
+        example: 21524
+      - name: sources
+        in: query
+        description: This parameter is used to only get logs for a specific sourceID. This parameter accepts a comma delimited list of sourceIDs.
+        schema:
+          type: integer
+        example: 4
+      - name: users
+        in: query
+        description: This parameter is used to only get logs created by specific users. This parameter accepts a comma delimited list of userIDs.
+        schema:
+          type: integer
+        example: 340
+      - name: logEntry
+        in: query
+        description: 'This is a parameter used to string search for manual log entry (sourceID: 4). This parameter expects a string with the wildcard %.'
+        schema:
+          type: string
+        example: '%new%'
+      - name: start
+        in: query
+        description: 'This parameter is used to only get logs that were last edited after the unix timestamp passed into the start parameter. '
+        schema:
+          type: integer
+        example: 1663018000
+      - name: end
+        in: query
+        description: This parameter is used to only get logs that were last edited before the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1663018900
+      - name: page
+        in: query
+        description: This parameter is used to paginate results based on the limit. Refer to Pagination section for more information.
+        schema:
+          type: integer
+        example: 1
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 10
+      - name: cursor
+        in: query
+        description: 'This parameter is a cursor that selects what ID you want to start receiving results at. '
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Part Logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartLogEntry'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request returns the log entries for a part.
+
+
+        **Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.
+
+
+        Return data description
+
+
+        logID | The unique logID of the log.
+
+        dateCreated | The date the log was created as a UNIX timestamp.
+
+        partID | The partID the log belongs to.
+
+        sourceID | The sourceID of the source of the log. The sourceID can be as follows:, 1: Part name was changed., 2: Part Number was changed., 3: Parts were added/removed., 4: Manual log entry., 5: Parts were used on a Task., 6: Part Price was changed., 7: Stale threshold was manually changed., 8: Part Qty threshold was manually changed., 11: Part Qty threshold status was changed., 13: Part Location was changed., 14: Part Vendor was changed., 15: Part Image was changed., 18: Parts were received on a Bill., 19: Part Maximum Part Qty was manually changed., 20: Some of a PO Item Received Qty was used during manual Part Qty adjustment
+
+        logEntry | The log entry for the part.
+
+        userID | The ID of the user that created the log.
+
+        associatedID | The ID of the item associated with this log, if any. Current examples include:, sourceID: 5, associatedID type: Task, sourceID: 18, associatedID type: Bill, sourceID: 20, associatedID type: Bill'
+    post:
+      operationId: postPartsByPartIDLogs
+      summary: New Part Log
+      responses:
+        '201':
+          description: New Part Log
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              example: '1000'
+            X-RateLimit-Minute-Limit:
+              schema:
+                type: integer
+              example: '240'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              example: '994'
+            X-RateLimit-First-Call:
+              schema:
+                type: integer
+              example: '1684346312'
+            X-RateLimit-Minute-Remaining:
+              schema:
+                type: integer
+              example: '239'
+            X-RateLimit-Minute-First-Call:
+              schema:
+                type: integer
+              example: '1684346687'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logID:
+                    type: integer
+              example:
+                logID: 43002
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request creates a manual log entry for a part.
+
+
+        This request adds a new Field to the list of Suggested Fields that can later be attached to Parts.
+
+
+        userID | Int | Required | The ID of the user creating the log.
+
+        logEntry | String | Required | Details of the log.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userID:
+                  type: integer
+                logEntry:
+                  type: string
+            example:
+              userID: 342
+              logEntry: Creating a log
+  /v2/parts/logs/{logID}:
+    parameters:
+    - name: logID
+      in: path
+      required: true
+      description: The ID of the log to be deleted.
+      schema:
+        type: integer
+      example: 21524
+    patch:
+      operationId: patchPartsLogsByLogID
+      summary: Update Part Log
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: This requests updates a manual log entry. Only logs with a sourceID=4 can be updated.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                logEntry:
+                  type: string
+            example:
+              logEntry: Changing log
+    delete:
+      operationId: deletePartsLogsByLogID
+      summary: Delete Part Log
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: This request deletes manual log entries (sourceID=4).
+  /v2/parts/logs:
+    get:
+      operationId: getPartsLogs
+      summary: All Part Logs
+      parameters:
+      - name: logs
+        in: query
+        schema:
+          type: integer
+        example: 1
+      - name: sources
+        in: query
+        schema:
+          type: integer
+        example: 20
+      - name: users
+        in: query
+        schema:
+          type: string
+      - name: logEntry
+        in: query
+        schema:
+          type: string
+      - name: start
+        in: query
+        schema:
+          type: string
+      - name: end
+        in: query
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          type: integer
+        example: 1
+      - name: parts
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+        example: 5
+      - name: cursor
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: All Part Logs
+          headers:
+            x-ratelimit-limit:
+              schema:
+                type: integer
+              example: '4000'
+            x-ratelimit-minute-limit:
+              schema:
+                type: integer
+              example: '360'
+            x-ratelimit-remaining:
+              schema:
+                type: integer
+              example: '3992'
+            x-ratelimit-first-call:
+              schema:
+                type: integer
+              example: '1719246455'
+            x-ratelimit-minute-remaining:
+              schema:
+                type: integer
+              example: '359'
+            x-ratelimit-minute-first-call:
+              schema:
+                type: integer
+              example: '1719247424'
+            Cache-Control:
+              schema:
+                type: string
+              example: no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    logID:
+                      type: integer
+                    dateCreated:
+                      type: integer
+                    partID:
+                      type: integer
+                    sourceID:
+                      type: integer
+                    logEntry:
+                      type: string
+                    userID:
+                      type: integer
+                    associatedID:
+                      type: integer
+              example:
+              - logID: 72
+                dateCreated: 1715279617
+                partID: 1
+                sourceID: 20
+                logEntry: 1 used from Bill during Manual Qty adjustment.
+                userID: 230530
+                associatedID: 304723
+              - logID: 102
+                dateCreated: 1718406015
+                partID: 2
+                sourceID: 20
+                logEntry: 1 used from Bill during Manual Qty adjustment.
+                userID: 230530
+                associatedID: 323880
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request returns all part logs across your Limble account.
+
+
+        **Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.
+
+
+        Return data description
+
+
+        logID | The unique logID of the log.
+
+        dateCreated | The date the log was created as a UNIX timestamp.
+
+        partID | The partID the log belongs to.
+
+        sourceID | The sourceID of the source of the log. The sourceID can be as follows:, 1: Part name was changed., 2: Part Number was changed., 3: Parts were added/removed., 4: Manual log entry., 5: Parts were used on a Task., 6: Part Price was changed., 7: Stale threshold was manually changed., 8: Part Qty threshold was manually changed., 11: Part Qty threshold status was changed., 13: Part Location was changed., 14: Part Vendor was changed., 15: Part Image was changed., 18: Parts were received on a Bill., 19: Part Maximum Part Qty was manually changed., 20. Some of a PO Item Received Qty was used during manual Part Qty adjustment
+
+        logEntry | The log entry for the part.
+
+        userID | The ID of the user that created the log.
+
+        associatedID | The ID of the item associated with this log, if any. Current examples include:, sourceID: 5, associatedID type: Task, sourceID: 18, associatedID type: Bill, sourceID: 20, associatedID type: Bill'
+  /v2/parts/{partID}/purchasables:
+    parameters:
+    - name: partID
+      in: path
+      required: true
+      description: The ID of the part you need purchasables for.
+      schema:
+        type: integer
+      example: 11
+    get:
+      operationId: getPartsByPartIDPurchasables
+      summary: Get Purchasables
+      parameters:
+      - name: page
+        in: query
+        description: This parameter is used to paginate results based on the limit. Refer to Pagination section for more information.
+        schema:
+          type: integer
+        example: 1
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 2
+      - name: nameStartsWith
+        in: query
+        description: Filter purchasables that have a name which starts with this string.
+        schema:
+          type: string
+        example: Box of
+      responses:
+        '200':
+          description: Get Purchasables
+          headers:
+            x-ratelimit-limit:
+              schema:
+                type: integer
+              example: '4000'
+            x-ratelimit-minute-limit:
+              schema:
+                type: integer
+              example: '360'
+            x-ratelimit-remaining:
+              schema:
+                type: integer
+              example: '3992'
+            x-ratelimit-first-call:
+              schema:
+                type: integer
+              example: '1734557517'
+            x-ratelimit-minute-remaining:
+              schema:
+                type: integer
+              example: '359'
+            x-ratelimit-minute-first-call:
+              schema:
+                type: integer
+              example: '1734560048'
+            Cache-Control:
+              schema:
+                type: string
+              example: no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    purchasableID:
+                      type: integer
+                    partID:
+                      type: integer
+                    name:
+                      type: string
+                    size:
+                      type: integer
+                    orderUnitCode:
+                      type: string
+                    sizeUnitCode:
+                      type: string
+              example:
+              - purchasableID: 10
+                partID: 1
+                name: Drum of 10 liters
+                size: 10
+                orderUnitCode: drum
+                sizeUnitCode: liter
+              - purchasableID: 15
+                partID: 1
+                name: By the gallon
+                size: 1
+                orderUnitCode: gallon
+                sizeUnitCode: gallon
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This endpoint makes an HTTP GET request to retrieve a part''s purchasable data. The response of this request is documented as a JSON schema.
+
+
+        Return data description
+
+
+        | **Property** | **Description** |
+
+        | --- | --- |
+
+        | partID | The ID of the part the purchasable belongs to. |
+
+        | name | The name of the purchasable. |
+
+        | size | The size of the purchasable. |
+
+        | orderUnitCode | The unit that describes how this purchasable is ordered. E.g. "by the box", or "by the foot". |
+
+        | sizeUnitCode | The unit that qualifies the size value. E.g. this tells you whether this purchasable is 10 liters, or cans, or feet, etc. |'
+  /v2/parts/vendors/associations:
+    get:
+      operationId: getPartsVendorsAssociations
+      summary: Get Part Vendor Associations
+      parameters:
+      - name: parts
+        in: query
+        description: This parameter is used to only get associations for specific parts. This parameter accepts a comma delimited list of part IDs.
+        schema:
+          type: string
+        example: 158,159
+      - name: vendors
+        in: query
+        description: This parameter is used to only get associations for specific vendors. This parameter accepts a comma delimited list of vendor IDs.
+        schema:
+          type: string
+        example: 12,34
+      - name: vendorPartNumber
+        in: query
+        description: This parameter is used to search for associations by vendor part number. This parameter expects a string with the wildcard % for partial matching.
+        schema:
+          type: string
+        example: '%ABC%'
+      - name: vendorName
+        in: query
+        description: This parameter is used to search for associations by vendor name. This parameter expects a string with the wildcard % for partial matching.
+        schema:
+          type: string
+        example: '%Acme%'
+      - name: start
+        in: query
+        description: This parameter is used to only get associations that were last updated after the unix timestamp passed into the start parameter.
+        schema:
+          type: integer
+        example: 1700000000
+      - name: end
+        in: query
+        description: This parameter is used to only get associations that were last updated before the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1800000000
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what relationID you want to start receiving results at. This will return results with a relationID greater than the value of cursor.
+        schema:
+          type: integer
+        example: 0
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time. The maximum is 1000.
+        schema:
+          type: integer
+        example: 100
+      - name: orderBy
+        in: query
+        description: 'This parameter is used to order results. Accepted values: relationID, -relationID, createdAt, -createdAt, updatedAt, -updatedAt, partName, -partName, vendorName, -vendorName. Prefix with - for descending order.'
+        schema:
+          type: string
+        example: relationID
+      - name: page
+        in: query
+        description: This parameter is used to paginate results based on the limit. Refer to Pagination section for more information.
+        schema:
+          type: integer
+        example: 1
+      responses:
+        '200':
+          description: Get Part Vendor Associations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    relationID:
+                      type: integer
+                    partID:
+                      type: integer
+                    vendorID:
+                      type: integer
+                    vendorPartNumber:
+                      type: string
+                    partPrice:
+                      type: number
+                    createdAt:
+                      type: integer
+                    updatedAt:
+                      type: integer
+                    partName:
+                      type: string
+                    number:
+                      type: string
+                    locationID:
+                      type: integer
+                    vendorName:
+                      type: string
+              example:
+              - relationID: 1
+                partID: 158
+                vendorID: 12
+                vendorPartNumber: ABC-001
+                partPrice: 9.99
+                createdAt: 1700000000
+                updatedAt: 1700100000
+                partName: Air Filter
+                number: 25x25x1
+                locationID: 163
+                vendorName: Acme Supply Co.
+              - relationID: 2
+                partID: 159
+                vendorID: 34
+                vendorPartNumber: ''
+                partPrice: 0
+                createdAt: 1700050000
+                updatedAt: 1700050000
+                partName: Oil Filter
+                number: OF-500
+                locationID: 163
+                vendorName: Parts Depot
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'Returns a paginated list of vendor-part associations for the customer.
+
+
+        **Note:** this endpoint supports both cursor-based and page-based pagination. Please refer to the [**Pagination**](#pagination) section for more information.
+
+
+        Return data description
+
+
+        Property: relationID, Description: The unique ID of this vendor-part association.
+
+        Property: partID, Description: The ID of the associated part.
+
+        Property: vendorID, Description: The ID of the associated vendor.
+
+        Property: vendorPartNumber, Description: The vendor''s part number for this part, if provided.
+
+        Property: partPrice, Description: The vendor''s price for this part, if provided.
+
+        Property: createdAt, Description: Unix timestamp of when this association was created.
+
+        Property: updatedAt, Description: Unix timestamp of when this association was last updated.
+
+        Property: partName, Description: The name of the associated part.
+
+        Property: number, Description: The part''s internal part number.
+
+        Property: locationID, Description: The ID of the location this part belongs to.
+
+        Property: vendorName, Description: The name of the associated vendor.'
+    post:
+      operationId: postPartsVendorsAssociations
+      summary: Create Part Vendor Association
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - partID
+              - vendorID
+              properties:
+                partID:
+                  type: integer
+                  description: The ID of the part to associate.
+                vendorID:
+                  type: integer
+                  description: The ID of the vendor to associate.
+            example:
+              partID: 158
+              vendorID: 12
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              example: /v2/parts/vendors/associations?parts=158&vendors=12
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  relationID:
+                    type: integer
+                  partID:
+                    type: integer
+                  vendorID:
+                    type: integer
+                  associationType:
+                    type: string
+              example:
+                relationID: 45
+                partID: 158
+                vendorID: 12
+                associationType: manual
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'Creates a new manual vendor-part association. The part and vendor must both exist and the vendor must be accessible at the part''s location.
+
+
+        Returns `201 Created` with the new association details. Returns `409 Conflict` if the association already exists.'
+  /v2/parts/vendors/associations/{relationID}:
+    parameters:
+    - name: relationID
+      in: path
+      required: true
+      schema:
+        type: string
+    delete:
+      operationId: deletePartsVendorsAssociationsByRelationID
+      summary: Delete Part Vendor Association
+      responses:
+        '204':
+          description: Delete Part Vendor Association
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/AssociationNotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'Deletes a vendor-part association by its `relationID`. Only manually created associations (associationType: `manual`) can be deleted through this endpoint.
+
+
+        Returns `204 No Content` on success. Returns `404 Not Found` if the association does not exist or does not belong to your account.'
+  /v2/parts:
+    get:
+      operationId: getParts
+      summary: Parts
+      parameters:
+      - name: parts
+        in: query
+        description: This parameter is used to only get specific Parts. This parameter accepts a comma delimited list of part IDs.
+        schema:
+          type: string
+        example: 1,2
+      - name: locations
+        in: query
+        description: This parameter is used to only get Parts at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs.
+        schema:
+          type: integer
+        example: 73
+      - name: name
+        in: query
+        description: This parameter is used to only get specific parts. This parameter expects a string either a full name of a part or a partial name with the wildcard %.
+        schema:
+          type: string
+        example: '%blade%'
+      - name: start
+        in: query
+        description: This parameter is used to only get Parts that were last edited after the unix timestamp passed into the start parameter. For example, all Parts that were last edited after April 18th, 2018.
+        schema:
+          type: integer
+        example: 1564895015
+      - name: end
+        in: query
+        description: This parameter is used to only get Parts that were last edited *before* the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1564895015
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what partID you want to start receiving results at. e.g. passing 137 here will only get you parts with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 100
+      - name: numbers
+        in: query
+        description: This parameter is used to only get parts with part numbers that match the list provided. This parameter accepts a comma delimited list of Part Numbers.
+        schema:
+          type: string
+        example: 25x25x1 - Vendor b - location 2
+      - name: page
+        in: query
+        description: 'This parameter is used to paginate results based on the limit. Refer to Pagination section for more information. '
+        schema:
+          type: integer
+        example: 2
+      responses:
+        '200':
+          description: Parts
+          headers:
+            Last-Page:
+              schema:
+                type: string
+              example: /v2/parts/?locations=163&name=%Filter%&start=1564895015&end=1636670380&cursor=0&limit=100&numbers=25x25x1%20-%20Vendor%20b%20-%20location%202&page=1
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Part'
+              example:
+              - partID: 159
+                number: 25x25x1 - Vendor b - location 2
+                name: Filter
+                generalStock: -14
+                unitCode: each
+                generalPrice: 5.99
+                category: Air Filters
+                categoryID: 7
+                locationID: 163
+                location: Bin 002
+                minQtyStatus: 1
+                minQtyThreshold: 10
+                maxQtyThreshold: -1
+                staleThreshold: -1
+                staleStatus: 0
+                lastEdited: 1636670374
+                userID: 0
+                teamID: 436
+                stockOnHand: -11
+                pos:
+                - quantity: 2
+                  quantityUsed: 2
+                  price: 5.99
+                  poItemID: 8
+                - quantity: 8
+                  quantityUsed: 5
+                  price: 5.99
+                  poItemID: 11
+                image: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request returns a list of Parts with top level information such as name, last edited, etc.
+
+
+        **Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.
+
+
+        Return data description
+
+
+        number | The Part''s Number. e.g. 25x25x1
+
+        name | The Part''s Name. e.g. Filter
+
+        generalStock | How many of this Part you have in stock. Not including purchase orders.
+
+        unitCode | The unit code displayed for the part. This represents the unit of measure assigned to the part (e.g., "kg", "lb", "each", etc.). If no unit is assigned, this field will be null.
+
+        generalPrice | The default price of this part. Not considering purchase oder prices.
+
+        category | The category this Part belongs to
+
+        location | The Location of this Part. e.g. Shelf A
+
+        minQtyStatus | Is the Part currently under the min quantity threshold. 0 = false, 1 = true.
+
+        minQtyThreshold | The number at which reordering of this part is triggered. -1 means this feature is turned off.
+
+        maxQtyThreshold | The number to bring the parts quantity back to. For example, if my inventory is at 4 and my maxQtyThreshold is 20 I will be reordering 16 parts to bring my inventory back up to the max quantity.
+
+        staleThreshold | This value is how many days will need to go without a User using this Part by before this Part is considering stale.
+
+        staleStatus | Is the Part stale or not. 0 = false, 1 = true.
+
+        userID | The user that will receive threshold notifications and Tasks if thresholds are hit.
+
+        team | The team that will receive threshold notifications and Tasks if thresholds are hit.
+
+        stockOnHand | General Stock plus any unused, received PO Quantities for this part. This matches the ''Qty'' value seen in the CMMS Part Management page.
+
+        pos | Array of purchase order objects. price and quantity do not effect generalStock and generalPrice listed above.
+
+        image | Array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link.'
+    post:
+      operationId: postParts
+      summary: Create Part
+      responses:
+        '201':
+          description: Create Part
+          headers:
+            Location:
+              schema:
+                type: string
+              example: /v2/parts/?parts=2941
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  partID:
+                    type: integer
+              example:
+                partID: 2941
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request adds new Parts to inventory list.
+
+
+        locationID | Int | Required | The location of the Part to be updated. Must be the Location''s unique ID number.
+
+        name | String | Required | The new name of the Part.
+
+        number | String | Optional | The new number of the Part.
+
+        generalStock | number | Optional | How many of this Part are now in stock. Not including purchase orders
+
+        generalPrice | number | Optional | The new price of the Part. Not considering purchase order prices.
+
+        unitCode | String | Optional | The unit code to assign to the part. If the unit code is not found, the request will return a 404 error.
+
+        supplier | String | Optional | The new supplier of the Part.
+
+        location | String | Optional | The new location of the Part (i.e. bin).
+
+        categoryID | int | Optional | The category this part is in. (i.e. Electronics).
+
+        staleThreshold | Int | Optional | The Stale Threshold setting allows you to set how many days need to go by without a Work Order or Task using this Part. For example, if the Stale Threshold is set at 30 and a Part does not get used by a Work Order or Task within 30 days, then the Part clock indicator will change color to red. If you wish to turn off this feature, assign a value of -1.
+
+        minQtyThreshold | Int | Optional | The Minimum Part Qty Threshold setting allows you to set a limit on how low you want this Part''s qty to get. For example, if a Part Qty is lower than the Part Qty Threshold, a Task will be assigned to the Manager of the location to order new Parts. If you wish to turn off this feature, assign a value of -1.
+
+        maxQtyThreshold | Int | Optional | The Max Part Quantity Threshold number is used to determine what level you would like to bring your stock back to when you need to reorder a part. For example if I have 4 parts and my Maximum Part Qty Threshold is set to 20, I will have a task letting me know to order 16 more parts. If you wish to disable this feature please have a value of -1 entered.
+
+        minQtyStatus | Boolean | Optional | This indicates if you are understocked or not.
+
+        staleStatus | Boolean | Optional | This indicates if the part has gone stale or not. This value cannot be changed by regular user interaction it is change automatically by limble.
+
+        assignment | Int | Optional. Required if ''assignmentType'' is used. | The user or team to which the task will be assigned., Must be a user or team that exists at the specified location. Must be the unique ID number of the user or team. If this parameter is set, the assignmentType parameter must also be set.,
+
+        assignmentType | Enum | Optional. Required if ''assignment'' is used. | Specifies wether this task will be assigned to a ''user'' or a ''team''. Those two strings are the only accepted input. If this parameter is set, the assignment parameter must also be set.,'
+  /v2/parts/{partID}:
+    parameters:
+    - name: partID
+      in: path
+      required: true
+      description: partID of the part you are removing.
+      schema:
+        type: string
+      example: '{{partID}}'
+    patch:
+      operationId: patchPartsByPartID
+      summary: Update Part
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request updates an Part''s information such as a Part''s quantity.
+
+
+        locationID | Int | Required | The location of the Part to be updated. Must be the Location''s unique ID number.
+
+        name | String | Optional | The new name of the Part.
+
+        number | String | Optional | The new number of the Part.
+
+        generalStock | number | Optional | How many of this Part are now in stock. Not including purchase orders.
+
+        generalPrice | number | Optional | The new price of the Part. Not considering purchase order prices.
+
+        unitCode | String | Optional | Update the part''s unit by providing a unit code. If the unit code is not found, the request will return a 404 error. The unit of measure cannot be changed if the part has purchasables associated with it or is referenced in open purchase orders - in these cases, the request will return a 400 error.
+
+        supplier | String | Optional | The new supplier of the Part.
+
+        location | String | Optional | The new location of the Part (i.e. bin).
+
+        categoryID | int | Optional | The category this part is in. (i.e. Electronics).
+
+        staleThreshold | Int | Optional | The Stale Threshold setting allows you to set how many days need to go by without a Work Order or Task using this Part. For example, if the Stale Threshold is set at 30 and a Part does not get used by a Work Order or Task within 30 days, then the Part clock indicator will change color to red. If you wish to turn off this feature, assign a value of -1.
+
+        minQtyThreshold | Int | Optional | The Minimum Part Qty Threshold setting allows you to set a limit on how low you want this Part''s qty to get. For example, if a Part Qty is lower than the Part Qty Threshold, a Task will be assigned to the Manager of the location to order new Parts. If you wish to turn off this feature, assign a value of -1.
+
+        maxQtyThreshold | Int | Optional | The Max Part Quantity Threshold number is used to determine what level you would like to bring your stock back to when you need to reorder a part. For example if I have 4 parts and my Maximum Part Qty Threshold is set to 20, I will have a task letting me know to order 16 more parts. If you wish to disable this feature please have a value of -1 entered.
+
+        minQtyStatus | Boolean | Optional | This indicates if you are understocked or not.
+
+        staleStatus | Boolean | Optional | This indicates if the part has gone stale or not. This value cannot be changed by regular user interaction it is change automatically by limble.
+
+        assignment | Int | Optional. Required if ''assignmentType'' is used. | The user or team to which the task will be assigned., Must be a user or team that exists at the specified location. Must be the unique ID number of the user or team. If this parameter is set, the assignmentType parameter must also be set.,
+
+        assignmentType | Enum | Optional. Required if ''assignment'' is used. | Specifies wether this task will be assigned to a ''user'' or a ''team''. Those two strings are the only accepted input. If this parameter is set, the assignment parameter must also be set.,'
+    delete:
+      operationId: deletePartsByPartID
+      summary: Delete Part
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: This request removes a Part from your inventory list.
+  /v2/parts/usage:
+    get:
+      operationId: getPartsUsage
+      summary: Parts Usage
+      parameters:
+      - name: parts
+        in: query
+        description: This parameter is used to only get specific Parts. This parameter accepts a comma delimited list of part IDs.
+        schema:
+          type: integer
+        example: 2
+      - name: tasks
+        in: query
+        description: This parameter is used to only get Parts at a specific group of Tasks. This parameter accepts a comma delimited list of Task IDs.
+        schema:
+          type: string
+        example: 8,10
+      - name: start
+        in: query
+        description: This parameter is used to only get Parts that were last edited after the unix timestamp passed into the start parameter. For example, all Assets that were last edited after April 18th, 2018.
+        schema:
+          type: integer
+        example: 1457663400
+      - name: end
+        in: query
+        description: This parameter is used to only get Parts that were last edited *before* the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1457663400
+      - name: name
+        in: query
+        description: This parameter is used to string search part names either partial or full name with the wildcard %.
+        schema:
+          type: string
+        example: '%Pro%'
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what partID you want to start receiving results at. e.g. passing 137 here will only get you part usage records with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 100
+      responses:
+        '200':
+          description: Parts Usage
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    meta:
+                      type: object
+                      properties:
+                        task:
+                          type: string
+                        part:
+                          type: string
+                    partID:
+                      type: integer
+                    name:
+                      type: string
+                    taskID:
+                      type: integer
+                    usedCount:
+                      type: integer
+                    usedPrice:
+                      type: integer
+                    usedOn:
+                      type: integer
+                    poItemID:
+                      type: integer
+              example:
+              - meta:
+                  task: /v2/tasks/?tasks=2
+                  part: /v2/parts/?parts=4
+                partID: 2
+                name: X1161P Projector Lamp
+                taskID: 8
+                usedCount: 0
+                usedPrice: 0
+                usedOn: 0
+                poItemID: 0
+              - meta:
+                  task: /v2/tasks/?tasks=3
+                  part: /v2/parts/?parts=5
+                partID: 3
+                name: Stain Cleaner
+                taskID: 10
+                usedCount: 0
+                usedPrice: 0
+                usedOn: 0
+                poItemID: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'This request gets your Parts usage log.
+
+
+        Return data description
+
+
+        Property: meta, Description: A call which can be used to quickly look up the Task that this part''s usage was recorded on.
+
+        Property: name, Description: The name of the part used.
+
+        Property: taskID, Description: The associated Task where this part was used.
+
+        Property: usedCount, Description: The number of parts that were used.
+
+        Property: usedPrice, Description: The price per 1 part.
+
+        Property: usedOn, Description: The date when the part was used. This is a unix timestamp.
+
+        Property: poItemID, Description: The unique ID of the PO item associated with this usage record.'
+  /v2/tasks/{taskID}/parts:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      schema:
+        type: string
+      example: '{{taskID}}'
+    get:
+      operationId: getTasksByTaskIDParts
+      summary: Get attached parts
+      responses:
+        '200':
+          description: Get attached parts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    partID:
+                      type: integer
+                    quantity:
+                      type: integer
+                    usedPrice:
+                      type: integer
+                    partName:
+                      type: string
+                    poItemID:
+                      type: integer
+              example:
+              - partID: 2934
+                quantity: 1
+                usedPrice: 1
+                partName: Lawn Mower Blade
+                poItemID: 0
+              - partID: 2992
+                quantity: 1
+                usedPrice: 5
+                partName: Cog
+                poItemID: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'Gets parts attached to a task.
+
+
+        This request gets parts associated with a task. A single Task can have multiple parts associated with it.
+
+
+        Return data description
+
+
+        Property: partID, Description: The partID of the part associated to this task.
+
+        Property: quantity, Description: The quantity of this part associated to this task.
+
+        Property: usedPrice, Description: The price of the part at the time of use.
+
+        Property: partName, Description: The name of the part.
+
+        Property: poItemID, Description: The unique ID of the PO item associated with this record.'
+    put:
+      operationId: putTasksByTaskIDParts
+      summary: Attach part to task
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: This request associates a part to a task.
+  /v2/tasks/parts:
+    get:
+      operationId: getTasksParts
+      summary: Get all attached parts
+      parameters:
+      - name: tasks
+        in: query
+        description: This parameter is used to get parts attached to a list of tasks. This parameter accepts a comma delimited list of task IDs.
+        schema:
+          type: string
+        example: 5,10,12
+      - name: parts
+        in: query
+        description: This parameter is used to get only certain. This parameter accepts a comma delimited list of task IDs.
+        schema:
+          type: string
+        example: 121,112,553
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what id you want to start receiving results at. e.g. passing 137 here will only get you assets with an id greater than 137.
+        schema:
+          type: integer
+        example: 137
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 100
+      responses:
+        '200':
+          description: Get all attached parts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    relationID:
+                      type: integer
+                    partID:
+                      type: integer
+                    taskID:
+                      type: integer
+                    quantity:
+                      type: integer
+                    lastEdited:
+                      type: integer
+                    usedPrice:
+                      type: integer
+                    partName:
+                      type: string
+                    poItemID:
+                      type: integer
+              example:
+              - relationID: 2
+                partID: 2
+                taskID: 8
+                quantity: 1
+                lastEdited: 1519084797
+                usedPrice: 0
+                partName: X1161P Projector Lamp
+                poItemID: 0
+              - relationID: 3
+                partID: 3
+                taskID: 10
+                quantity: 5
+                lastEdited: 1519084797
+                usedPrice: 0
+                partName: Stain Cleaner
+                poItemID: 0
+              - relationID: 8
+                partID: 4
+                taskID: 31
+                quantity: 1
+                lastEdited: 1519084797
+                usedPrice: 0
+                partName: Spark Plugs
+                poItemID: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: 'Gets parts attached to all tasks.
+
+
+        This request gets parts associated with any task. A single Task can have multiple parts associated with it.
+
+
+        Return data description
+
+
+        Property: relationID, Description: The identifier that associates parts to tasks.
+
+        Property: partID, Description: The partID of the part associated to this task.
+
+        Property: taskID, Description: The taskID this part is assoicated with.
+
+        Property: quantity, Description: The quantity of this part associated to this task.
+
+        Property: lastEdited, Description: The unix timestamp date of the last time this record was edited.
+
+        Property: usedPrice, Description: The price of the part at the time of use.
+
+        Property: partName, Description: The name of the part.
+
+        Property: poItemID, Description: The unique ID of the PO item associated with this record.'
+  /v2/tasks/{taskID}/{partID}:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      schema:
+        type: string
+      example: '{{taskID}}'
+    - name: partID
+      in: path
+      required: true
+      schema:
+        type: string
+      example: '{{partID}}'
+    delete:
+      operationId: deleteTasksByTaskIDByPartID
+      summary: Delete part from task
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Parts
+      description: This request deletes a part from a task.
+components:
+  responses:
+    Forbidden:
+      description: The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    TooManyRequests:
+      description: The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: No `Authorization` header was provided on the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    EmptySuccess:
+      description: The operation completed successfully. The response body is empty.
+    NotFound:
+      description: The referenced resource does not exist or is not visible to the authenticated customer.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    AssociationNotFound:
+      description: The vendor-part association does not exist.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              error:
+                type: string
+          example:
+            status: 404
+            error: Vendor-part association not found
+    Conflict:
+      description: The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    PartLogEntry:
+      type: object
+      properties:
+        logID:
+          type: integer
+        dateCreated:
+          type: integer
+        partID:
+          type: integer
+        sourceID:
+          type: integer
+        logEntry:
+          type: string
+        userID:
+          type: integer
+        associatedID:
+          type: integer
+    AssetPart:
+      type: object
+      properties:
+        relationID:
+          type: integer
+        partID:
+          type: integer
+        assetID:
+          type: integer
+        qty:
+          type: integer
+        createdAt:
+          type: integer
+        lastEdited:
+          type: integer
+        associationType:
+          type: string
+    Part:
+      type: object
+      properties:
+        partID:
+          type: integer
+        number:
+          type: string
+        name:
+          type: string
+        generalStock:
+          type: integer
+        unitCode:
+          type: string
+        generalPrice:
+          type: number
+        category:
+          type: string
+        categoryID:
+          type: integer
+        locationID:
+          type: integer
+        location:
+          type: string
+        minQtyStatus:
+          type: integer
+        minQtyThreshold:
+          type: integer
+        maxQtyThreshold:
+          type: integer
+        staleThreshold:
+          type: integer
+        staleStatus:
+          type: integer
+        lastEdited:
+          type: integer
+        userID:
+          type: integer
+        teamID:
+          type: integer
+        stockOnHand:
+          type: integer
+        pos:
+          type: array
+          items:
+            type: object
+            properties:
+              quantity:
+                type: integer
+              quantityUsed:
+                type: integer
+              price:
+                type: number
+              poItemID:
+                type: integer
+        image:
+          type: array
+    ErrorResponse:
+      description: 'Error response body. The API emits two shapes today: the standard `{ message }` shape returned by the central error handler and most controllers, and the legacy `{ error, success, msg }` shape returned by the auth middleware. Some controllers also include extra fields (e.g. `success`, conflict metadata).'
+      oneOf:
+      - type: object
+        required:
+        - message
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          raw:
+            description: Optional raw error object (validation errors).
+      - type: object
+        required:
+        - error
+        - msg
+        properties:
+          error:
+            type: integer
+            description: Numeric HTTP status echoed in the body.
+          success:
+            type: boolean
+          msg:
+            type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

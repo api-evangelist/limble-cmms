@@ -1,0 +1,1651 @@
+openapi: 3.0.3
+info:
+  title: Limble API V2 Assets API
+  version: 1.0.0
+  description: "Getting Started!\n\nWelcome to Limble CMMS’s API documentation.\n\nYou can use this documentation to configure connections to the Limble CMMS API over https using RESTful standards.\n\nUsing the API you can get information about the following portions of your system:\n\n- Assets\n\n- Locations\n\n- Parts (Current quantities and Usage)\n\n- Tasks (Work Orders, Preventive Maintenance, Work Requests, etc.)\n\n- Users\n\n- Vendors\n\n- Roles\n\n- Teams\n\n- Purchase Orders\n\n- General Ledgers\n\n- Budgets\n\n- Priorities\n\n- Tags\n\n- Statuses\n\n- Bills\n\n- Regions\n\n- Webhooks\n\n- Units of Measure(UOM)\n\nPlease use the correct Limble API URL to connect to our API based on the region or the type of your Limble Account.\n\n| **Limble Account (Region/Type)** | **Limble API URL** |\n| --- | --- |\n| Default | api.limblecmms.com |\n| Canada | ca-api.limblecmms.com |\n| Australia | au-api.limblecmms.com |\n| Europe | eu-api.limblecmms.com |\n| 21CFR | 21cfr-api.limblecmms.com |\n\n---\n\n# Authentication\n\nTo protect your information the Limble CMMS API uses BASIC authorization standards.\n\nEvery call to the API must include an authorization header with your base 64 encoded id and secret.\n\nClient ID\n\nYour Client ID is your unique customer identification.\n\nClient Secret\n\nYour Client Secret is used to authenticate the Client ID on each API call. This is something that must be kept secret.\n\n> How do I get my Client ID and Client Secret? \n\nTo obtain your Client ID and Client Secret login to your Limble account as a **Super Administrator** and go to **Settings** -> **Configuration**, on this page scroll down to the **API Settings** section and click **Generate API Keys**. Keep this information **secret**, you will only be able to see your Client Secret once upon initial generation. If you lose your secret you will need to regenerate it and update your integration accordingly.\n\n> Example Header \nAuthorization: Basic \\[BASE64 ENCODED YOUR_CLIENT_ID:YOUR_CLIENT_SECRET \n\nBelow is a code example for PHP:\n\n```\n$curl = curl_init();\n$id = 'your_client_id';\n$secret = 'your_client_id';\n$headers = array(\n'Content-Type:application/json',\n'Authorization: Basic '. base64_encode($id.':'.$secret)\n);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, $headers);\ncurl_setopt_array($curl, array(\nCURLOPT_URL => 'https://api.limblecmms.com:443/v2/tasks/',\nCURLOPT_RETURNTRANSFER => true,\nCURLOPT_ENCODING => \"\",\nCURLOPT_MAXREDIRS => 10,\nCURLOPT_TIMEOUT => 0,\nCURLOPT_FOLLOWLOCATION => false,\nCURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\nCURLOPT_CUSTOMREQUEST => \"GET\",\n));\n$response = curl_exec($curl);\n$err = curl_error($curl);\ncurl_close($curl);\nif ($err) {\necho \"cURL Error #:\" . $err;\n} else {\necho $response;\n} ?>\n\n```\n\nBelow is a code example for NodeJS:\n\n```\nconst https = require('https');\nconst id = 'your_client_id';\nconst secret = 'your_client_secret';\nconst options = {\n'method': 'GET',\n'hostname': 'api.limblecmms.com',\n'path': '/v2/tasks/?',\n'headers': {\n'Authorization': 'Basic ' + Buffer.from(`${credentials.id}:${credentials.secret}`).toString('base64')\n}\n};\nconst req = https.request(options, function (res) {\nconst chunks = [];\nres.on(\"data\", function (chunk) {\nchunks.push(chunk);\n});\nres.on(\"end\", function (chunk) {\nconst body = Buffer.concat(chunks);\nconsole.log(body.toString());\n});\nres.on(\"error\", function (error) {\nconsole.error(error);\n});\n});\nreq.end();\n\n```\n\n---\n\n# Error Codes\n\n- HTTP 400 - Data Validation Error - Malformed JSON input or incorrect data type.\n\n- HTTP 403 - Forbidden - The resource cannot be accessed.\n\n- HTTP 404 - Resource not found - The resource you are targeting does not exist.\n\n- HTTP 409 - Resource Conflict - A resource already exists with those parameters.\n\n- HTTP 422 - Unprocessable Entity - The syntax of the request is correct but cannot be processed due to semantic errors.\n\n- HTTP 429 - Too Many Requests - See the rate limiting section below.\n\n- HTTP 500 - Internal Server Error - Contact Limble for assistance.\n\n- HTTP 501 - Method Not Support - Limble's API only supports GET, POST, PATCH, PUT, and DELETE.\n\n---\n\n# Success Codes\n\n- HTTP 200 - OK - Everything was successful. PUTs, PATCHs and DELETEs on success always return an empty 200 OK.\n\n- HTTP 201 - CREATED - This is used on POST calls when new resouces are created. If a new resource was created Limble will always pass back a GET URL in the location header so a developer can easily GET the new resource.\n\n---\n\n# Overriding HTTP methods\n\nSome systems may support only the `POST` and `GET` HTTP methods. This restriction prevents using other HTTP methods such as `PUT`, `PATCH` and `DELETE`. RESTful web API implementations can work around this restriction by letting the client override the HTTP method via the custom HTTP headers.\n\nThe Limble API supports **Method Overrides** by using a `POST` request and setting the `X-HTTP-Method-Override` header with a method string value. The header value can be `PATCH` or `PUT`. This will allow Limble API users to use `PATCH` and `PUT` endpoints by sending `POST` requests to these endpoints and overriding them with the respective HTTP method.\n\n# Webhooks\n\nReceive data on certain events such as Tasks being completed.\n\nLimble's webhooks allow you to receive data whenever specific events occur.\n\nFor example, you may need to run your own script whenever a Task is completed.\n\nLimble supports adding multiple webhooks that can be triggered when actions are carried out on:\n\n- Tasks\n\n- Assets\n\n- Asset Fields\n\n- Purchase Orders\n\n- Purchase Order Items\n\nWhen an event occurs, Limble sends an HTTP POST request to a URL endpoint you configure.\n\nYou can configure this URL in the Limble Web App under:\n\n**Settings → Configuration → API Settings**\n\nAll data sent is JSON-encoded, and Limble includes the following fields in the request headers for validation:\n\n- `signature`\n\n- `timestamp`\n\n- `token`\n\nYou may register multiple webhooks for the same event type.\n\n### Important: API Key Requirement for Webhooks\n\nTo receive webhooks, the customer must have at least one active **limbleAPI key** created in API Settings.\n\n- Webhooks **will not function** without at least one valid `limbleAPI` key.\n\n- Limble uses the **first-created** **`limbleAPI`** **key** (by creation date) to generate the **signature** included in webhook headers.\n\n- The receiving system must use this key to verify the authenticity of incoming webhook requests.\n\nIf a customer has multiple `limbleAPI` keys, **only the oldest one** will be used for signing webhook requests.\n\n### Response Time and Retry Behavior\n\nYour server must respond to webhook POST requests within **10 seconds**.\n\nIf it does not, Limble will attempt to retry the webhook request.\n\nLimble handles server responses as follows:\n\n- If the server returns **200 OK**, Limble considers the webhook successful and will not retry.\n\n- If the server returns **406 Not Acceptable**, Limble considers the webhook received but intentionally ignored — no retry will occur.\n\n- For any other response (e.g., 500, timeout, etc.), Limble will retry the request.\n\n**Retry schedule:**\n\n- After 10 minutes\n\n- After 1 hour\n\n- After 2 hours\n\n- After 4 hours\n\nAfter the final retry attempt, the webhook will be **automatically disabled**.\n\n### Re-enabling a Disabled Webhook\n\nTo re-enable a disabled webhook:\n\n1. Go to **Settings → Configuration → API Settings** in the Limble Web App. \nFind the webhook and use the option to **Re-enable** the API endpoint.\n\n2. Alternatively, send a `PATCH` request using the **Update Webhook** endpoint and set `enabled = true`.\n\n### Assets\n\nBelow is an example payload you might be sent when an event occurs on an asset:\n\n```\n{\n\"assetID\": 10748, \n\"status\": \"CREATED\",\n\"category\": \"asset\", \n\"user\": \"bob@limblecmms.com\" \n}\n\n```\n\nOnce the Payload is received you can use the Get Assets API call to get the most recent Asset data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | An Asset is created\nDELETED | An Asset was deleted\nCHANGED ASSET NAME | An asset has been renamed\n\n### Asset Field\n\nBelow is an example payload you might be sent when an event occurs on an asset field:\n\n```\n{\n\"valueID\": 46490,\n\"status\": \"DELETED\",\n\"category\": \"assetField\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Asset Field API call to get the most recent Asset Field data. The following is a list of all the possible statuses that a webhook might be set to:\n\nADDED | An Asset Field was added to an Asset\nDELETED | An Asset Field was deleted from an Asset\nUPDATED | An Asset Field was updated on an Asset\n\n### Location\n\nBelow is an example payload you might be sent when an event occurs on an location field:\n\n```\n{\n\"valueID\": 46490,\n\"status\": \"DELETED\",\n\"category\": \"location\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Location API call to get the most recent Location data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | An Location was added\nDELETED | An Location was deleted\nUPDATED | An Location was updated\n\n### Parts\n\nFor Parts, you may receive a webhook that looks like this:\n\n```\n{ \n\"partID\": 3456,\n\"status\": \"CREATED\",\n\"category\": \"part\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nAll possible statuses for Parts webhooks are as follows:\n\nCREATED | A Part was created.\nDELETED | A Part was deleted.\nLOCATION UPDATED | A Part had its location updated.\nSUPPLIER UPDATED | A Part had its supplier updated.\nPRICE UPDATED | A Part had its price updated.\nNAME UPDATED | A Part had its name updated.\nQUANTITY INCREASED | The quantity of a part increased.\nQUANTITY DECREASED | The quantity of a part decreased.\n\n### Purchase Order\n\nIf you have enabled purchasing webhooks, you may receive a webhook for POs that looks like this:\n\n```\n{ \n\"poID\": 8203,\n\"status\": \"READY TO RECEIVE\",\n\"category\": \"po\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nPossible statuses for PO webhooks are:\n\nCREATED | A PO was created.\nSETUP | A PO has been reset and now has the setup status.\nCHANGE STATUS | A PO has been approved and now has a custom status.\nREADY TO RECEIVE | A PO now has the Ready to Receive status.\nPARTIALLY RECEIVED | A PO has received any number of items and now has the Partially Received status.\nFULLY RECEIVED | A PO has received all of its items and now has the Fully Received status.\nCLOSED | A PO has had all items received and all bills paid and now has the Closed status.\nDELETED | A PO was deleted.\nCHANGE BUDGET | A PO has been assigned a new budget.\nCHANGE VENDOR | A PO has been assigned a new vendor.\nCHANGE NUMBER | A PO's PO Number has been modified.\nCHANGE BILL-TO | A PO's bill-to field has been modified.\nCHANGE SHIP-TO | A PO's ship-to field has been modified.\nCHANGE NOTES TO VENDOR | A PO's \"Notes to Vendor\" field has been modified.\nCHANGE CUSTOM FIELD | Any of a PO's custom fields has been modified.\nCHANGE ASSIGNMENT | A PO has had its assignment (user, team, multi-user) modified.\nCHANGE DATE | A PO's created date has been modified.\nCHANGE DELIVERY DATE | A PO's expected delivery date has been modified.\nDISAPPROVED PURCHASE REQUEST | A Purchase Request PO has been disapproved.\nREOPENED PURCHASE REQUEST | A disapproved Purchase Request PO has been reopened.\nDISAPPROVED STEP | A PO has had its workflow step disapproved and been sent back a step.\n\n### Purchase Order Items\n\nFor PO Items, you may receive a webhook that looks like this:\n\n```\n{ \n\"poItemID\": 8203,\n\"status\": \"RECEIVED\",\n\"category\": \"poItem\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nAll possible statuses for PO Item webhooks are as follows:\n\nCREATED | A PO Item was created.\nDELETED | A PO Item was deleted.\nRECEIVED | Some quantity of a PO Item was marked as received.\nCHANGE GL | A PO Item has been assigned a new GL or its GL has been removed.\nCHANGE DESCRIPTION | A PO Item has had its description modified.\nCHANGE QUANTITY | A PO Item has had its quantity modified.\nCHANGE RATE | A PO Item has had its rate (price) modified.\nCHANGE TAX | A PO Item has had its tax percentage modified.\nCHANGE DISCOUNT | A PO Item has had its discount percentage modified.\nCHANGE SHIPPING | A PO Item has had its shipping cost modified.\n\n### Tasks\n\nBelow is an example payload you might be sent when an event occurs on a Task:\n\n```\n{\n\"taskID\": 8203, // The unique identifier for the item the webhook event describes\n\"status\": \"COMPLETE\", // The status (e.g. task created, task complete, etc.) -- see below for a full list of possible statuses.\n\"category\": \"task\", // The category of item that triggered the webhook to fire (e.g. task, po, poItem).\n\"user\": \"bob@limblecmms.com\" // The user whose action caused the webhook to fire.\n}\n\n```\n\nOnce the Payload is received you can use the Get Tasks API call to get the most recent Task data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | A Task was created\nDELETED | A Task was deleted\nCHANGED DUE DATE | A Task changed due date\nCHANGED ASSIGNMENT | A Task changed assignment\nCOMPLETE | A Task was completed.\nCHANGED COMPLETED TASK | A Task that is completed was changed.\nCOMPLETED TASK REOPENED | A task that was completed was reopened and is now open.\nCHANGED TASK NAME | A task has been renamed.\nCHANGED TASK DESCRIPTION | The description of a task has been changed.\nADDED COMMENT TO TASK | A comment was added to a task.\nCUSTOM TAG ADDED TO TASK | A custom tag was added to a task.\nCUSTOM TAG REMOVED FROM TASK | A custom tag was removed from task.\nLOGGED TIME ON TASK | A time entry was added to a task.\n\n### Task Instruction\n\nBelow is an example payload you might be sent when an event occurs on an location field:\n\n```\n{\n\"instructionID\": 46490,\n\"status\": \"Updated\",\n\"category\": \"instruction\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Instruction API call to get the task instruction data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | A Task Instruction was added\nDELETED | A Task Instruction was deleted\nUPDATED | A Task Instruction was updated\nLABEL UPDATED | A Task Instruction's label was updated\nDESCRIPTION UPDATED | A Task Instruction's description was updated\nPARENT RESPONSE UPDATED | The response of a Task Instruction's parent item was updated\nSORT ORDER UPDATED | The sort order of a Task Instruction was updated.\n\n## Securing Webhooks\n\nTo ensure the authenticity and integrity of webhook events each webhook is \nsigned with a signature as well as some other data described below:\n\ntimestamp | int | A standard unix time stamp\ntoken | string | , randomly generated string that is an integrity check of the, payload.,\nsignature | String | A string generated by the HMAC algorithm\n\nTo verify the webhook is originating from LimbleCMMS you will need to:\n\n- Concatenate the timestamp and token\n\n- Encode your private API key (oldest Limble API Key) with the SHA256 algorithm\n\n- Encode the timestamp and token value with the HMAC algorithm using your hashed private key and the SHA256 method.\n\n- Compare the resulting digest to the signature provided in your webhook \nheader\n\n## Validation Code Examples\n\nCode samples to verify webhook data.\n\nPHP\n\n```\nfunction verify($timestamp, $signature, $apiKey, $token)\n//hash private key\n$apiKey = hash('sha256', $apiKey);\n$generated_signature = hash_hmac('sha256', $timestamp . $token, $apiKey);\nif($generated_signature === $signature) {\nreturn true;\n} else {\nreturn false;\n}\n} \n\n```\n\nNodeJS\n\n```\nvar crypto = require('crypto');\nconst verify = (apiKey, token, timestamp, signature) => {\n//hash private key\nconst apiKey = crypto.createHash('sha256').update(apiKey).digest('hex');\nconst value = timestamp+token;\nconst generated_signature = crypto.createHmac('sha256',apiKey).update(value).digest('hex');\nif(signature === generated_signature){\nreturn true;\n} else {\nreturn false;\n}\n};\n\n```\n\n---\n\n# Rate limit\n\nTo help protect against run-away scripts, clients who make an inordinate \nnumber of calls over a period of time may be temporarily blocked from \naccessing the service. The limits are defined in the table below. If you \nreceive an error indicating that you have exceeded the call limit, please \nwait and try again later. If you need higher limits please reach out to your dedicated account manager.\n\n## Per Hour\n\nGET | 4000 calls per hour. | 360 calls per minute.\nPATCH | 2000 calls per hour. | 240 calls per minute.\nPOST | 1000 calls per hour. | 240 calls per minute.\nPUT | 1000 calls per hour. | 240 calls per minute.\nDELETE | 100 calls per hour. | 60 calls per minute.\nBATCH REQUEST | 20 calls per hour | 5 calls per minute\n\nEvery API response is accompanied by the following set of headers to identify the status of your consumption. API calls are rate-limited on two windows of time: per-minute and per-hour. For example, if you made a request at 13:42:42, that request will expire from your per-minute window at 13:43:42 and from your per-hour window at 14:42:42.\n\nX-RateLimit-Limit | The maximum number of requests that the consumer is permitted to make per hour.\nX-RateLimit-Remaining | The number of requests remaining in the current per-hour window.\nX-RateLimit-First-Call | The time your first call was made in the current per-hour window.\nX-RateLimit-TTL | The time until more request resources become available (This only displays when you've hit your limit).\nX-RateLimit-Minute-Limit | The maximum number of requests that the consumer is permitted to make per minute.\nX-RateLimit-Minute-Remaining | The number of requests remaining in the current per-minute window.\nX-RateLimit-Minute-First-Call | The time your first call was made in the current per-minute window.\nX-RateLimit-Minute-TTL | The time until more request resources become available (This only displays when you've hit your limit).\n\n# Pagination\n\nCurrently pagination using OrderBy and cursor is supported only by **GET Tasks** and **GET Assets**. Pagination using Limit and Page is supported by many other GET endpoints including **GET Tasks** and **GET Assets**.\n\nPagination can be implemented by using the orderBy, cursor, limit and page query parameters. \n**Note: cursor and page cannot be used simultaneously for pagination.**\n\n## Pagination using Limit and Page\n\nThis uses limit and page query parameters. For a given limit and page results will be paginated. If orderBy query parameter is given the results will be ordered and paginated accordingly.\n\nThe page parameter is **required** and can be greater than or equal to 1 for this pagination method. The default limit is 100 but can be changed. The max limit is 1000.\n\nThe response headers contain information about the Previous, Next and Last Page of the result based on the limit.\n\nThe result will be empty when for a given limit, the given page does not exist. For example, if there are 100 Assets in total and limit is set at 10, only pages 1-10 are possible. An empty result will be given for page numbers greater than 10.\n\nThis pagination method is supported by various GET endpoints. Please refer to the examples for those GET endpoints for more information.\n\n## Pagination using OrderBy and Cursor\n\n**Note**: If you're implementing pagination for the first time for **GET Tasks** or **GET Assets** please follow **Pagination Using Limit and Page** as the use of **Cursor** will be deprecated in the next API version.\n\nThis uses orderBy and cursor query parameters. Generally, in all of our GET endpoints, the cursor parameter ensures that the ID will be greater than the value of cursor. This makes sense when we're ordering the results ascending by ID.\n\nIn GET Assets, when we're fetching a set of assets and ordering by lastEdited (ascending) or -lastEdited (descending), the cursor parameter will instead ensure that we're returning a set of results that begin at the next asset in the order, regardless of whether its **ID is greater or less than the value of cursor**.\n\nIf the value of cursor does not match an existing assetID, then the result set will be empty, because there is no lastEdited value to compare to. **When providing orderBy and cursor, the value of cursor must be a real assetID or the result set will be empty.**\n\nThe same applies for GET Tasks when using cursor and ordering by createdDate, dateCompleted and due."
+servers:
+- url: https://api.limblecmms.com
+  description: US (Default)
+- url: https://ca-api.limblecmms.com
+  description: Canada
+- url: https://au-api.limblecmms.com
+  description: Australia
+- url: https://eu-api.limblecmms.com
+  description: Europe
+- url: https://21cfr-api.limblecmms.com
+  description: 21 CFR Part 11 (Pharma/Life Sciences)
+security:
+- BasicAuth: []
+tags:
+- name: Assets
+paths:
+  /v2/assets/{assetID}/image:
+    parameters:
+    - name: assetID
+      in: path
+      required: true
+      description: assetID of the asset you are removing the main image from.
+      schema:
+        type: string
+      example: '{{assetID}}'
+    put:
+      operationId: putAssetsByAssetIDImage
+      summary: Add Asset Main Image
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: Each asset can have one main image associated with it.  This request allows you to set that image.
+    delete:
+      operationId: deleteAssetsByAssetIDImage
+      summary: Delete Asset Main Image
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: This request removes the main image from the asset.
+  /v2/assets/fields:
+    get:
+      operationId: getAssetsFields
+      summary: Asset Fields
+      parameters:
+      - name: name
+        in: query
+        description: This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %.
+        schema:
+          type: string
+        example: Model
+      - name: fields
+        in: query
+        description: This parameter can be used to get a single Asset Fields or a list of Asset Fields in a comma-separated list.
+        schema:
+          type: integer
+        example: 107
+      - name: start
+        in: query
+        description: This parameter is used to only get Asset Fields for Assets that were last edited after the unix timestamp passed into the start parameter. For example, all Assets that were last edited after April 18th, 2018.
+        schema:
+          type: integer
+        example: 1555105636
+      - name: end
+        in: query
+        description: This parameter is used to only get Asset Fields for Assets that were last edited *before* the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1555105636
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what id you want to start receiving results at. e.g. passing 137 here will only get you asset fields with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 1
+      - name: locations
+        in: query
+        description: This parameter can be used to get a group of asset fields in a location in a comma-separated list.
+        schema:
+          type: integer
+        example: 163
+      - name: value
+        in: query
+        description: This parameter is used to only get specific field by value. This parameter expects a string full name of a field or partial name with the wildcard %.
+        schema:
+          type: string
+        example: F250
+      - name: assetName
+        in: query
+        description: This parameter is used to only get specific fields by asset name. This parameter expects a string full name of a field or partial name with the wildcard %.
+        schema:
+          type: string
+        example: '%fork%'
+      - name: fieldType[0]
+        in: query
+        description: This parameter is used to only get specific fields by type. This parameter expects an array of strings "Text, Date, Pictures, Documents, Number, Currency, Dropdown"
+        schema:
+          type: string
+        example: Text
+      - name: fieldType[1]
+        in: query
+        description: This parameter is used to only get specific fields by type. This parameter expects an array of strings "Text, Date, Pictures, Documents, Number, Currency, Dropdown"
+        schema:
+          type: string
+        example: Documents
+      - name: page
+        in: query
+        description: This parameter is used to paginate results based on the limit. Refer to Pagination section for more information.
+        schema:
+          type: integer
+        example: 1
+      - name: values
+        in: query
+        description: This parameter is used to get asset fields by their valueID. This parameter expects a comma delimited list of Value IDs.
+        schema:
+          type: string
+      - name: assets
+        in: query
+        description: This parameter can be used to get a group of asset fields for a specific set of asset ids in a comma-separated list.
+        schema:
+          type: integer
+        example: 171
+      responses:
+        '200':
+          description: Asset Fields
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    fieldID:
+                      type: integer
+                    assetID:
+                      type: integer
+                    locationID:
+                      type: integer
+                    field:
+                      type: string
+                    value:
+                      type: string
+                      nullable: true
+                    valueID:
+                      type: integer
+                    fieldType:
+                      type: string
+                    lastEdited:
+                      type: integer
+                    locked:
+                      type: boolean
+                    files:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          fileName:
+                            type: string
+                          link:
+                            type: string
+                            format: uri
+              example:
+              - fieldID: 27
+                assetID: 1022
+                locationID: 163
+                field: Manual
+                value: null
+                valueID: 45346
+                fieldType: Documents
+                lastEdited: 1572028803
+                locked: false
+                files:
+                - fileName: guide.pdf
+                  link: https://content.limblecmms.com/upload-36/assets/163/1022/45346/guide.pdf?Expires=1572372505&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jb250ZW50LmxpbWJsZWNtbXMuY29tL3VwbG9hZC0zNi9hc3NldHMvMTYzLzEwMjIvNDUzNDYvMS5wZGYiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE1NzIzNzI1MDV9fX1dfQ__&Signature=BqvWWjq-bk03MJ1~GxAHIRh0J1qK6NkiD~GcE9R1awh8xhrVUhOgvrZapSjMCe8dqKOsri7qYc~CytaQgD-NmqmWK4du4khv-hU~LmXQ-nDFnbUCs4SHo0QOtHieFX7x0Hs6DkioLdPHlvZsgb7bXyHXJMyMwhQThfAXR6WjfIjDpggsdEnUeyeEMI9tg1SLZOnCI64oWze56EGDNk1VQ6s0RcwPCjAsYebRjkr9crktS9x0Xt7WySL0UZeWUK-gbte3tjC52xDUvOeLsXw19JvA4Dx9GCWRTQu1R4kRMh4Phy7iR62kZTaJGP-Hb8OimGs95DUF-cniGOsMgQrXmQ__&Key-Pair-Id=APKAIH5A42E3EPKJRHFQ
+                - fileName: parts-guide.pdf
+                  link: https://content.limblecmms.com/upload-36/assets/163/1022/45346/parts-guide.pdf?Expires=1572372505&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jb250ZW50LmxpbWJsZWNtbXMuY29tL3VwbG9hZC0zNi9hc3NldHMvMTYzLzEwMjIvNDUzNDYvMS0xLnBkZiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTU3MjM3MjUwNX19fV19&Signature=sMg0S7HCdz8KeMVvXQW~KsZWGGolD5K4QFhKD2jcn90QIL5xqhKDTwZbyUdYWWr7aJLleMXBAW3iBxIxfp58bBcbfqDPQsWlseO~zRFIoORGHgozwvZ9V8gA0-UvlYFLVX1dLiZIzxRh3UXqXEU1uNRLehSGcJbaWc6TTvfCGuRrg4b8FUE8MVyyQBMtFBZ4aI82ggwkQWVu3~P2Vjltd5QNmArd2XJdrx2FtPxrhpupdoQdW0fd4dpwADjGzUQzlAmVA~1rzzWERDzIC29wQaT4GuOJIJ3cePQZHjw9KCxetYcsu4W-38BXmAybmMmLDvmOk61PDVaDhCcLkA4ycw__&Key-Pair-Id=APKAIH5A42E3EPKJRHFQ
+                - fileName: 2018-ELANTRA-AD-OM.pdf
+                  link: https://content.limblecmms.com/upload-36/assets/163/1022/45346/2018-ELANTRA-AD-OM.pdf?Expires=1572372505&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jb250ZW50LmxpbWJsZWNtbXMuY29tL3VwbG9hZC0zNi9hc3NldHMvMTYzLzEwMjIvNDUzNDYvMjAxOC1FTEFOVFJBLUFELU9NLnBkZiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTU3MjM3MjUwNX19fV19&Signature=jClvv7jCkK5hB~2DEp9GYe7xpo2SPkDo2XFNsrBHMX3f8vynCPtN~zi0HELdE5XdSnhtNRO4dgMzy9n0nB~uBzR-8lvSxKflAG9Hk~5ch9lW8uO1LosfG8ixt9qyKTLI5gcMkXBLH42l~M094fGyjUEDROZ2f7aiFTyGK-kX4KLvGctFdbAL-AsiIAQusrE1AbUTFkEmlQlJVn4S8sUcQNYUDMY1uXhoW6g3fN7RO5vdC8t-WKkLHauJLy5hBeAWvbpmG0G1-5KGvB3n3LRCJHIN~cNDs1vWyZo0BH-fUauai3T2fRPd8rsspW2cagtnqeanHg78pffQARGaEoMneA__&Key-Pair-Id=APKAIH5A42E3EPKJRHFQ
+              - fieldID: 37
+                assetID: 1022
+                locationID: 163
+                field: Gallons
+                value: null
+                valueID: 45377
+                fieldType: Number
+                lastEdited: 1572028803
+                locked: true
+                files: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This request gets detailed information about asset fields such as Make, Model and any other custom field.
+
+
+        This call also returns "files" which is an array of objects that have a file name and a link you can use to download that file. All links are only valid for 15 minutes, a new call will generate a new link.
+
+
+        **Note:** this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information.'
+    post:
+      operationId: postAssetsFields
+      summary: New Asset Suggested Field
+      responses:
+        '201':
+          description: New Asset Suggested Field
+          headers:
+            Location:
+              schema:
+                type: string
+              example: /v2/assets/fields/?fields=643
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fieldID:
+                    type: string
+                    format: color
+              example:
+                fieldID: '643'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This request creates a new Suggested Field.
+
+
+        Suggested Fields are the full list of possible Fields that can be added to Assets at that Location.
+
+
+        Parameter: locationID, Type: Int, Required?: Required, Description: The location ID of the Asset to add the new Field to.
+
+        Parameter: name, Type: String, Required?: Required, Description: The name of the new Field. Some custom field names such as "Asset" are not allowed and reserved for internal use. This will result in a 409 error.
+
+        Parameter: fieldType, Type: Int, Required?: Required, Description: The type of the new Field. You can choose from Text (1), Date (2), Pictures (3), Documents (4), Number (5), Currency (6).'
+  /v2/assets/fields/suggested:
+    get:
+      operationId: getAssetsFieldsSuggested
+      summary: Asset Suggested Fields
+      parameters:
+      - name: fields
+        in: query
+        description: This parameter can be used to get a single Asset Fields or a list of Asset Fields in a comma-separated list.
+        schema:
+          type: integer
+        example: 16
+      - name: name
+        in: query
+        description: This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %.
+        schema:
+          type: string
+        example: '%S%'
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what id you want to start receiving results at. e.g. passing 137 here will only get you asset fields with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 100
+      - name: locations
+        in: query
+        description: This parameter is used to only get fields at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs.
+        schema:
+          type: integer
+        example: 163
+      responses:
+        '200':
+          description: Asset Suggested Fields
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    fieldID:
+                      type: integer
+                    fieldType:
+                      type: string
+                    fieldName:
+                      type: string
+                    locationID:
+                      type: integer
+              example:
+              - fieldID: 16
+                fieldType: Text
+                fieldName: Serial No.
+                locationID: 163
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: "This request gets all possible fields an Asset can pick from when deciding which fields it should have.  \n\nTo understand this concept, let's pretend you have the following assets:  \n\nYour first Asset (a Truck) has the fields Make, Model, and VIN.  \n\nYour second Asset (a HVAC) has the fields Make, Model, and Serial Number.  \n\nThis would mean there are 4 suggested fields that exist:  Make, Model, VIN and Serial Number.  If I added a third new asset I could pick from any of the 4 suggested fields.\n\nSuggested fields are the full list of possible fields that can be added to assets at that location."
+  /v2/assets/fields/history:
+    get:
+      operationId: getAssetsFieldsHistory
+      summary: Asset Field History
+      parameters:
+      - name: assets
+        in: query
+        description: This parameter can be used to get a single Asset or a list of Assets in a comma-separated list.
+        schema:
+          type: string
+        example: 4864, 4865
+      - name: fields
+        in: query
+        description: This parameter can be used to get a single Asset Fields or a list of Asset Fields in a comma-separated list.
+        schema:
+          type: string
+        example: 321, 202
+      - name: start
+        in: query
+        description: This parameter is used to only get Asset Fields for Assets that were last edited after the unix timestamp passed into the start parameter. For example, all Assets that were last edited after April 18th, 2018.
+        schema:
+          type: integer
+        example: 1555105636
+      - name: end
+        in: query
+        description: This parameter is used to only get Asset Fields for Assets that were last edited *before* the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1555105636
+      - name: limit
+        in: query
+        description: This parameter is a cursor that selects what id you want to start receiving results at. e.g. passing 137 here will only get you asset fields with an id greater than 137.
+        schema:
+          type: integer
+        example: 100
+      - name: cursor
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 0
+      responses:
+        '200':
+          description: Asset Field History
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    fieldID:
+                      type: integer
+                    field:
+                      type: string
+                    value:
+                      type: string
+                      format: utc-millisec
+                    valueID:
+                      type: integer
+                    dateUpdated:
+                      type: string
+                      format: utc-millisec
+              example:
+              - fieldID: 323
+                field: Custom Field 4
+                value: '23'
+                valueID: 24683
+                dateUpdated: '1528597316'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: "Any time an Asset's field is changed an entry is inserted into a history.  \n\nThis request allows you to pull that information so you can see trends over time."
+  /v2/assets/{assetID}/fields:
+    parameters:
+    - name: assetID
+      in: path
+      required: true
+      schema:
+        type: string
+      example: '{{assetID}}'
+    put:
+      operationId: putAssetsByAssetIDFields
+      summary: Attach Field to Asset
+      responses:
+        '200':
+          description: Attach Field to Asset
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valueID:
+                    type: string
+                    format: utc-millisec
+              example:
+                valueID: '45350'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This request attaches a Suggested Field to an Asset. The field and asset must belong to the same location.
+
+
+        For example, let''s say I have an Asset called Truck - 001. This Truck doesn''t have any Fields attached to it, but I want to track its Make so I can set that this Truck is a Dodge. This is the request I would use to attach the Make Field to the Truck and then I would use the Update Asset Field Value request to set it to Dodge.
+
+
+        Parameter: locationID, Type: Int, Required?: Required, Description: The ID of the Location the Asset exists at.
+
+        Parameter: fieldID, Type: Int, Required?: Required, Description: The ID of the existing Field to add to the Asset.'
+  /v2/assets/fields/{valueID}:
+    parameters:
+    - name: valueID
+      in: path
+      required: true
+      description: valueID of the field you are removing.
+      schema:
+        type: integer
+      example: 45612
+    delete:
+      operationId: deleteAssetsFieldsByValueID
+      summary: Delete Asset Field
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: This request deletes a field attached to an Asset.
+    patch:
+      operationId: patchAssetsFieldsByValueID
+      summary: Update Asset Field Value
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: "This request updates the value of a Field that is attached to an Asset. \n\nParameter: value, Type: Varies depending on the Field's type, Required?: Required, Description: The value that will be written to the field, overwriting the previous value and creating an entry in the field history. \"value\" must correspond to the fieldType of the field. For example, if the field is a \"number\" fieldType, then \"value\" must be a number."
+  /v2/assets/logs/file/{fileID}:
+    parameters:
+    - name: fileID
+      in: path
+      required: true
+      description: The ID of the file to be deleted.
+      schema:
+        type: integer
+      example: 58
+    delete:
+      operationId: deleteAssetsLogsFileByFileID
+      summary: Delete Asset Log File
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: This requests deletes a file attached to a log.
+  /v2/assets/{assetID}/logs/{logID}/file:
+    parameters:
+    - name: assetID
+      in: path
+      required: true
+      description: The ID of the asset the log belongs to.
+      schema:
+        type: integer
+      example: 1
+    - name: logID
+      in: path
+      required: true
+      description: The ID of the log to attach the file to.
+      schema:
+        type: integer
+      example: 7257
+    put:
+      operationId: putAssetsByAssetIDLogsByLogIDFile
+      summary: Add Asset Log File
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This request adds files to a log.
+
+
+        Return data description
+
+
+        fileID | The ID of the file attached to the log.'
+  /v2/assets/{assetID}/logs:
+    parameters:
+    - name: assetID
+      in: path
+      required: true
+      description: The ID of the asset the log will be created for.
+      schema:
+        type: integer
+      example: 1
+    get:
+      operationId: getAssetsByAssetIDLogs
+      summary: Asset Logs
+      parameters:
+      - name: logs
+        in: query
+        description: This parameter is used to only get specific logs. This parameter accepts a comma delimited list of logIDs.
+        schema:
+          type: integer
+        example: 16
+      - name: users
+        in: query
+        description: This parameter is used to only get logs created by specific users. This parameter accepts a comma delimited list of userIDs.
+        schema:
+          type: integer
+        example: 341
+      - name: logEntry
+        in: query
+        description: This is a parameter used to string search for manual log entry. This parameter expects a string with the wildcard %.
+        schema:
+          type: string
+        example: '%bro%'
+      - name: start
+        in: query
+        description: 'This parameter is used to only get logs that were last edited after the unix timestamp passed into the start parameter. '
+        schema:
+          type: integer
+        example: 1506274400
+      - name: end
+        in: query
+        description: This parameter is used to only get logs that were last edited before the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1506274900
+      - name: page
+        in: query
+        description: This parameter is used to paginate results based on the limit. Refer to Pagination section for more information.
+        schema:
+          type: integer
+        example: 1
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: 'This parameter is a cursor that selects what ID you want to start receiving results at. '
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Asset Logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LogEntry'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This request returns logs created manually by users and automatically created (where userID=0) by certain actions taken on the asset. Logs related to tasks completed on an Asset will not be returned.
+
+
+        **Note:** this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information.
+
+
+        Return data description
+
+
+        logID | The unique logID of the log.
+
+        dateCreated | The date the log was created as a UNIX timestamp.
+
+        assetD | The ID of the asset the log belongs to.
+
+        logEntry | The log entry for the asset.
+
+        userID | The ID of the user that created the log.
+
+        logFiles | An array of objects that have a fileID, fileName and a link that can used to download the files attached to the log. All links are only valid for 15 minutes, a new call will generate a new link.'
+    post:
+      operationId: postAssetsByAssetIDLogs
+      summary: New Asset Log
+      responses:
+        '201':
+          description: New Asset Log
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              example: '1000'
+            X-RateLimit-Minute-Limit:
+              schema:
+                type: integer
+              example: '240'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              example: '997'
+            X-RateLimit-First-Call:
+              schema:
+                type: integer
+              example: '1684346312'
+            X-RateLimit-Minute-Remaining:
+              schema:
+                type: integer
+              example: '237'
+            X-RateLimit-Minute-First-Call:
+              schema:
+                type: integer
+              example: '1684346312'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logID:
+                    type: integer
+              example:
+                logID: 29777
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This requests creates a manual log entry for an asset.
+
+
+        userID | Int | Optional | The ID of the user creating the log. If userID is not given a log entry with userID=0 will be created.
+
+        logEntry | String | Required | Details of the log.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userID:
+                  type: integer
+                logEntry:
+                  type: string
+            example:
+              userID: 342
+              logEntry: Creating a log
+  /v2/assets/logs/{logID}:
+    parameters:
+    - name: logID
+      in: path
+      required: true
+      description: The ID of the log to be deleted.
+      schema:
+        type: integer
+      example: 7257
+    patch:
+      operationId: patchAssetsLogsByLogID
+      summary: Update Asset Log
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: This requests updates a manual log entry for an asset.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                logEntry:
+                  type: string
+            example:
+              logEntry: Changing log
+    delete:
+      operationId: deleteAssetsLogsByLogID
+      summary: Delete Asset Log
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: This requests deletes a manual log entry for an asset.
+  /v2/assets/fields/batch/update:
+    post:
+      operationId: postAssetsFieldsBatchUpdate
+      summary: Batch Update Asset Fields
+      responses:
+        '200':
+          description: Some field values are not updated.
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              example: '20'
+            X-RateLimit-Minute-Limit:
+              schema:
+                type: integer
+              example: '5'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              example: '16'
+            X-RateLimit-First-Call:
+              schema:
+                type: integer
+              example: '1681935325'
+            X-RateLimit-Minute-Remaining:
+              schema:
+                type: integer
+              example: '4'
+            X-RateLimit-Minute-First-Call:
+              schema:
+                type: integer
+              example: '1681935418'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updates:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        value:
+                          type: string
+                        valueID:
+                          type: integer
+                        success:
+                          type: boolean
+                  success:
+                    type: boolean
+              example:
+                updates:
+                - value: Fix this
+                  valueID: 43676
+                  success: true
+                - value: '31'
+                  valueID: 27050
+                  success: true
+                - value: Integrated Module
+                  valueID: 24898
+                  success: true
+                - value: '94'
+                  valueID: 46456
+                  success: true
+                - value: '57'
+                  valueID: 46457
+                  success: true
+                - value: '31'
+                  valueID: 46458
+                  success: true
+                - value: '100'
+                  valueID: 45474
+                  success: true
+                - value: '12'
+                  valueID: 45476
+                  success: true
+                - value: '22'
+                  valueID: 45477
+                  success: true
+                - value: '33'
+                  valueID: 45478
+                  success: true
+                - value: '59'
+                  valueID: 45479
+                  success: true
+                - value: Five
+                  valueID: 46014
+                  success: false
+                - value: '9'
+                  valueID: 46460
+                  success: true
+                - value: '9'
+                  valueID: 46461
+                  success: true
+                success: false
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This request will update multiple asset fields values at a time. The request expects an array of asset fields values. The array needs to have atleast two asset field values and atmost 100 asset field values. The request expects an array made up of asset field values that need to be updated. Only asset fields values of type Text (1), Date (2), Number (5) and Currency (6) can be updated using this request.
+
+
+        The response returns `{ sucess:true }` if all field values are updated successfully. The response returns `{ sucess: false }` and an `updates` array that gives details of which field values were updated and the `reason` for field values that were not updated successfully. Please refer to the examples for more information.
+
+
+        valueID | Integer | Required | The valueID of the asset field value
+
+        value | Based on the type of value | Required | The value that needs to be updated'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    type: string
+                  valueID:
+                    type: integer
+            example:
+            - value: Fix this
+              valueID: 43676
+            - value: '31'
+              valueID: 27050
+            - value: Integrated Module
+              valueID: 24898
+            - value: '94'
+              valueID: 46456
+            - value: '57'
+              valueID: 46457
+            - value: '31'
+              valueID: 46458
+            - value: '100'
+              valueID: 45474
+            - value: '12'
+              valueID: 45476
+            - value: '22'
+              valueID: 45477
+            - value: '33'
+              valueID: 45478
+            - value: '59'
+              valueID: 45479
+            - value: '5'
+              valueID: 46014
+            - value: '9'
+              valueID: 46460
+            - value: '9'
+              valueID: 46461
+  /v2/assets/parts:
+    get:
+      operationId: getAssetsParts
+      summary: Asset Parts
+      parameters:
+      - name: assets
+        in: query
+        description: This parameter is used to only get specific Assets. This parameter expects a comma delimited list of Asset IDs.
+        schema:
+          type: string
+        example: 172,253
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 3
+      - name: page
+        in: query
+        description: This parameter is used to paginate results based on the limit. Refer to Pagination section for more information.
+        schema:
+          type: integer
+        example: 3
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what ID you want to start receiving results at. Without ordering, this will return results with an ID greater than the value of cursor. With ordering, this will return results starting at the next item in the order, regardless of whether its ID is greater than or lesser than the value of cursor.
+        schema:
+          type: integer
+        example: 49
+      - name: parts
+        in: query
+        description: This parameter is used to only get specific Parts. This parameter accepts a comma delimited list of part IDs.
+        schema:
+          type: string
+        example: 46,172
+      - name: relations
+        in: query
+        description: This parameter is used to only get specific relations. This parameter expects a comma delimited list of relation IDs.
+        schema:
+          type: string
+        example: 1,10
+      - name: start
+        in: query
+        description: This parameter is used to only get relations that were last edited after the unix timestamp passed into the start parameter. For example, all relations that were last edited after April 18th, 2018.
+        schema:
+          type: integer
+        example: 1334570141
+      - name: end
+        in: query
+        description: This parameter is used to only get relations that were last edited *before* the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1784570141
+      responses:
+        '200':
+          description: Asset Parts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssetPart'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This request returns a list of Part Asset Relations with top level information such as part, asset, qty, last edited, etc.
+
+
+        **Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.
+
+
+        Return data description
+
+
+        relationID | The Relations ID. e.g. 1
+
+        partID | The ID of the Part in this Relation
+
+        assetID | The ID of the Asset in this Relation
+
+        qty | The qty of the Part related to this Asset
+
+        createdAt | The unix timestamp at which this Relation was created
+
+        lastEdited | The unix timestamp at which this Relation last saw a change
+
+        associationType | The method used to create this Relation. At this time, only "manual" is supported'
+  /v2/assets:
+    get:
+      operationId: getAssets
+      summary: Assets
+      parameters:
+      - name: assets
+        in: query
+        description: This parameter is used to only get specific Assets. This parameter expects a comma delimited list of Asset IDs.
+        schema:
+          type: integer
+        example: 1
+      - name: name
+        in: query
+        description: This is a parameter used to string search for a name or partial name of an asset this parameter expects a string with the wildcard %.
+        schema:
+          type: string
+        example: '%test%'
+      - name: locations
+        in: query
+        description: This parameter is used to only get Assets at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs.
+        schema:
+          type: integer
+        example: 73
+      - name: start
+        in: query
+        description: This parameter is used to only get Assets that were last edited after the unix timestamp passed into the start parameter. For example, all Assets that were last edited after April 18th, 2018.
+        schema:
+          type: integer
+        example: 1541796014
+      - name: end
+        in: query
+        description: This parameter is used to only get Assets that were last edited *before* the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1541796014
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what ID you want to start receiving results at. Without ordering, this will return results with an ID greater than the value of cursor. With ordering, this will return results starting at the next item in the order, regardless of whether its ID is greater than or lesser than the value of cursor.
+        schema:
+          type: integer
+        example: 0
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 1
+      - name: parentAssetID
+        in: query
+        description: This parameter can be used to get asset(s) children using the Parent's ID. This parameter accepts a comma delimited list of Asset IDs.
+        schema:
+          type: integer
+        example: 2317
+      - name: orderBy
+        in: query
+        description: This parameter is used to order results by their lastEdited property instead of the default ordering by ascending assetID. CANNOT be provided alongside the cursor parameter. to paginate in this ordering, use the start or end parameters.
+        schema:
+          type: string
+        example: -lastEdited
+      - name: page
+        in: query
+        description: This parameter is used to paginate results based on the limit. Refer to Pagination section for more information.
+        schema:
+          type: integer
+        example: 1
+      - name: geoLocation
+        in: query
+        description: This parameter is used to filter results that contain a geoLocation property. By default it is false and will return **all** assets with and without geoLocation property. If true, it will only return assets with a geoLocation property.
+        schema:
+          type: boolean
+        example: true
+      responses:
+        '200':
+          description: Pagination using Page & Limit
+          headers:
+            Last-Page:
+              schema:
+                type: string
+              example: /v2/assets/?limit=5&orderBy=-lastEdited&page=279
+            Next-Page:
+              schema:
+                type: string
+              example: /v2/assets/?limit=5&orderBy=-lastEdited&page=4
+            Previous-Page:
+              schema:
+                type: string
+              example: /v2/assets/?limit=5&orderBy=-lastEdited&page=2
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asset'
+              example:
+              - assetID: 10836
+                name: Health Berkshire
+                startedOn: 1632949149
+                lastEdited: 1632949149
+                parentAssetID: 0
+                locationID: 205
+                hoursPerWeek: 40
+                meta:
+                  fields: /v2/assets/fields/?assets=10836
+                  tasks: /v2/tasks/?assets=10836
+                workRequestPortal: https://app.limblestaging.com/#!/problem/fdle6w36/205/10836
+                image: []
+              - assetID: 10835
+                name: Walks
+                startedOn: 1632949148
+                lastEdited: 1632949149
+                parentAssetID: 0
+                locationID: 205
+                hoursPerWeek: 40
+                meta:
+                  fields: /v2/assets/fields/?assets=10835
+                  tasks: /v2/tasks/?assets=10835
+                workRequestPortal: https://app.limblestaging.com/#!/problem/fdle6w36/205/10835
+                image: []
+              - assetID: 10834
+                name: Executive Springs Phased
+                startedOn: 1632949148
+                lastEdited: 1632949148
+                parentAssetID: 0
+                locationID: 205
+                hoursPerWeek: 40
+                meta:
+                  fields: /v2/assets/fields/?assets=10834
+                  tasks: /v2/tasks/?assets=10834
+                workRequestPortal: https://app.limblestaging.com/#!/problem/fdle6w36/205/10834
+                image: []
+              - assetID: 10833
+                name: functionalities
+                startedOn: 1632949148
+                lastEdited: 1632949148
+                parentAssetID: 0
+                locationID: 205
+                hoursPerWeek: 40
+                meta:
+                  fields: /v2/assets/fields/?assets=10833
+                  tasks: /v2/tasks/?assets=10833
+                workRequestPortal: https://app.limblestaging.com/#!/problem/fdle6w36/205/10833
+                image: []
+              - assetID: 10832
+                name: AGP magnetic Handmade
+                startedOn: 1632949148
+                lastEdited: 1632949148
+                parentAssetID: 0
+                locationID: 205
+                hoursPerWeek: 40
+                meta:
+                  fields: /v2/assets/fields/?assets=10832
+                  tasks: /v2/tasks/?assets=10832
+                workRequestPortal: https://app.limblestaging.com/#!/problem/fdle6w36/205/10832
+                image: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This request returns a list of Assets with top level information such as name, last edited, etc.
+
+
+        **Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.
+
+
+        Return data description
+
+
+        meta | Requests to gather more information on an Asset such as Fields for the Asset or what Tasks are assigned to the Asset
+
+        startedOn | The date when this Asset was started on. This property is used to help determine runtime which is used in MTBF.
+
+        lastEdited | A UNIX timestamp of when this Asset was last edited.
+
+        parentAssetID | The Asset that is the parent of this Asset. If the value is 0 that means this Asset does not have a parent.
+
+        locationID | The ID of the location this asset is located at.
+
+        hoursPerWeek | The number of hours this Asset runs per week. This is used to determine runtime which is used in MTBF. If the value is -1 then the Asset uses the Location''s hoursPerWeek setting.
+
+        workRequestPortal | The url work requestors can use to submit problems with this Asset.
+
+        image | Array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link.
+
+        geoLocation | The location of an asset on a Map.'
+    post:
+      operationId: postAssets
+      summary: New Asset
+      responses:
+        '201':
+          description: New Asset
+          headers:
+            Location:
+              schema:
+                type: string
+              example: /v2/assets/?assets=10728
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  assetID:
+                    type: string
+                    format: utc-millisec
+              example:
+                assetID: '10728'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This request creates a new blank Asset.
+
+
+        Parameter: name, Type: String, Required?: Required, Description: The new name of the Asset.
+
+        Parameter: hoursPerWeek, Type: Integer, Required?: Optional, Description: The new hours of operation per week for this Asset. Use -1 to disable this feature.
+
+        Parameter: parentAssetID, Type: Int, Required?: Optional, Description: The asset''s parent. This makes it so assets can be nested in the web application.
+
+        Parameter: locationID, Type: Int, Required?: Required, Description: The ID of the location this asset is located at.
+
+        Parameter: geoLocation, Type: geoJSON, Required?: Optional, Description: The geoJSON Feature object that can be used to locate an asset on a Map.'
+  /v2/assets/{assetID}:
+    parameters:
+    - name: assetID
+      in: path
+      required: true
+      description: The value of the asset that needs to be updated
+      schema:
+        type: integer
+      example: 10728
+    delete:
+      operationId: deleteAssetsByAssetID
+      summary: Delete Asset
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: This request removes an Asset from your Limble account.
+    patch:
+      operationId: patchAssetsByAssetID
+      summary: Patch Asset
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This request updates an Asset''s top level information. See Update Asset Field Value to update an Asset Field''s value.
+
+
+        name | String | Optional | The new name of the Asset.
+
+        hoursPerWeek | Integer | Optional | The new hours of operation per week for this Asset. Use -1 to disable this feature and have it default to the Locations hours of operation.
+
+        parentAssetID | Int | Optional | The asset''s parent. This must be another asset ID and is used to display an Asset hierarchy. You can not have assets be their own ancestor.
+
+        startedOn | Int | Optional | The new date this Asset was created. Must be a unix, timestamp.
+
+        geoLocation | geoJSON | Optional | The geoJSON Feature object that can be used to locate an asset on a Map. To remove geoLocation from an Asset pass an empty object ( {}).'
+  /v2/assets/{assetID}/move:
+    parameters:
+    - name: assetID
+      in: path
+      required: true
+      description: The value of the asset that needs to be moved
+      schema:
+        type: integer
+      example: 14113
+    patch:
+      operationId: patchAssetsByAssetIDMove
+      summary: Move Asset to another Location
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              example: '2000'
+            X-RateLimit-Minute-Limit:
+              schema:
+                type: integer
+              example: '240'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              example: '1995'
+            X-RateLimit-First-Call:
+              schema:
+                type: integer
+              example: '1684352145'
+            X-RateLimit-Minute-Remaining:
+              schema:
+                type: integer
+              example: '238'
+            X-RateLimit-Minute-First-Call:
+              schema:
+                type: integer
+              example: '1684352297'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  moved:
+                    type: boolean
+              example:
+                moved: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Assets
+      description: 'This request moves an existing asset from it''s current location to another location. An parent asset that has one or more children assets cannot be moved.
+
+
+        A child asset can be moved and will be created as a top level asset in the other location.
+
+
+        locationID | Int | Required | The locationID of the location the asset needs to be moved to.
+
+        transferParts | boolean | Optional | A boolean representing whether parts associated with the asset should be moved to the location as well., Defaults to true.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                locationID:
+                  type: integer
+                transferParts:
+                  type: boolean
+            example:
+              locationID: 73
+              transferParts: true
+components:
+  responses:
+    Forbidden:
+      description: The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    TooManyRequests:
+      description: The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: No `Authorization` header was provided on the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    EmptySuccess:
+      description: The operation completed successfully. The response body is empty.
+    NotFound:
+      description: The referenced resource does not exist or is not visible to the authenticated customer.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      description: 'Error response body. The API emits two shapes today: the standard `{ message }` shape returned by the central error handler and most controllers, and the legacy `{ error, success, msg }` shape returned by the auth middleware. Some controllers also include extra fields (e.g. `success`, conflict metadata).'
+      oneOf:
+      - type: object
+        required:
+        - message
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          raw:
+            description: Optional raw error object (validation errors).
+      - type: object
+        required:
+        - error
+        - msg
+        properties:
+          error:
+            type: integer
+            description: Numeric HTTP status echoed in the body.
+          success:
+            type: boolean
+          msg:
+            type: string
+    AssetPart:
+      type: object
+      properties:
+        relationID:
+          type: integer
+        partID:
+          type: integer
+        assetID:
+          type: integer
+        qty:
+          type: integer
+        createdAt:
+          type: integer
+        lastEdited:
+          type: integer
+        associationType:
+          type: string
+    LogEntry:
+      type: object
+      properties:
+        logID:
+          type: integer
+        dateCreated:
+          type: integer
+        logEntry:
+          type: string
+        userID:
+          type: integer
+        logFiles:
+          type: array
+          items:
+            type: object
+            properties:
+              fileID:
+                type: integer
+              fileName:
+                type: string
+              link:
+                type: string
+                format: uri
+    Asset:
+      type: object
+      properties:
+        assetID:
+          type: integer
+        name:
+          type: string
+        startedOn:
+          type: integer
+        lastEdited:
+          type: integer
+        parentAssetID:
+          type: integer
+        locationID:
+          type: integer
+        hoursPerWeek:
+          type: integer
+        meta:
+          type: object
+          properties:
+            fields:
+              type: string
+            tasks:
+              type: string
+        workRequestPortal:
+          type: string
+          format: uri
+        image:
+          type: array
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

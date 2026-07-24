@@ -1,0 +1,3104 @@
+openapi: 3.0.3
+info:
+  title: Limble API V2 Assets Tasks API
+  version: 1.0.0
+  description: "Getting Started!\n\nWelcome to Limble CMMS’s API documentation.\n\nYou can use this documentation to configure connections to the Limble CMMS API over https using RESTful standards.\n\nUsing the API you can get information about the following portions of your system:\n\n- Assets\n\n- Locations\n\n- Parts (Current quantities and Usage)\n\n- Tasks (Work Orders, Preventive Maintenance, Work Requests, etc.)\n\n- Users\n\n- Vendors\n\n- Roles\n\n- Teams\n\n- Purchase Orders\n\n- General Ledgers\n\n- Budgets\n\n- Priorities\n\n- Tags\n\n- Statuses\n\n- Bills\n\n- Regions\n\n- Webhooks\n\n- Units of Measure(UOM)\n\nPlease use the correct Limble API URL to connect to our API based on the region or the type of your Limble Account.\n\n| **Limble Account (Region/Type)** | **Limble API URL** |\n| --- | --- |\n| Default | api.limblecmms.com |\n| Canada | ca-api.limblecmms.com |\n| Australia | au-api.limblecmms.com |\n| Europe | eu-api.limblecmms.com |\n| 21CFR | 21cfr-api.limblecmms.com |\n\n---\n\n# Authentication\n\nTo protect your information the Limble CMMS API uses BASIC authorization standards.\n\nEvery call to the API must include an authorization header with your base 64 encoded id and secret.\n\nClient ID\n\nYour Client ID is your unique customer identification.\n\nClient Secret\n\nYour Client Secret is used to authenticate the Client ID on each API call. This is something that must be kept secret.\n\n> How do I get my Client ID and Client Secret? \n\nTo obtain your Client ID and Client Secret login to your Limble account as a **Super Administrator** and go to **Settings** -> **Configuration**, on this page scroll down to the **API Settings** section and click **Generate API Keys**. Keep this information **secret**, you will only be able to see your Client Secret once upon initial generation. If you lose your secret you will need to regenerate it and update your integration accordingly.\n\n> Example Header \nAuthorization: Basic \\[BASE64 ENCODED YOUR_CLIENT_ID:YOUR_CLIENT_SECRET \n\nBelow is a code example for PHP:\n\n```\n$curl = curl_init();\n$id = 'your_client_id';\n$secret = 'your_client_id';\n$headers = array(\n'Content-Type:application/json',\n'Authorization: Basic '. base64_encode($id.':'.$secret)\n);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, $headers);\ncurl_setopt_array($curl, array(\nCURLOPT_URL => 'https://api.limblecmms.com:443/v2/tasks/',\nCURLOPT_RETURNTRANSFER => true,\nCURLOPT_ENCODING => \"\",\nCURLOPT_MAXREDIRS => 10,\nCURLOPT_TIMEOUT => 0,\nCURLOPT_FOLLOWLOCATION => false,\nCURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\nCURLOPT_CUSTOMREQUEST => \"GET\",\n));\n$response = curl_exec($curl);\n$err = curl_error($curl);\ncurl_close($curl);\nif ($err) {\necho \"cURL Error #:\" . $err;\n} else {\necho $response;\n} ?>\n\n```\n\nBelow is a code example for NodeJS:\n\n```\nconst https = require('https');\nconst id = 'your_client_id';\nconst secret = 'your_client_secret';\nconst options = {\n'method': 'GET',\n'hostname': 'api.limblecmms.com',\n'path': '/v2/tasks/?',\n'headers': {\n'Authorization': 'Basic ' + Buffer.from(`${credentials.id}:${credentials.secret}`).toString('base64')\n}\n};\nconst req = https.request(options, function (res) {\nconst chunks = [];\nres.on(\"data\", function (chunk) {\nchunks.push(chunk);\n});\nres.on(\"end\", function (chunk) {\nconst body = Buffer.concat(chunks);\nconsole.log(body.toString());\n});\nres.on(\"error\", function (error) {\nconsole.error(error);\n});\n});\nreq.end();\n\n```\n\n---\n\n# Error Codes\n\n- HTTP 400 - Data Validation Error - Malformed JSON input or incorrect data type.\n\n- HTTP 403 - Forbidden - The resource cannot be accessed.\n\n- HTTP 404 - Resource not found - The resource you are targeting does not exist.\n\n- HTTP 409 - Resource Conflict - A resource already exists with those parameters.\n\n- HTTP 422 - Unprocessable Entity - The syntax of the request is correct but cannot be processed due to semantic errors.\n\n- HTTP 429 - Too Many Requests - See the rate limiting section below.\n\n- HTTP 500 - Internal Server Error - Contact Limble for assistance.\n\n- HTTP 501 - Method Not Support - Limble's API only supports GET, POST, PATCH, PUT, and DELETE.\n\n---\n\n# Success Codes\n\n- HTTP 200 - OK - Everything was successful. PUTs, PATCHs and DELETEs on success always return an empty 200 OK.\n\n- HTTP 201 - CREATED - This is used on POST calls when new resouces are created. If a new resource was created Limble will always pass back a GET URL in the location header so a developer can easily GET the new resource.\n\n---\n\n# Overriding HTTP methods\n\nSome systems may support only the `POST` and `GET` HTTP methods. This restriction prevents using other HTTP methods such as `PUT`, `PATCH` and `DELETE`. RESTful web API implementations can work around this restriction by letting the client override the HTTP method via the custom HTTP headers.\n\nThe Limble API supports **Method Overrides** by using a `POST` request and setting the `X-HTTP-Method-Override` header with a method string value. The header value can be `PATCH` or `PUT`. This will allow Limble API users to use `PATCH` and `PUT` endpoints by sending `POST` requests to these endpoints and overriding them with the respective HTTP method.\n\n# Webhooks\n\nReceive data on certain events such as Tasks being completed.\n\nLimble's webhooks allow you to receive data whenever specific events occur.\n\nFor example, you may need to run your own script whenever a Task is completed.\n\nLimble supports adding multiple webhooks that can be triggered when actions are carried out on:\n\n- Tasks\n\n- Assets\n\n- Asset Fields\n\n- Purchase Orders\n\n- Purchase Order Items\n\nWhen an event occurs, Limble sends an HTTP POST request to a URL endpoint you configure.\n\nYou can configure this URL in the Limble Web App under:\n\n**Settings → Configuration → API Settings**\n\nAll data sent is JSON-encoded, and Limble includes the following fields in the request headers for validation:\n\n- `signature`\n\n- `timestamp`\n\n- `token`\n\nYou may register multiple webhooks for the same event type.\n\n### Important: API Key Requirement for Webhooks\n\nTo receive webhooks, the customer must have at least one active **limbleAPI key** created in API Settings.\n\n- Webhooks **will not function** without at least one valid `limbleAPI` key.\n\n- Limble uses the **first-created** **`limbleAPI`** **key** (by creation date) to generate the **signature** included in webhook headers.\n\n- The receiving system must use this key to verify the authenticity of incoming webhook requests.\n\nIf a customer has multiple `limbleAPI` keys, **only the oldest one** will be used for signing webhook requests.\n\n### Response Time and Retry Behavior\n\nYour server must respond to webhook POST requests within **10 seconds**.\n\nIf it does not, Limble will attempt to retry the webhook request.\n\nLimble handles server responses as follows:\n\n- If the server returns **200 OK**, Limble considers the webhook successful and will not retry.\n\n- If the server returns **406 Not Acceptable**, Limble considers the webhook received but intentionally ignored — no retry will occur.\n\n- For any other response (e.g., 500, timeout, etc.), Limble will retry the request.\n\n**Retry schedule:**\n\n- After 10 minutes\n\n- After 1 hour\n\n- After 2 hours\n\n- After 4 hours\n\nAfter the final retry attempt, the webhook will be **automatically disabled**.\n\n### Re-enabling a Disabled Webhook\n\nTo re-enable a disabled webhook:\n\n1. Go to **Settings → Configuration → API Settings** in the Limble Web App. \nFind the webhook and use the option to **Re-enable** the API endpoint.\n\n2. Alternatively, send a `PATCH` request using the **Update Webhook** endpoint and set `enabled = true`.\n\n### Assets\n\nBelow is an example payload you might be sent when an event occurs on an asset:\n\n```\n{\n\"assetID\": 10748, \n\"status\": \"CREATED\",\n\"category\": \"asset\", \n\"user\": \"bob@limblecmms.com\" \n}\n\n```\n\nOnce the Payload is received you can use the Get Assets API call to get the most recent Asset data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | An Asset is created\nDELETED | An Asset was deleted\nCHANGED ASSET NAME | An asset has been renamed\n\n### Asset Field\n\nBelow is an example payload you might be sent when an event occurs on an asset field:\n\n```\n{\n\"valueID\": 46490,\n\"status\": \"DELETED\",\n\"category\": \"assetField\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Asset Field API call to get the most recent Asset Field data. The following is a list of all the possible statuses that a webhook might be set to:\n\nADDED | An Asset Field was added to an Asset\nDELETED | An Asset Field was deleted from an Asset\nUPDATED | An Asset Field was updated on an Asset\n\n### Location\n\nBelow is an example payload you might be sent when an event occurs on an location field:\n\n```\n{\n\"valueID\": 46490,\n\"status\": \"DELETED\",\n\"category\": \"location\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Location API call to get the most recent Location data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | An Location was added\nDELETED | An Location was deleted\nUPDATED | An Location was updated\n\n### Parts\n\nFor Parts, you may receive a webhook that looks like this:\n\n```\n{ \n\"partID\": 3456,\n\"status\": \"CREATED\",\n\"category\": \"part\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nAll possible statuses for Parts webhooks are as follows:\n\nCREATED | A Part was created.\nDELETED | A Part was deleted.\nLOCATION UPDATED | A Part had its location updated.\nSUPPLIER UPDATED | A Part had its supplier updated.\nPRICE UPDATED | A Part had its price updated.\nNAME UPDATED | A Part had its name updated.\nQUANTITY INCREASED | The quantity of a part increased.\nQUANTITY DECREASED | The quantity of a part decreased.\n\n### Purchase Order\n\nIf you have enabled purchasing webhooks, you may receive a webhook for POs that looks like this:\n\n```\n{ \n\"poID\": 8203,\n\"status\": \"READY TO RECEIVE\",\n\"category\": \"po\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nPossible statuses for PO webhooks are:\n\nCREATED | A PO was created.\nSETUP | A PO has been reset and now has the setup status.\nCHANGE STATUS | A PO has been approved and now has a custom status.\nREADY TO RECEIVE | A PO now has the Ready to Receive status.\nPARTIALLY RECEIVED | A PO has received any number of items and now has the Partially Received status.\nFULLY RECEIVED | A PO has received all of its items and now has the Fully Received status.\nCLOSED | A PO has had all items received and all bills paid and now has the Closed status.\nDELETED | A PO was deleted.\nCHANGE BUDGET | A PO has been assigned a new budget.\nCHANGE VENDOR | A PO has been assigned a new vendor.\nCHANGE NUMBER | A PO's PO Number has been modified.\nCHANGE BILL-TO | A PO's bill-to field has been modified.\nCHANGE SHIP-TO | A PO's ship-to field has been modified.\nCHANGE NOTES TO VENDOR | A PO's \"Notes to Vendor\" field has been modified.\nCHANGE CUSTOM FIELD | Any of a PO's custom fields has been modified.\nCHANGE ASSIGNMENT | A PO has had its assignment (user, team, multi-user) modified.\nCHANGE DATE | A PO's created date has been modified.\nCHANGE DELIVERY DATE | A PO's expected delivery date has been modified.\nDISAPPROVED PURCHASE REQUEST | A Purchase Request PO has been disapproved.\nREOPENED PURCHASE REQUEST | A disapproved Purchase Request PO has been reopened.\nDISAPPROVED STEP | A PO has had its workflow step disapproved and been sent back a step.\n\n### Purchase Order Items\n\nFor PO Items, you may receive a webhook that looks like this:\n\n```\n{ \n\"poItemID\": 8203,\n\"status\": \"RECEIVED\",\n\"category\": \"poItem\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nAll possible statuses for PO Item webhooks are as follows:\n\nCREATED | A PO Item was created.\nDELETED | A PO Item was deleted.\nRECEIVED | Some quantity of a PO Item was marked as received.\nCHANGE GL | A PO Item has been assigned a new GL or its GL has been removed.\nCHANGE DESCRIPTION | A PO Item has had its description modified.\nCHANGE QUANTITY | A PO Item has had its quantity modified.\nCHANGE RATE | A PO Item has had its rate (price) modified.\nCHANGE TAX | A PO Item has had its tax percentage modified.\nCHANGE DISCOUNT | A PO Item has had its discount percentage modified.\nCHANGE SHIPPING | A PO Item has had its shipping cost modified.\n\n### Tasks\n\nBelow is an example payload you might be sent when an event occurs on a Task:\n\n```\n{\n\"taskID\": 8203, // The unique identifier for the item the webhook event describes\n\"status\": \"COMPLETE\", // The status (e.g. task created, task complete, etc.) -- see below for a full list of possible statuses.\n\"category\": \"task\", // The category of item that triggered the webhook to fire (e.g. task, po, poItem).\n\"user\": \"bob@limblecmms.com\" // The user whose action caused the webhook to fire.\n}\n\n```\n\nOnce the Payload is received you can use the Get Tasks API call to get the most recent Task data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | A Task was created\nDELETED | A Task was deleted\nCHANGED DUE DATE | A Task changed due date\nCHANGED ASSIGNMENT | A Task changed assignment\nCOMPLETE | A Task was completed.\nCHANGED COMPLETED TASK | A Task that is completed was changed.\nCOMPLETED TASK REOPENED | A task that was completed was reopened and is now open.\nCHANGED TASK NAME | A task has been renamed.\nCHANGED TASK DESCRIPTION | The description of a task has been changed.\nADDED COMMENT TO TASK | A comment was added to a task.\nCUSTOM TAG ADDED TO TASK | A custom tag was added to a task.\nCUSTOM TAG REMOVED FROM TASK | A custom tag was removed from task.\nLOGGED TIME ON TASK | A time entry was added to a task.\n\n### Task Instruction\n\nBelow is an example payload you might be sent when an event occurs on an location field:\n\n```\n{\n\"instructionID\": 46490,\n\"status\": \"Updated\",\n\"category\": \"instruction\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Instruction API call to get the task instruction data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | A Task Instruction was added\nDELETED | A Task Instruction was deleted\nUPDATED | A Task Instruction was updated\nLABEL UPDATED | A Task Instruction's label was updated\nDESCRIPTION UPDATED | A Task Instruction's description was updated\nPARENT RESPONSE UPDATED | The response of a Task Instruction's parent item was updated\nSORT ORDER UPDATED | The sort order of a Task Instruction was updated.\n\n## Securing Webhooks\n\nTo ensure the authenticity and integrity of webhook events each webhook is \nsigned with a signature as well as some other data described below:\n\ntimestamp | int | A standard unix time stamp\ntoken | string | , randomly generated string that is an integrity check of the, payload.,\nsignature | String | A string generated by the HMAC algorithm\n\nTo verify the webhook is originating from LimbleCMMS you will need to:\n\n- Concatenate the timestamp and token\n\n- Encode your private API key (oldest Limble API Key) with the SHA256 algorithm\n\n- Encode the timestamp and token value with the HMAC algorithm using your hashed private key and the SHA256 method.\n\n- Compare the resulting digest to the signature provided in your webhook \nheader\n\n## Validation Code Examples\n\nCode samples to verify webhook data.\n\nPHP\n\n```\nfunction verify($timestamp, $signature, $apiKey, $token)\n//hash private key\n$apiKey = hash('sha256', $apiKey);\n$generated_signature = hash_hmac('sha256', $timestamp . $token, $apiKey);\nif($generated_signature === $signature) {\nreturn true;\n} else {\nreturn false;\n}\n} \n\n```\n\nNodeJS\n\n```\nvar crypto = require('crypto');\nconst verify = (apiKey, token, timestamp, signature) => {\n//hash private key\nconst apiKey = crypto.createHash('sha256').update(apiKey).digest('hex');\nconst value = timestamp+token;\nconst generated_signature = crypto.createHmac('sha256',apiKey).update(value).digest('hex');\nif(signature === generated_signature){\nreturn true;\n} else {\nreturn false;\n}\n};\n\n```\n\n---\n\n# Rate limit\n\nTo help protect against run-away scripts, clients who make an inordinate \nnumber of calls over a period of time may be temporarily blocked from \naccessing the service. The limits are defined in the table below. If you \nreceive an error indicating that you have exceeded the call limit, please \nwait and try again later. If you need higher limits please reach out to your dedicated account manager.\n\n## Per Hour\n\nGET | 4000 calls per hour. | 360 calls per minute.\nPATCH | 2000 calls per hour. | 240 calls per minute.\nPOST | 1000 calls per hour. | 240 calls per minute.\nPUT | 1000 calls per hour. | 240 calls per minute.\nDELETE | 100 calls per hour. | 60 calls per minute.\nBATCH REQUEST | 20 calls per hour | 5 calls per minute\n\nEvery API response is accompanied by the following set of headers to identify the status of your consumption. API calls are rate-limited on two windows of time: per-minute and per-hour. For example, if you made a request at 13:42:42, that request will expire from your per-minute window at 13:43:42 and from your per-hour window at 14:42:42.\n\nX-RateLimit-Limit | The maximum number of requests that the consumer is permitted to make per hour.\nX-RateLimit-Remaining | The number of requests remaining in the current per-hour window.\nX-RateLimit-First-Call | The time your first call was made in the current per-hour window.\nX-RateLimit-TTL | The time until more request resources become available (This only displays when you've hit your limit).\nX-RateLimit-Minute-Limit | The maximum number of requests that the consumer is permitted to make per minute.\nX-RateLimit-Minute-Remaining | The number of requests remaining in the current per-minute window.\nX-RateLimit-Minute-First-Call | The time your first call was made in the current per-minute window.\nX-RateLimit-Minute-TTL | The time until more request resources become available (This only displays when you've hit your limit).\n\n# Pagination\n\nCurrently pagination using OrderBy and cursor is supported only by **GET Tasks** and **GET Assets**. Pagination using Limit and Page is supported by many other GET endpoints including **GET Tasks** and **GET Assets**.\n\nPagination can be implemented by using the orderBy, cursor, limit and page query parameters. \n**Note: cursor and page cannot be used simultaneously for pagination.**\n\n## Pagination using Limit and Page\n\nThis uses limit and page query parameters. For a given limit and page results will be paginated. If orderBy query parameter is given the results will be ordered and paginated accordingly.\n\nThe page parameter is **required** and can be greater than or equal to 1 for this pagination method. The default limit is 100 but can be changed. The max limit is 1000.\n\nThe response headers contain information about the Previous, Next and Last Page of the result based on the limit.\n\nThe result will be empty when for a given limit, the given page does not exist. For example, if there are 100 Assets in total and limit is set at 10, only pages 1-10 are possible. An empty result will be given for page numbers greater than 10.\n\nThis pagination method is supported by various GET endpoints. Please refer to the examples for those GET endpoints for more information.\n\n## Pagination using OrderBy and Cursor\n\n**Note**: If you're implementing pagination for the first time for **GET Tasks** or **GET Assets** please follow **Pagination Using Limit and Page** as the use of **Cursor** will be deprecated in the next API version.\n\nThis uses orderBy and cursor query parameters. Generally, in all of our GET endpoints, the cursor parameter ensures that the ID will be greater than the value of cursor. This makes sense when we're ordering the results ascending by ID.\n\nIn GET Assets, when we're fetching a set of assets and ordering by lastEdited (ascending) or -lastEdited (descending), the cursor parameter will instead ensure that we're returning a set of results that begin at the next asset in the order, regardless of whether its **ID is greater or less than the value of cursor**.\n\nIf the value of cursor does not match an existing assetID, then the result set will be empty, because there is no lastEdited value to compare to. **When providing orderBy and cursor, the value of cursor must be a real assetID or the result set will be empty.**\n\nThe same applies for GET Tasks when using cursor and ordering by createdDate, dateCompleted and due."
+servers:
+- url: https://api.limblecmms.com
+  description: US (Default)
+- url: https://ca-api.limblecmms.com
+  description: Canada
+- url: https://au-api.limblecmms.com
+  description: Australia
+- url: https://eu-api.limblecmms.com
+  description: Europe
+- url: https://21cfr-api.limblecmms.com
+  description: 21 CFR Part 11 (Pharma/Life Sciences)
+security:
+- BasicAuth: []
+tags:
+- name: Tasks
+paths:
+  /v2/tasks/{taskID}/invoices/{invoiceID}/file:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      description: The taskID of the invoice you want remove the file from.
+      schema:
+        type: integer
+      example: 15188
+    - name: invoiceID
+      in: path
+      required: true
+      description: The invoiceID of the invoice you want to remove the file from.
+      schema:
+        type: integer
+      example: 311
+    put:
+      operationId: putTasksByTaskIDInvoicesByInvoiceIDFile
+      summary: Attach a file to an invoice
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: This request will attach a text or image file to an invoice on an **open** Task (i.e. task status=0).
+    delete:
+      operationId: deleteTasksByTaskIDInvoicesByInvoiceIDFile
+      summary: Delete file from Invoice
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: This request removes a file attached to an invoice on an open Task (i.e. task status = 0).
+  /v2/tasks/invoices:
+    get:
+      operationId: getTasksInvoices
+      summary: Invoices
+      parameters:
+      - name: invoices
+        in: query
+        description: This parameter is used to only get specific invoices or invoices. This parameter accepts a comma delimited list of invoice IDs.
+        schema:
+          type: integer
+        example: 1
+      - name: tasks
+        in: query
+        description: This parameter is used to only get invoices on a task or tasks. This parameter accepts a comma delimited list of task IDs.
+        schema:
+          type: integer
+        example: 8250
+      - name: start
+        in: query
+        description: This parameter is used to only get invoices that were logged after the unix timestamp passed into the start parameter. For example, all Invoices that were last edited after April 18th, 2018.
+        schema:
+          type: integer
+        example: 1459391400
+      - name: end
+        in: query
+        description: This parameter is used to only get invoices that were logged *before* the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1518826313
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what invoiceID you want to start receiving results at. e.g. passing 137 here will only get you tasks with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 100
+      responses:
+        '200':
+          description: Invoices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    meta:
+                      type: object
+                      properties:
+                        task:
+                          type: string
+                    invoiceID:
+                      type: integer
+                    file:
+                      type: string
+                    cost:
+                      type: number
+                    taskID:
+                      type: integer
+                    lastEdited:
+                      type: integer
+                    description:
+                      type: string
+                      nullable: true
+                    completedDate:
+                      type: integer
+                    poItemID:
+                      type: integer
+                    invoiceFiles:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          fileName:
+                            type: string
+                          link:
+                            type: string
+                            format: uri
+              example:
+              - meta:
+                  task: /v2/tasks/?tasks=40
+                invoiceID: 2
+                file: home-depot-receipt.pdf
+                cost: 261.78
+                taskID: 40
+                lastEdited: 1522339851
+                description: null
+                completedDate: 1459391400
+                poItemID: 0
+                invoiceFiles:
+                - fileName: home-depot-receipt.pdf
+                  link: https://content.limblecmms.com/upload-36/invoices/40/home-depot-receipt.pdf?Expires=1756912910&Key-Pair-Id=APKAIH5A42E3EPKJRHFQ&Signature=MeBymiHtMiuORuBqmQApfPXVgvTjQIl-zpRR6fhIjsrDItx~JGtUQkDW29dEDbzFqXsckIs~EIsd6ORuR8gxWcXXJopX3ZD4WjWjZKjSdz2LluwJRTp4odlTiEE2kZUoheEeIMbHJrRNQoQRPpNhJIXGZp5j5e9pqCR1R1~W3ykq-xRFmkGT7nOE0z-2ilHa9qjrgErSmrxjCRxPt0CFsYdzSySBuz4Fz2mXIDQiwO1cw7SEbnqBbqKEjogjMydy7vdtUC3upG7MF2BT-bOovihxeDksLEKZdmjAwaU-nhiJ4IWW1WGZ05wlHQG~xkYqDVW1R~A20qFA3-Cya0MmgQ__
+              - meta:
+                  task: /v2/tasks/?tasks=63
+                invoiceID: 3
+                file: ''
+                cost: 50
+                taskID: 63
+                lastEdited: 1518826313
+                description: null
+                completedDate: 1475597795
+                poItemID: 0
+                invoiceFiles: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: This request gets all Invoices associated with Tasks.
+  /v2/tasks/{taskID}/invoices:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      description: The taskID of the task you're attaching an invoice to.
+      schema:
+        type: integer
+      example: 15188
+    put:
+      operationId: putTasksByTaskIDInvoices
+      summary: Attach an Invoice to task
+      responses:
+        '200':
+          description: Attach an Invoice to task
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  invoiceID:
+                    type: integer
+              example:
+                invoiceID: 312
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'StartFragment
+
+
+        .expect(''Content-Type'', /json/);
+
+
+        EndFragment'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cost:
+                  type: number
+                description:
+                  type: string
+            example:
+              cost: 10.1
+              description: testing
+  /v2/tasks/{taskID}/invoices/{invoiceID}:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      description: The taskID of the task the invoice is attached to
+      schema:
+        type: integer
+      example: 15188
+    - name: invoiceID
+      in: path
+      required: true
+      description: The invoiceID that needs to be updated
+      schema:
+        type: integer
+      example: 290
+    delete:
+      operationId: deleteTasksByTaskIDInvoicesByInvoiceID
+      summary: Delete invoice from task
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: This request will remove an invoice from an **open** Task (i.e. task status=0).
+    patch:
+      operationId: patchTasksByTaskIDInvoicesByInvoiceID
+      summary: Update an Invoice
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request will update an invoice attached to an **open** Task (i.e. task status=0).
+
+
+        cost | Float | Required | The cost on the invoice.
+
+        description | String | Required | Brief description for the invoice.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cost:
+                  type: integer
+                description:
+                  type: string
+            example:
+              cost: 10000
+              description: new inovoice
+  /v2/tasks/{taskID}/instructions/{instructionID}/options:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      description: taskID of the task you are getting the option/dropdown list.
+      schema:
+        type: integer
+      example: 11429
+    - name: instructionID
+      in: path
+      required: true
+      description: instructionID of the option/dropdown list you are getting the options for.
+      schema:
+        type: integer
+      example: 49343
+    get:
+      operationId: getTasksByTaskIDInstructionsByInstructionIDOptions
+      summary: Instruction Options
+      responses:
+        '200':
+          description: Instruction Options
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    instructionOptionID:
+                      type: integer
+                    instructionOptionOrder:
+                      type: integer
+                    instruction:
+                      type: string
+              example:
+              - instructionOptionID: 7096
+                instructionOptionOrder: 1
+                instruction: 'Yes'
+              - instructionOptionID: 7097
+                instructionOptionOrder: 2
+                instruction: 'No'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: This request gets all the Options for an Instruction Option or Dropdown list associated with a Task.
+    post:
+      operationId: postTasksByTaskIDInstructionsByInstructionIDOptions
+      summary: New Instruction Option
+      responses:
+        '201':
+          description: New Instruction Option
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  instructionOptionID:
+                    type: integer
+              example:
+                instructionOptionID: 7097
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request will create a new Option for a Dropdown or Option instruction of a task.
+
+
+        Parameter: instruction, Type: string, Required?: Required, Description: The text that guides the User for selecting the option.
+
+        Parameter: instructionOptionOrder, Type: Int, Required?: Optional, Description: If this is set the option is created at that position of the list. This value cannot be greater than the total number of option present in the list. If not set the option is added to the end of the list.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instruction:
+                  type: string
+                instructionOptionOrder:
+                  type: integer
+            example:
+              instruction: 'Yes'
+              instructionOptionOrder: 1
+  /v2/tasks/instructions/{instructionID}/options/{instructionOptionID}:
+    parameters:
+    - name: instructionID
+      in: path
+      required: true
+      description: instructionID of the instruction whose option you are editing.
+      schema:
+        type: integer
+      example: 49343
+    - name: instructionOptionID
+      in: path
+      required: true
+      description: instructionOptionID of the option you are editing.
+      schema:
+        type: integer
+      example: 7097
+    delete:
+      operationId: deleteTasksInstructionsByInstructionIDOptionsByInstructionOptionID
+      summary: Delete Instruction Option
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: This request will delete an option from a Dropdown or Option instruction.
+    patch:
+      operationId: patchTasksInstructionsByInstructionIDOptionsByInstructionOptionID
+      summary: Update Instruction Option
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instruction:
+                  type: string
+                instructionOptionOrder:
+                  type: integer
+            example:
+              instruction: Not Allowed
+              instructionOptionOrder: 1
+  /v2/tasks/{taskID}/instructions:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 80
+    get:
+      operationId: getTasksByTaskIDInstructions
+      summary: Task Instructions
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+        example: 2
+      - name: page
+        in: query
+        schema:
+          type: integer
+        example: 1
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what partID you want to start receiving results at. e.g. passing 137 here will only get you parts with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      responses:
+        '200':
+          description: Pagination using Page & Limit
+          headers:
+            Last-Page:
+              schema:
+                type: string
+              example: /v2/tasks/103/instructions?limit=2&page=4
+            Next-Page:
+              schema:
+                type: string
+              example: /v2/tasks/103/instructions?limit=2&page=2
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    instructionID:
+                      type: integer
+                    taskID:
+                      type: integer
+                    parentInstructionID:
+                      type: integer
+                    instruction:
+                      type: string
+                    type:
+                      type: integer
+                    options:
+                      type: array
+                    response:
+                      type: boolean
+                    instructionFiles:
+                      type: array
+              example:
+              - instructionID: 767
+                taskID: 103
+                parentInstructionID: 0
+                instruction: Check Air Oil
+                type: 1
+                options: []
+                response: false
+                instructionFiles: []
+              - instructionID: 768
+                taskID: 103
+                parentInstructionID: 0
+                instruction: '&lt;b&gt;Check Fly wheel belts&lt;/b&gt;'
+                type: 1
+                options: []
+                response: false
+                instructionFiles: []
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request gets all Task Instructions associated with a Task.
+
+
+        **Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.
+
+
+        Return data description
+
+
+        parentInstructionID | This is the instructionID of the Instruction''s parent. If this value is 0 then this Instruction does not have a parent.
+
+        instruction | The text that guides a User on what to do on this Instruction.
+
+        type | The type of the Instruction. See the request Post New Task Instruction to see a list of possible types and their meaning.
+
+        instructionFiles | Array of objects that have a file name and a link you can use to download that file. All links are only valid for 15 minutes, a new call will generate a new link.
+
+        options | Array of objects that have an itemOptionID, itemOptionOrder, and itemOptionText.
+
+        response | This field is the "response" of an instruction i.e. what a user filled out when doing this instruction. The return value changes based on the instruction type:, 1 Check Box - true/false, 2 Radio List - if no option is selected, this will be 0. If an option is selected, this will be a number that maps to the itemOptionID of one of the members of the options array., 3 Text Box - string, 4 Dropdown Box - if no option is selected, this will be 0. If an option is selected, this will be a number that maps to the itemOptionID of one of the members of the options array., 5 Date Picker - unix time stamp, 7 Label - labels will never have a user response, 9 File or Picture Attachment - Array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link., 10 Assign PM - not supported yet., 13 Number - integer, 14 Start WO - not supported yet., 15 Capture Signature - Array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link., 16 Request Approval - Array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link.,
+
+        meta | This property is useful to get more information related to the Task Instructions. Different instruction types may have different properties in the meta section., Instruction Type:, 14 Start WO - If this instruction is completed on the task, the meta property would have an "associatedTask" property on it. The associatedTask gives the route for the task created by this instruction. For example, if task 2 was created by a "Start WO" instruction on task 1. In GET Task Instruction for task 1, this instruction would have a meta associatedTask property pointing to task 2.'
+    post:
+      operationId: postTasksByTaskIDInstructions
+      summary: New Task Instruction
+      responses:
+        '201':
+          description: New Task Instruction
+          headers:
+            Location:
+              schema:
+                type: string
+              example: /v2/tasks/8250/instructions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  instructionID:
+                    type: integer
+              example:
+                instructionID: 34068
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request will create a new Instruction for a Task.
+
+
+        Parameter: type, Type: Int, Required?: Required, Description: The type of each checklist item., 1 = Check Box; 2 = Option List; 3 = Text Box; 4 = Dropdown List; 5 = Date Picker; 7 = Label; 9 = File or Picture Attachment; 11 = Deadline Date Picker; 13 = Number; 14 = Start WO; 15 = Capture Signature., Item types not listed here are not currently supported. If you would like another item type to be supported, please contact us at product@limblecmms.com.
+
+        Parameter: instruction, Type: string, Required?: Required, Description: The text that guides a User on what to do on this Instruction.
+
+        Parameter: parentInstructionID, Type: Int, Required?: Required, Description: If this is set this Instruction is a ''child'' or sub-instruction. This value is the id of the Instruction''s parent. A value of 0 means it does not have a parent.
+
+        Parameter: parentInstructionOptionID, Type: Int, Required?: Optional, Description: If type is set to 2,4 and a parentInstructionID of an existing option/dropdown list is set then the parentInstructionOptionID needs to be set as the ID of the option for which a child option/dropdown list needs to be added.'
+  /v2/tasks/instructions/{instructionID}:
+    parameters:
+    - name: instructionID
+      in: path
+      required: true
+      schema:
+        type: string
+    patch:
+      operationId: patchTasksInstructionsByInstructionID
+      summary: Update Task Instruction
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request updates an Task Instruction.
+
+
+        Parameter: instruction, Type: string, Required?: Optional, Description: The text that guides a User on what to do on this Instruction.
+
+        Parameter: parentInstructionID, Type: Int, Required?: Optional, Description: If this is set this Instruction is a ''child'' or sub-instruction. This value of parentInstructionID is the id of the Instruction''s parent. A value of 0 means this Instruction does not have a parent Instruction.'
+    delete:
+      operationId: deleteTasksInstructionsByInstructionID
+      summary: Delete Task Instruction
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: This request removes a Task Instruction from a Task.
+    get:
+      operationId: getTasksInstructionsByInstructionID
+      summary: Get Task Instruction by ID
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  instructionID:
+                    type: integer
+                  taskID:
+                    type: integer
+                  parentInstructionID:
+                    type: integer
+                  instruction:
+                    type: string
+                  type:
+                    type: integer
+                  instructionFiles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        fileName:
+                          type: string
+                        downloadLink:
+                          type: string
+                          format: uri
+                  response:
+                    type: string
+              example:
+                instructionID: 12345
+                taskID: 67890
+                parentInstructionID: 0
+                instruction: Check oil levels and record reading
+                type: 3
+                instructionFiles:
+                - fileName: oil_check_guide.pdf
+                  downloadLink: https://example.com/files/oil_check_guide.pdf?expires=1234567890
+                response: Oil level at 75%
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request retrieves a single Task Instruction by its instructionID.
+
+
+        **Path Parameters:**
+
+        - `instructionID` (required): The ID of the instruction to retrieve
+
+
+        **Return data description:**
+
+
+        Returns a single instruction object with the following properties:
+
+
+        | Property | Description |
+
+        |----------|-------------|
+
+        | instructionID | The unique identifier for this instruction |
+
+        | taskID | The ID of the task this instruction belongs to |
+
+        | parentInstructionID | This is the instructionID of the Instruction''s parent. If this value is 0 then this Instruction does not have a parent. |
+
+        | instruction | The text that guides a User on what to do on this Instruction. |
+
+        | type | The type of the Instruction. See the request Post New Task Instruction to see a list of possible types and their meaning. |
+
+        | instructionFiles | Array of objects that have a file name and a link you can use to download that file. All links are only valid for 15 minutes, a new call will generate a new link. |
+
+        | response | This field is the ''response'' of an instruction i.e. what a user filled out when completing this instruction. |
+
+
+        **Error Responses:**
+
+        - 404: Instruction not found'
+  /v2/tasks/instructions:
+    get:
+      operationId: getTasksInstructions
+      summary: Batch Task Instructions
+      parameters:
+      - name: tasks
+        in: query
+        description: 'CSV of task IDs '
+        schema:
+          type: string
+        example: 1,2,3,4,5,6,7
+      - name: limit
+        in: query
+        description: Page size (1..1000)
+        schema:
+          type: integer
+        example: 100
+      - name: page
+        in: query
+        description: Page-based pagination (mutually exclusive with cursor)
+        schema:
+          type: integer
+        example: 1
+      responses:
+        '200':
+          description: Batch Task Instructions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskInstruction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'Retrieves instructions across multiple tasks, by taskID.
+
+
+        Return data description
+
+
+        parentInstructionID | This is the instructionID of the Instruction''s parent. If this value is 0 then this Instruction does not have a parent.
+
+        instruction | The text that guides a User on what to do on this Instruction.
+
+        type | The type of the Instruction. See the request Post New Task Instruction to see a list of possible types and their meaning.
+
+        instructionFiles | Array of objects that have a file name and a link you can use to download that file. All links are only valid for 15 minutes, a new call will generate a new link.
+
+        options | Array of objects that have an itemOptionID, itemOptionOrder, and itemOptionText.
+
+        response | This field is the "response" of an instruction i.e. what a user filled out when doing this instruction. The return value changes based on the instruction type:, 1 Check Box - true/false, 2 Radio List - if no option is selected, this will be 0. If an option is selected, this will be a number that maps to the itemOptionID of one of the members of the options array., 3 Text Box - string, 4 Dropdown Box - if no option is selected, this will be 0. If an option is selected, this will be a number that maps to the itemOptionID of one of the members of the options array., 5 Date Picker - unix time stamp, 7 Label - labels will never have a user response, 9 File or Picture Attachment - Array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link., 10 Assign PM - not supported yet., 13 Number - integer, 14 Start WO - not supported yet., 15 Capture Signature - Array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link., 16 Request Approval - Array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link.,
+
+        meta | This property is useful to get more information related to the Task Instructions. Different instruction types may have different properties in the meta section., Instruction Type:, 14 Start WO - If this instruction is completed on the task, the meta property would have an "associatedTask" property on it. The associatedTask gives the route for the task created by this instruction. For example, if task 2 was created by a "Start WO" instruction on task 1. In GET Task Instruction for task 1, this instruction would have a meta associatedTask property pointing to task 2.'
+  /v2/tasks/instructions/{instructionID}/image:
+    parameters:
+    - name: instructionID
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 59271
+    put:
+      operationId: putTasksInstructionsByInstructionIDImage
+      summary: Task Instruction Image
+      responses:
+        '200':
+          description: Task Instruction Image
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filename:
+                    type: string
+              example:
+                filename: 165040874634324-pic.png
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request adds instructional images to an Instruction.
+
+
+        Return data description
+
+
+        filename | The name of the file after being uploaded to Limble.'
+    delete:
+      operationId: deleteTasksInstructionsByInstructionIDImage
+      summary: Delete Task Instruction Image
+      parameters:
+      - name: filename
+        in: query
+        description: The name of the instruction file that needs to be deleted. This is an optional parameter. If not given, **all** the files attached to an instruction will be deleted.
+        schema:
+          type: string
+        example: 165040769563793-pic.png
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: This request removes an instructional image from an Instruction.
+  /v2/tasks/{taskID}/image:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 555
+    put:
+      operationId: putTasksByTaskIDImage
+      summary: Upload Task Main Image
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'Uploads a main image to a task.
+
+
+        Parameters:
+
+
+        | Parameter | In | Type | Required | Default | Description |
+
+        |---|---|---|---|---|---|
+
+        | taskID | path | integer | yes |  | Task identifier |
+
+        | image | form-data | file | yes |  | Image file (≤ 50MB). Types: JPEG, PNG, JPG, GIF |'
+    delete:
+      operationId: deleteTasksByTaskIDImage
+      summary: Delete Task Main Image
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'Deletes the task''s main image.
+
+
+        Parameters:
+
+
+        | Parameter | In | Type | Required | Default | Description |
+
+        |---|---|---|---|---|---|
+
+        | taskID | path | integer | yes |  | Task identifier |
+
+
+        Responses:
+
+        - 200 OK: Image cleared.
+
+        - 404 Not Found: No image exists for this task.'
+  /v2/tasks/labor:
+    get:
+      operationId: getTasksLabor
+      summary: Task Labor
+      parameters:
+      - name: tasks
+        in: query
+        description: This parameter is used to only get specific Tasks. This parameter accepts a comma delimited list of task IDs.
+        schema:
+          type: string
+        example: 6,11
+      - name: users
+        in: query
+        description: This parameter is used to only get labor records for a specific user or set of users in a comma delimited list.
+        schema:
+          type: integer
+        example: 0
+      - name: start
+        in: query
+        description: This parameter is used to only get labor that was logged after the unix timestamp passed into the start parameter. For example, all Assets that were last edited after April 18th, 2018.
+        schema:
+          type: integer
+        example: 1564895015
+      - name: end
+        in: query
+        description: This parameter is used to only get labor that was logged *before* the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 1564895015
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 100
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what taskID you want to start receiving results at. e.g. passing 137 here will only get you tasks with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      - name: locations
+        in: query
+        description: This parameter is used to retrieve labor entries for particular locations. This parameter accepts a comma delimited list of location IDs.
+        schema:
+          type: integer
+        example: 0
+      - name: orderBy
+        in: query
+        description: This parameter is used to order results by their dateLogged property instead of the default ordering. CANNOT be provided alongside the cursor parameter. to paginate in this ordering, use the start or end parameters.
+        schema:
+          type: string
+        example: -dateLogged
+      responses:
+        '200':
+          description: Task Labor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    meta:
+                      type: object
+                      properties:
+                        task:
+                          type: string
+                        user:
+                          type: string
+                    userID:
+                      type: integer
+                    timeSpent:
+                      type: integer
+                    userWage:
+                      type: integer
+                    taskID:
+                      type: integer
+                    taskName:
+                      type: string
+                    tashPriorityID:
+                      type: integer
+                    description:
+                      type: string
+                      nullable: true
+                    dateLogged:
+                      type: integer
+                    billableTime:
+                      type: string
+                      nullable: true
+                    billableRate:
+                      type: string
+                      nullable: true
+                    categoryID:
+                      type: string
+                      nullable: true
+              example:
+              - meta:
+                  task: /v2/tasks/?tasks=7
+                  user: /v2/users/?users=341
+                userID: 341
+                timeSpent: 7200
+                userWage: 15
+                taskID: 7
+                taskName: Tire Rotation
+                tashPriorityID: 1682
+                description: null
+                dateLogged: 1457559196
+                billableTime: null
+                billableRate: null
+                categoryID: null
+              - meta:
+                  task: /v2/tasks/?tasks=16
+                  user: /v2/users/?users=341
+                userID: 341
+                timeSpent: 3660
+                userWage: 15
+                taskID: 16
+                description: null
+                dateLogged: 1457569392
+                billableTime: null
+                billableRate: null
+                categoryID: null
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request gets the labor (time spent) on a Task. A single Task can have multiple times logged onto it.
+
+
+        Return data description
+
+
+        meta | This property contains shortcuts to other requests that can be used to get more information regarding the Task the labor was logged on and the user who logged the time.
+
+        taskID | The Task ID associated with this labor entry.
+
+        timeSpent | The amount of time measure in seconds.
+
+        userWage | The wage per hour.
+
+        description | A description of the labor entry.
+
+        dateLogged | The date that this time was logged on the Task.
+
+        billableTime | The amount of time that is billable for this Task.
+
+        billableRate | The rate at which this labor entry is billed at.
+
+        categoryID | The labor category this entry is associated with.
+
+        taskName | The name of the task associated with this labor entry.
+
+        taskPriorityID | The Priority ID of the task this labor entry is associated with.
+
+        taskPriorityLevel | The Priority value of the task this labor entry is associated with.'
+  /v2/tasks/labor/categories:
+    get:
+      operationId: getTasksLaborCategories
+      summary: Get Labor Categories
+      parameters:
+      - name: name
+        in: query
+        description: This is a parameter used to string search for a name or partial name of a category this parameter expects a string with the wildcard %.
+        schema:
+          type: string
+        example: '%tech%'
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 100
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what taskID you want to start receiving results at. e.g. passing 137 here will only get you tasks with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      responses:
+        '200':
+          description: Get Labor Categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    categoryID:
+                      type: integer
+                    categoryName:
+                      type: string
+                    categoryRate:
+                      type: integer
+              example:
+              - categoryID: 1
+                categoryName: Technical
+                categoryRate: 100
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request gets the labor categories.
+
+
+        Return data description
+
+
+        Property: categoryID, Description: The unique ID for this billing category.
+
+        Property: categoryName, Description: The name of this billing category.
+
+        Property: categoryRate, Description: The rate per hour of this billing category.'
+  /v2/tasks/{taskID}/parts:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      schema:
+        type: string
+      example: '{{taskID}}'
+    get:
+      operationId: getTasksByTaskIDParts
+      summary: Get attached parts
+      responses:
+        '200':
+          description: Get attached parts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    partID:
+                      type: integer
+                    quantity:
+                      type: integer
+                    usedPrice:
+                      type: integer
+                    partName:
+                      type: string
+                    poItemID:
+                      type: integer
+              example:
+              - partID: 2934
+                quantity: 1
+                usedPrice: 1
+                partName: Lawn Mower Blade
+                poItemID: 0
+              - partID: 2992
+                quantity: 1
+                usedPrice: 5
+                partName: Cog
+                poItemID: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'Gets parts attached to a task.
+
+
+        This request gets parts associated with a task. A single Task can have multiple parts associated with it.
+
+
+        Return data description
+
+
+        Property: partID, Description: The partID of the part associated to this task.
+
+        Property: quantity, Description: The quantity of this part associated to this task.
+
+        Property: usedPrice, Description: The price of the part at the time of use.
+
+        Property: partName, Description: The name of the part.
+
+        Property: poItemID, Description: The unique ID of the PO item associated with this record.'
+    put:
+      operationId: putTasksByTaskIDParts
+      summary: Attach part to task
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: This request associates a part to a task.
+  /v2/tasks/parts:
+    get:
+      operationId: getTasksParts
+      summary: Get all attached parts
+      parameters:
+      - name: tasks
+        in: query
+        description: This parameter is used to get parts attached to a list of tasks. This parameter accepts a comma delimited list of task IDs.
+        schema:
+          type: string
+        example: 5,10,12
+      - name: parts
+        in: query
+        description: This parameter is used to get only certain. This parameter accepts a comma delimited list of task IDs.
+        schema:
+          type: string
+        example: 121,112,553
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what id you want to start receiving results at. e.g. passing 137 here will only get you assets with an id greater than 137.
+        schema:
+          type: integer
+        example: 137
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 100
+      responses:
+        '200':
+          description: Get all attached parts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    relationID:
+                      type: integer
+                    partID:
+                      type: integer
+                    taskID:
+                      type: integer
+                    quantity:
+                      type: integer
+                    lastEdited:
+                      type: integer
+                    usedPrice:
+                      type: integer
+                    partName:
+                      type: string
+                    poItemID:
+                      type: integer
+              example:
+              - relationID: 2
+                partID: 2
+                taskID: 8
+                quantity: 1
+                lastEdited: 1519084797
+                usedPrice: 0
+                partName: X1161P Projector Lamp
+                poItemID: 0
+              - relationID: 3
+                partID: 3
+                taskID: 10
+                quantity: 5
+                lastEdited: 1519084797
+                usedPrice: 0
+                partName: Stain Cleaner
+                poItemID: 0
+              - relationID: 8
+                partID: 4
+                taskID: 31
+                quantity: 1
+                lastEdited: 1519084797
+                usedPrice: 0
+                partName: Spark Plugs
+                poItemID: 0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'Gets parts attached to all tasks.
+
+
+        This request gets parts associated with any task. A single Task can have multiple parts associated with it.
+
+
+        Return data description
+
+
+        Property: relationID, Description: The identifier that associates parts to tasks.
+
+        Property: partID, Description: The partID of the part associated to this task.
+
+        Property: taskID, Description: The taskID this part is assoicated with.
+
+        Property: quantity, Description: The quantity of this part associated to this task.
+
+        Property: lastEdited, Description: The unix timestamp date of the last time this record was edited.
+
+        Property: usedPrice, Description: The price of the part at the time of use.
+
+        Property: partName, Description: The name of the part.
+
+        Property: poItemID, Description: The unique ID of the PO item associated with this record.'
+  /v2/tasks/{taskID}/{partID}:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      schema:
+        type: string
+      example: '{{taskID}}'
+    - name: partID
+      in: path
+      required: true
+      schema:
+        type: string
+      example: '{{partID}}'
+    delete:
+      operationId: deleteTasksByTaskIDByPartID
+      summary: Delete part from task
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: This request deletes a part from a task.
+  /v2/tasks/{taskID}/comments:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      description: taskID of the task you are adding a comment to.
+      schema:
+        type: integer
+      example: 19696
+    get:
+      operationId: getTasksByTaskIDComments
+      summary: Task Comments
+      parameters:
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what commentID you want to start receiving results at. e.g. passing 137 here will only get you parts with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 100
+      responses:
+        '200':
+          description: Task Comments
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              example: '4000'
+            X-RateLimit-Minute-Limit:
+              schema:
+                type: integer
+              example: '360'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              example: '3691'
+            X-RateLimit-First-Call:
+              schema:
+                type: integer
+              example: '1694457371'
+            X-RateLimit-Minute-Remaining:
+              schema:
+                type: integer
+              example: '359'
+            X-RateLimit-Minute-First-Call:
+              schema:
+                type: integer
+              example: '1694458796'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    commentID:
+                      type: integer
+                    comment:
+                      type: string
+                      format: style
+                    commentFiles:
+                      type: array
+                    timestamp:
+                      type: integer
+                    userID:
+                      type: integer
+                    commentEmailAddress:
+                      type: string
+                      nullable: true
+                    showExternalUsers:
+                      type: boolean
+              example:
+              - commentID: 18018
+                comment: 'Triggered at: 41 Mileage | Schedule set at: Every 15 Mileage'
+                commentFiles: []
+                timestamp: 1694110194
+                userID: 340
+                commentEmailAddress: null
+                showExternalUsers: true
+              - commentID: 18019
+                comment: This Task was assigned to Unassigned
+                commentFiles: []
+                timestamp: 1694110195
+                userID: 340
+                commentEmailAddress: null
+                showExternalUsers: true
+              - commentID: 18031
+                comment: This Task's Status was changed from name4 to name4
+                commentFiles: []
+                timestamp: 1694457643
+                userID: 340
+                commentEmailAddress: null
+                showExternalUsers: true
+              - commentID: 18032
+                comment: This Task's Status was changed from name4 to name444
+                commentFiles: []
+                timestamp: 1694457678
+                userID: 340
+                commentEmailAddress: null
+                showExternalUsers: true
+              - commentID: 18057
+                comment: task name
+                commentFiles: []
+                timestamp: 1694458584
+                userID: 340
+                commentEmailAddress: null
+                showExternalUsers: true
+              - commentID: 18058
+                comment: complete the task
+                commentFiles: []
+                timestamp: 1694458628
+                userID: 340
+                commentEmailAddress: null
+                showExternalUsers: false
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request gets all Task Comments associated with a Task.
+
+
+        Return data description
+
+
+        commentID | This is the commentID of comment.
+
+        comment | The text comment that was entered by the user.
+
+        timestamp | The date this comment was created. This is a unix timestamp.
+
+        userID | The ID of the user that made the comment.
+
+        commentEmailAddress | The email address of the external user that made this comment. This is only populated if the comment was made by an external user via the comment reply system.
+
+        showExternalUsers | The comment can be seen by external users or not., default value : true
+
+        commentFiles | Array of objects that have a file name and a link you can use to download that file. All links are only valid for 15 minutes, a new call will generate a new link.'
+    post:
+      operationId: postTasksByTaskIDComments
+      summary: Add Task Comments
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request adds a comment to a task.
+
+
+        comment | String | Required | The comment to be added.
+
+        showExternalUsers | Boolean | Optional | This will show the comment to external users. The default value is true.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                showExternalUsers:
+                  type: boolean
+            example:
+              comment: complete the task
+              showExternalUsers: false
+  /v2/tasks/{taskID}/tags:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      schema:
+        type: integer
+      example: 1160
+    get:
+      operationId: getTasksByTaskIDTags
+      summary: Tags
+      responses:
+        '200':
+          description: Tags
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tags:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request gets all Custom Tags associated with a Task.
+
+
+        Return data description
+
+
+        | Property | Description |
+
+        | --- | --- |
+
+        | tags | An array of custom tags associated with the task. |'
+    put:
+      operationId: putTasksByTaskIDTags
+      summary: PUT Apply Task Tags
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+          description: Invalid input — semicolons in tags, empty tags, etc.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+          description: One or more tags do not exist at the account level.
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'Applies one or more existing custom tags to a task. Tags must already exist at the account level (see POST /v2/tags to create new tags).
+
+
+        Body:
+
+        - tags: string[] — List of tags, or
+
+        - tag: string — Single tag.
+
+
+        Success Response (200):
+
+        - created: true
+
+        - name?: string — Present when a single tag was added; canonical without trailing '';''.
+
+        - sanitizations?: string[] — Applied normalizations.
+
+        - note?: string — Present when input had multiple ''@'' characters.
+
+        - tags: string[] — Updated canonical tags with trailing '';''.
+
+
+        Conflicts (409):
+
+        - Single: { created: false, message: ''Tag already exists'', name, tags }
+
+        - Multiple: { created: false, message: ''No new tags to add'', tags }
+
+
+        Errors:
+
+        - 404: { created: false, message, invalidTag(s), tags, availableTags } — Tag(s) don''t exist at account level.
+
+        - 400: { added: [], message: string } — Invalid input (semicolons, empty tags, etc.).
+
+
+        Notes:
+
+        - Tags MUST exist in the account''s tag definitions before they can be applied to tasks.
+
+        - Validation is case-insensitive (e.g., ''@urgent'' matches ''@Urgent'').
+
+        - Semicolons in input are rejected.
+
+        - The availableTags field in 404 responses shows which tags can be used.'
+  /v2/tasks/{taskID}/tags/{tagRaw}:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: tagRaw
+      in: path
+      required: true
+      schema:
+        type: string
+    delete:
+      operationId: deleteTasksByTaskIDTagsByTagRaw
+      summary: DELETE Remove Task Tag
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+          description: Invalid input — tag name contains semicolons or is empty.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+          description: Tag not found on this task.
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'Removes a single custom tag from a task.
+
+
+        Path:
+
+        - tag: string — Tag to remove; may be raw or canonical; server normalizes.
+
+
+        Success Response (200):
+
+        - deleted: true
+
+        - name: string — Canonical tag (includes trailing '';'').
+
+        - tags: string[] — Updated canonical tags.
+
+
+        Errors:
+
+        - 404: { message: ''Tag not found'' }
+
+        - 400: { removed: null, message: string } — Invalid input.'
+  /v2/work-requests/work-request-submissions:
+    get:
+      operationId: getWorkRequestsWorkRequestSubmissions
+      summary: List WR Submissions
+      parameters:
+      - name: orderBy
+        in: query
+        description: This parameter is used to order results by their createdAt, status, requestTitle, workRequestSubmissionID, and location property instead of the default ordering. each property can be flipped reverse by putting a minus before the property e.g. "-createdAt".
+        schema:
+          type: string
+        example: createdAt
+      - name: search
+        in: query
+        description: Free-text search
+        schema:
+          type: string
+        example: pump
+      - name: locationIDs
+        in: query
+        description: This parameter is used to only get work requests at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs.
+        schema:
+          type: integer
+        example: 1
+      - name: statuses
+        in: query
+        description: CSV of statuses
+        schema:
+          type: string
+        example: open
+      - name: limit
+        in: query
+        description: Max rows
+        schema:
+          type: integer
+        example: 100
+      - name: columns
+        in: query
+        description: CSV of field names (letters only); forwarded upstream as array
+        schema:
+          type: string
+      - name: createdDateStart
+        in: query
+        description: ISO 8601 start
+        schema:
+          type: string
+        example: '2025-06-20T20:51:13.000Z'
+      - name: createdDateEnd
+        in: query
+        description: ISO 8601 end (≥ start)
+        schema:
+          type: string
+        example: '2025-06-20T20:51:13.000Z'
+      - name: workRequestIDs
+        in: query
+        description: CSV of WR IDs
+        schema:
+          type: string
+        example: 1,2,3
+      - name: page
+        in: query
+        description: Page-based pagination (mutually exclusive with cursor)
+        schema:
+          type: integer
+        example: 1
+      - name: cursor
+        in: query
+        description: Cursor for pagination (forbidden with page)
+        schema:
+          type: integer
+        example: 1
+      responses:
+        '200':
+          description: List of work request submissions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkRequestSubmission'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'Lists WR submissions
+
+
+        Return data description:
+
+
+        | **Property** | **Description** |
+
+        | --- | --- |
+
+        | workRequestSubmissionId | The unique identifier of the work request submission. |
+
+        | status | Pending, Approved or Rejected. |
+
+        | createdByUserId | The unique identifier of the user who created the work request submission. |
+
+        | createdAt | The date the work request submission was created. The timestamp is in the following format: YYYY-MM-DD (2025-07-02) HH:MM:SS (21:36:31) |
+
+        | updatedAt | The date the work request submission was last updated. The timestamp is in the following format: YYYY-MM-DD (2025-07-02) HH:MM:SS (21:36:31) |
+
+        | deletedAt | The date the work request submission was deleted. The timestamp is in the following format: YYYY-MM-DD (2025-07-02) HH:MM:SS (21:36:31) Will be NULL if the submission is not deleted. |
+
+        | reviewedByUserId | The unique identifier of the user who reviewed the submission. |
+
+        | reviewedAt | The date the work request submission was reviewed. The timestamp is in the following format: YYYY-MM-DD (2025-07-02) HH:MM:SS (21:36:31) Will be NULL if the submission has not yet been reviewed |
+
+        | reviewedReason | The predefined reason the work request was declined. |
+
+        | additionalNotes | Any additional notes the person who declined the submission wishes to leave. |
+
+        | locationId | The unique identifier of the location the submission belongs to. |
+
+        | assetId | The unique identifier of the asset associated with the submission. |
+
+        | priorityId | The unique identifier of the priority of the submission. |
+
+        | dueDateUnit | The unit of measure used to communicate when the task will be due. Can be “days” or “hours”. |
+
+        | requestInformation | The information filled out in the Work Request Portal. Includes any of the following fields in JSON format. customerCode requesterName requesterEmail requesterPhone timeUnix customTag customFieldOne customFieldTwo customFieldThree customFieldOneTitle customFieldTwoTitle customFieldThreeTitle customFieldDropdownAnswerOne customFieldDropdownAnswerTwo customFieldDropdownAnswerThree customDropdownTitleOne customDropdownTitleTwo customDropdownTitleThree customDropdownOptionsOne customDropdownOptionsTwo customDropdownOptionsThree geoLocation |
+
+        | customerID | The unique identifier of the customer account. |
+
+        | requestTitle | The title of the submission. |
+
+        | assignedToProfileId | The Limble profile the submission is assigned to. This is used to determine what team or individual is assigned to review the submission. |
+
+        | requestDescription | The description of the problem filled out in the Work Request Portal. |
+
+        | checklistID | The unique identifier of the task generated from the submission when it is approved. Will be NULL if submission status is declined or pending. |
+
+        | requesterName | The name of the person who submitted the work request submission. |'
+    post:
+      operationId: postWorkRequestsWorkRequestSubmissions
+      summary: Create WR Submission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - locationID
+              - dueDateUnit
+              properties:
+                locationID:
+                  type: integer
+                  description: The location ID for the work request submission.
+                assetID:
+                  type: integer
+                  description: The asset ID associated with the submission.
+                  nullable: true
+                parts:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      partID:
+                        type: number
+                      quantity:
+                        type: number
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                timeUnix:
+                  type: integer
+                  description: Unix timestamp for the request.
+                priorityID:
+                  type: integer
+                  description: Priority ID for the submission.
+                  nullable: true
+                dueDateUnit:
+                  type: string
+                  description: Unit for the due date. Can be "days" or "hours".
+                requesterName:
+                  type: string
+                  description: Name of the person submitting the request.
+                requestTitle:
+                  type: string
+                  description: Title of the work request submission.
+                requestDescription:
+                  type: string
+                  description: Description of the problem.
+                requestInformation:
+                  type: object
+                  description: Additional information from the Work Request Portal form.
+                  properties:
+                    customerCode:
+                      type: string
+                    requesterName:
+                      type: string
+                    requesterEmail:
+                      type: string
+                    requesterPhone:
+                      type: string
+                    geoLocation:
+                      type: string
+                    timeUnix:
+                      type: integer
+                    customFieldOne:
+                      type: string
+                    customFieldTwo:
+                      type: string
+                    customFieldThree:
+                      type: string
+                    customFieldOneTitle:
+                      type: string
+                    customFieldTwoTitle:
+                      type: string
+                    customFieldThreeTitle:
+                      type: string
+            example:
+              locationID: 205
+              assetID: 10836
+              dueDateUnit: days
+              requesterName: John Doe
+              requestTitle: Broken pump
+              requestDescription: The pump on floor 2 is leaking.
+      responses:
+        '200':
+          description: Work request submission created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkRequestSubmission'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'Creates a new work request submission. The submission enters a pending state and must be approved or declined by a reviewer.
+
+
+        `locationID` and `dueDateUnit` are required. All other fields are optional.'
+  /v2/work-requests/work-request-submissions/{workRequestSubmissionID}/approve:
+    parameters:
+    - name: workRequestSubmissionID
+      in: path
+      required: true
+      description: The ID of the work request submission to approve.
+      schema:
+        type: integer
+      example: 42
+    post:
+      operationId: postWorkRequestSubmissionsApprove
+      summary: Approve WR Submission
+      responses:
+        '200':
+          description: Work request submission approved
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: Approves a pending work request submission, generating a task from it.
+  /v2/work-requests/work-request-submissions/{workRequestSubmissionID}/decline:
+    parameters:
+    - name: workRequestSubmissionID
+      in: path
+      required: true
+      description: The ID of the work request submission to decline.
+      schema:
+        type: integer
+      example: 42
+    post:
+      operationId: postWorkRequestSubmissionsDecline
+      summary: Decline WR Submission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                declineReason:
+                  type: string
+                  description: Predefined reason for declining.
+                additionalNotes:
+                  type: string
+                  description: Additional notes from the reviewer.
+            example:
+              declineReason: Duplicate request
+              additionalNotes: This issue was already reported under submission
+      responses:
+        '200':
+          description: Work request submission declined
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'Declines a pending work request submission.
+
+
+        Both `declineReason` and `additionalNotes` are optional strings.'
+  /v2/tasks:
+    post:
+      operationId: postTasks
+      summary: New Task
+      parameters:
+      - name: name
+        in: query
+        schema:
+          type: string
+        example: '"Priority Test"'
+      - name: locationID
+        in: query
+        schema:
+          type: integer
+        example: 34190
+      - name: due
+        in: query
+        schema:
+          type: integer
+        example: 1749680211
+      - name: type
+        in: query
+        schema:
+          type: integer
+        example: 2
+      - name: templateID
+        in: query
+        schema:
+          type: integer
+        example: 9
+      responses:
+        '201':
+          description: New Task
+          headers:
+            Location:
+              schema:
+                type: string
+              example: /v2/tasks/?tasks=8261
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  taskID:
+                    type: integer
+              example:
+                taskID: 8261
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request will create an empty Task, assign to a User or Team, etc.
+
+
+        name | String | Required | The name of the Task.
+
+        locationID | Int | Required | The id of the Location this Task is assigned to. Must be the Location''s unique ID number.
+
+        due | Int | Required | The time at which the Task is due. Must be a unix timestamp.
+
+        type | Int | Required | The type of Task according to this legend:, 1 = Preventative Maintanance (PM)., 2 = Unplanned Work Order (WO);, 4 = Planned Work Order (WO);, 6 = Work Request (WR)., Task types not listed here are not currently supported., If you would like another Task type to be supported, please contact us., A taskType of 6 prevents the user from assigning a batchID.
+
+        description | string | Optional | A brief description about the Task.
+
+        assetID | Int | Optional | The Asset that the Task will be attached to, if any. Must be the unique ID number of the Asset. Omitting this parameter or setting it to zero will not attach the Task to an asset.
+
+        assignment | Int | Optional. Required if ''assignmentType'' is used. | The User or Team to which the Task will be assigned. Must be a User or Team that exists at the specified Location. Must be the unique ID number of the user or Team. If this parameter is set, the assignmentType parameter must also be set.
+
+        templateID | Int | Optional | The taskID of the task you wish to utilize as a template when posting a new Task. Using this will duplicate all steps in the Template to the newly created task. Templates can be easily viewed and built in Limble''s web application.
+
+        assignmentType | Enum | Optional. Required if ''assignment'' is used. | Specifies whether this Task will be assigned to a ''user'', ''team'' or ''multi''. If this parameter is set, the assignment parameter must also be set.
+
+        priority | Int | Optional | Specifies the priority of the Task. Must correspond to a ''priorityLevel'' (See GET Priorities) configured in your Limble account.
+
+        estimatedTime | Int | Optional | Updates the estimated time of the task. This is the time it takes to complete the task in minutes.
+
+        scheduledStart | Int | Optional | The scheduled start date of the task. Must be a unix timestamp. Must be 0 or greater.
+
+        scheduledEnd | Int | Optional | The scheduled end date of the task. Must be a unix timestamp. Must be 0 or greater. If both scheduledStart and scheduledEnd are provided, scheduledEnd must be greater than scheduledStart.
+
+        requestName | string | Optional | Specifies the name of the Work Requestor.
+
+        requestEmail | string | Optional | Specifies the email address of the Work Requestor.
+
+        requestPhone | string | Optional | Specifies the phone number of the Work Requestor.
+
+        requestDescription | string | Optional | Specifies the description of the problem submitted by the Work Requestor.
+
+        meta1 | string | Optional | Task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+
+        meta2 | string | Optional | Task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+
+        meta3 | string | Optional | Task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+
+        geoLocation | geoJSON | Optional | The geoJSON Feature object that can be used to locate a task on a Map.
+
+        multiUsers | array | Optional. Required if assignmentType = multi | Array list of users a task is being assigned to.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                locationID:
+                  type: integer
+                type:
+                  type: integer
+                due:
+                  type: integer
+                priority:
+                  type: integer
+                scheduledStart:
+                  type: integer
+                scheduledEnd:
+                  type: integer
+            example:
+              name: Priority Test
+              locationID: 34190
+              type: 2
+              due: 1748656599
+              priority: 3
+              scheduledStart: 1748650000
+              scheduledEnd: 1748660000
+    get:
+      operationId: getTasks
+      summary: Tasks
+      parameters:
+      - name: tasks
+        in: query
+        description: This parameter is used to only get specific Tasks. This parameter accepts a comma delimited list of task IDs.
+        schema:
+          type: integer
+        example: 9109
+      - name: assets
+        in: query
+        description: This parameter is used to only get Tasks that are linked to an asset. This parameter accepts a comma delimited list of asset IDs.
+        schema:
+          type: integer
+        example: 1
+      - name: locations
+        in: query
+        description: This parameter is used to only get Tasks at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs.
+        schema:
+          type: integer
+        example: 73
+      - name: type
+        in: query
+        description: This parameter is used to only get Tasks of a specific type. This parameter accepts a comma delimited list of task types.
+        schema:
+          type: integer
+        example: 6
+      - name: name
+        in: query
+        description: This is a parameter used to string search for a name or partial name of a task this parameter expects a string with the wildcard %.
+        schema:
+          type: string
+        example: '%test%'
+      - name: start
+        in: query
+        description: This parameter is used to only get Tasks that were last edited after the unix timestamp passed into the start parameter. For example, all Tasks that were last edited after April 18th, 2018.
+        schema:
+          type: integer
+        example: 1000000000
+      - name: end
+        in: query
+        description: This parameter is used to only get Tasks that were last edited before the unix timestamp passed into the end parameter.
+        schema:
+          type: integer
+        example: 2500000000
+      - name: cursor
+        in: query
+        description: This parameter is a cursor that selects what taskID you want to start receiving results at. e.g. passing 137 here will only get you tasks with an id greater than 137.
+        schema:
+          type: integer
+        example: 0
+      - name: limit
+        in: query
+        description: This parameter is a result limiter. The default is set to return no more than 100 results at one time.
+        schema:
+          type: integer
+        example: 2
+      - name: page
+        in: query
+        description: This parameter is used to paginate results based on the limit. Refer to Pagination section for more information.
+        schema:
+          type: integer
+        example: 2
+      - name: completedStart
+        in: query
+        description: This parameter is used to only get Tasks that were completed after the unix timestamp passed into this parameter. For example, all Assets that were completed after April 18th, 2018.
+        schema:
+          type: integer
+        example: 0
+      - name: completedEnd
+        in: query
+        description: This parameter is used to only get Tasks that were completed before the unix timestamp passed into this parameter.
+        schema:
+          type: integer
+        example: 2500000000
+      - name: scheduledStart
+        in: query
+        description: This parameter is used as the start of a scheduled-date window. Tasks are returned when their scheduled date range overlaps this timestamp.
+        schema:
+          type: integer
+        example: 0
+      - name: scheduledEnd
+        in: query
+        description: This parameter is used as the end of a scheduled-date window. Tasks are returned when their scheduled date range overlaps this timestamp.
+        schema:
+          type: integer
+        example: 2500000000
+      - name: orderBy
+        in: query
+        description: This parameter sorts based on the value you pass. Negative parameters are used to reverse sort order. This supports sorting by due, createdDate, dateCompleted, scheduledStart, scheduledEnd, and lastEdited.
+        schema:
+          type: string
+        example: -createdDate
+      - name: geoLocation
+        in: query
+        description: This parameter is used to filter results that contain a geoLocation property. By default it is false and will return all tasks with and without geoLocation property. If true, it will only return tasks with a geoLocation property.
+        schema:
+          type: boolean
+        example: true
+      - name: users
+        in: query
+        description: This parameter filters tasks by assignee user IDs. It returns tasks directly assigned to those users and tasks assigned through team/profile membership (including multi-user assignments). This parameter accepts a comma delimited list of user IDs.
+        schema:
+          type: integer
+        example: 11
+      - name: teams
+        in: query
+        description: This parameter is used to only get Tasks assigned to specific teams/profiles. This parameter accepts a comma delimited list of team IDs.
+        schema:
+          type: integer
+        example: 500
+      - name: lastEditedByUsers
+        in: query
+        description: This parameter is used to filter tasks by users who last edited the task.
+        schema:
+          type: string
+        example: 0,340,341
+      - name: status
+        in: query
+        description: This parameter is used to filter tasks by completed status. 1 - Complete  0 - Incomplete
+        schema:
+          type: integer
+        example: 1
+      - name: meta1
+        in: query
+        description: This parameter is used to filter tasks by task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+        schema:
+          type: integer
+        example: 1
+      - name: meta2
+        in: query
+        description: This parameter is used to filter tasks by task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+        schema:
+          type: integer
+        example: 2
+      - name: meta3
+        in: query
+        description: This parameter is used to filter tasks by task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+        schema:
+          type: integer
+        example: 3
+      - name: statusIDs
+        in: query
+        description: This parameter is used to filter tasks by their associated statusID.
+        schema:
+          type: string
+        example: 0,1,2
+      - name: tag
+        in: query
+        description: This parameter is used to filter results that contain a certain custom tag. The tag must match exactly, i.e. "Tag" would not match "My Custom Tag". Searching for "@My Custom Tag;" is equivalent to searching for "My Custom Tag" but because custom tags are stored with an at sign ("@") at the beginning and a semicolon (";") at the end it is recommended that the param follows the same format.
+        schema:
+          type: string
+        example: '@My Custom Tag;'
+      responses:
+        '200':
+          description: Pagination using Page & Limit
+          headers:
+            Last-Page:
+              schema:
+                type: string
+              example: /v2/tasks/?limit=2&orderBy=createdDate&completedStart=0&status=1&page=152
+            Next-Page:
+              schema:
+                type: string
+              example: /v2/tasks/?limit=2&orderBy=createdDate&completedStart=0&status=1&page=3
+            Previous-Page:
+              schema:
+                type: string
+              example: /v2/tasks/?limit=2&orderBy=createdDate&completedStart=0&status=1&page=1
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+              example:
+              - meta:
+                  invoices: /v2/tasks/invoices/?tasks=16
+                  labor: /v2/tasks/labor/?tasks=16
+                  partsUsage: /v2/parts/usage/?tasks=16
+                  instructions: /v2/tasks/16/instructions
+                  status: /v2/statuses/?statuses=2
+                taskID: 16
+                poIDs:
+                - 1234
+                name: Part Qty Threshold Hit
+                userID: 0
+                teamID: 436
+                locationID: 73
+                template: false
+                createdDate: 1457569392
+                scheduledStart: 0
+                scheduledEnd: 0
+                due: 1457569392
+                description: ''
+                dateCompleted: 1457569392
+                lastEdited: 1518826313
+                lastEditedByUser: 0
+                completedByUser: 341
+                assetID: 0
+                completedUserWage: 15
+                priority: 0
+                priorityID: 8
+                downtime: 0
+                completionNotes: null
+                requestorName: null
+                requestorEmail: null
+                requestorPhone: null
+                requestTitle: null
+                requestField1: null
+                requestField2: null
+                requestField3: null
+                requestDropdown1: null
+                requestDropdown2: null
+                requestDropdown3: null
+                requestorDescription: null
+                meta1: null
+                meta2: null
+                meta3: null
+                statusID: 2
+                type: 7
+                status: 1
+              - meta:
+                  invoices: /v2/tasks/invoices/?tasks=36
+                  labor: /v2/tasks/labor/?tasks=36
+                  partsUsage: /v2/parts/usage/?tasks=36
+                  instructions: /v2/tasks/36/instructions
+                  status: /v2/statuses/?statuses=2
+                taskID: 36
+                name: Part Qty Threshold Hit
+                userID: 0
+                teamID: 436
+                locationID: 73
+                template: false
+                createdDate: 1458062821
+                scheduledStart: 0
+                scheduledEnd: 0
+                due: 1458062821
+                description: ''
+                dateCompleted: 1458062821
+                lastEdited: 1518826313
+                lastEditedByUser: 0
+                completedByUser: 341
+                assetID: 0
+                completedUserWage: 15
+                priority: 0
+                priorityID: 8
+                downtime: 0
+                completionNotes: null
+                requestorName: null
+                requestorEmail: null
+                requestorPhone: null
+                requestTitle: null
+                requestField1: null
+                requestField2: null
+                requestField3: null
+                requestDropdown1: null
+                requestDropdown2: null
+                requestDropdown3: null
+                requestorDescription: null
+                meta1: null
+                meta2: null
+                meta3: null
+                statusID: 2
+                type: 7
+                status: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request gets top level information about Tasks such as completed date, assignment, assetID, etc.
+
+
+        **Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.
+
+
+        Return data description
+
+
+        meta | This property has shortcuts to get other information related to the Task such as the Task''s invoices, labor parts usage and instructions.
+
+        name | The Task''s name.
+
+        userID | The id of the user this Task is assigned to. A Task can not be assigned to both a Team and a User at the same time.
+
+        teamID | The id of the team this Task is assigned to. A Task can not be assigned to both a Team and a User at the same time.
+
+        locationID | The id of the Location in which this Task belongs to.
+
+        template | This field indicates if the task is a ''template'' that spawns other tasks based on schedules or not.
+
+        createdDate | The date this Task was created. This is a unix timestamp.
+
+        startDate | By default this value is 0 as the startDate is usually the same as the createdDate. Sometimes a task is created such that it is scheduled to start in the future (i.e. after the createdDate). In such a case this value will be a unix timestamp indicating the actual start date of the Task.
+
+        scheduledStart | The scheduled start date of the Task. This is a unix timestamp. A value of null means no scheduled start date is set.
+
+        scheduledEnd | The scheduled end date of the Task. This is a unix timestamp. A value of null means no scheduled end date is set.
+
+        due | The date this Task is due. This is a unix timestamp.
+
+        dateCompleted | The date this Task was completed. This is a unix timestamp. A value of 0 means this Task is not completed.
+
+        lastEdited | The date this Task was last edited. This is a unix timestamp.
+
+        description | The decription of a task.
+
+        completedByUser | The id of the User that completed this Task.
+
+        lastEditedByUser | The id of the User that last edited the task.
+
+        assetID | The id of the Asset that this Task belongs to.
+
+        completedUserWage | The price per hour of the User''s Wage at the point in time when the task was completed.
+
+        priority | The priority of the Task.
+
+        downtime | The amount of downtime in seconds caused by this Task.
+
+        estimatedTime | The estimated time of the task. This is the time it takes to complete the task in minutes.
+
+        completionNotes | Notes inputted by the user at the time of task completion.
+
+        requestorName | The name of the person that requested this Task.
+
+        requestorEmail | The email of the person that requested this Task.
+
+        requestorPhone | The phone number of the person that requested this Task.
+
+        requestTile | The title of the work request being submitted.
+
+        requestField1 | Work request portal custom field 1.
+
+        requestField2 | Work request portal custom field 2.
+
+        requestField3 | Work request portal custom field 3.
+
+        requestDropdown1 | Work request portal custom dropdown box 1.
+
+        requestDropdown2 | Work request portal custom dropdown box 2.
+
+        requestDropdown3 | Work request portal custom dropdown box 3.
+
+        requestorDescription | The description of the request submitted via the Work Request portal.
+
+        type | 1 = Preventative Maintanance (PM);, 2 = Unplanned Work Order (WO);, 4 = Planned Work Order (WO);, 5 = Cycle Count;, 6 = Work Request (WR);, 7 = Min Part Threshold;, 8 = Materials Request;
+
+        status | 1 - Complete, 0 - Incomplete, Note: this property indicates a task status with respect to task completion. For the custom task status refer to statusID
+
+        statusID | The current custom status assigned to this task., Note: this indicates the current status of a task. Use GET Statuses to find the value of each statusID.
+
+        poIDs | An array of Purchase Order IDs linked to this Task. Returns an empty array if no Purchase Orders are linked.
+
+        associatedTaskID (deprecated) | Please refer to associatedTask meta property on GET Task Instruction for instruction type 14.
+
+        meta1 | Task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+
+        meta2 | Task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+
+        meta3 | Task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+
+        geoLocation | The location of a task on a Map.
+
+        customTags | An array of custom tags associated with the task.'
+  /v2/tasks/{taskID}:
+    parameters:
+    - name: taskID
+      in: path
+      required: true
+      description: taskID of the task you are removing.
+      schema:
+        type: string
+      example: '{{taskID}}'
+    patch:
+      operationId: patchTasksByTaskID
+      summary: Update Task
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+      description: 'This request updates the top level information of a Task.
+
+
+        name | String | Optional | The name of the task.
+
+        locationID | Int | Optional | The location to which the task is assigned. Must be the location''s unique ID number.
+
+        due | Int | Optional | The time at which the task is due for completion. Must be a unix timestamp.
+
+        type | Int | Optional | The type of task according to this legend:, 1 = Preventative Maintanance (PM)., 2 = Unplanned Work Order (WO);, 4 = Planned Work Order (WO);, 6 = Work Request (WR)., Only these type of tasks can be changed from one task type to another.
+
+        description | string | Optional | A brief description about the task.
+
+        asset | Int | Optional | The asset that the task will be attached to, if any. Must be the unique ID number of the asset. Omitting this parameter or setting it to zero will not attach the task to any asset.
+
+        assignment | Int | Optional. Required if ''assignmentType'' is used. | The user or team to which the task will be assigned. Must be a user or team that exists at the specified location. Must be the unique ID number of the user or team. If this parameter is set, the assignmentType parameter must also be set.
+
+        assignmentType | Enum | Optional. Required if ''assignment'' is used. | Specifies whether this task will be assigned to a ''user'', ''team'' or ''multi''. If this parameter is set, the assignment parameter must also be set.
+
+        priority | Int | Optional | Specifies the priority of the task. Must be between 0 and 6 inclusive: 0 = lowest priority, 5 = highest priority, 6 = "On Hold".
+
+        estimatedTime | Int | Optional | Updates the estimated time of the task. This is the time it takes to complete the task in minutes.
+
+        scheduledStart | Int | Optional | The scheduled start date of the task. Must be a unix timestamp. Must be 0 or greater.
+
+        scheduledEnd | Int | Optional | The scheduled end date of the task. Must be a unix timestamp. Must be 0 or greater. If both scheduledStart and scheduledEnd are provided, scheduledEnd must be greater than scheduledStart.
+
+        requestName | string | Optional | Specifies the name of the work requestor.
+
+        requestEmail | string | Optional | Specifies the email address of the work requestor.
+
+        requestPhone | string | Optional | Specifies the phone number of the work requestor.
+
+        requestDescription | string | Optional | Specifies the description set by the work requestor.
+
+        status | int | Optional | 1 - Closes a task., 0 - Opens a task., If this parameter is set to 1, the assignment and assignmentType parameters must also be set.
+
+        meta1 | string | Optional | Task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+
+        meta2 | string | Optional | Task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+
+        meta3 | string | Optional | Task meta data. This does not show in the web application, but can be used to track items between integrated systems.
+
+        geoLocation | geoJSON | Optional | The geoJSON Feature object that can be used to locate a task on a Map. To remove geoLocation from a Task pass an empty object ({}).
+
+        statusID | int | Optional | Update the custom status of the task. Cannot update custom status to 1 (Open) or 2 (Complete).
+
+        multiUsers | array | Optional. Required if assignmentType = multi | Array list of users a task is being assigned to.'
+    delete:
+      operationId: deleteTasksByTaskID
+      summary: Delete Task
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptySuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Tasks
+components:
+  responses:
+    Forbidden:
+      description: The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    TooManyRequests:
+      description: The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: No `Authorization` header was provided on the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    EmptySuccess:
+      description: The operation completed successfully. The response body is empty.
+    NotFound:
+      description: The referenced resource does not exist or is not visible to the authenticated customer.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    WorkRequestSubmission:
+      type: object
+      properties:
+        workRequestSubmissionId:
+          type: integer
+        status:
+          type: string
+          enum:
+          - Pending
+          - Approved
+          - Rejected
+        createdByUserId:
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        deletedAt:
+          type: string
+          nullable: true
+        reviewedByUserId:
+          type: integer
+          nullable: true
+        reviewedAt:
+          type: string
+          nullable: true
+        reviewedReason:
+          type: string
+          nullable: true
+        additionalNotes:
+          type: string
+          nullable: true
+        locationId:
+          type: integer
+        assetId:
+          type: integer
+          nullable: true
+        priorityId:
+          type: integer
+          nullable: true
+        dueDateUnit:
+          type: string
+          nullable: true
+        requestInformation:
+          type: object
+        customerID:
+          type: integer
+        requestTitle:
+          type: string
+        assignedToProfileId:
+          type: integer
+          nullable: true
+        requestDescription:
+          type: string
+          nullable: true
+        checklistID:
+          type: integer
+          nullable: true
+        requesterName:
+          type: string
+    Task:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            invoices:
+              type: string
+            labor:
+              type: string
+            partsUsage:
+              type: string
+            instructions:
+              type: string
+            status:
+              type: string
+        taskID:
+          type: integer
+        poIDs:
+          type: array
+          items:
+            type: integer
+        name:
+          type: string
+        userID:
+          type: integer
+        teamID:
+          type: integer
+        locationID:
+          type: integer
+        template:
+          type: boolean
+        createdDate:
+          type: integer
+        scheduledStart:
+          type: integer
+        scheduledEnd:
+          type: integer
+        due:
+          type: integer
+        description:
+          type: string
+        dateCompleted:
+          type: integer
+        lastEdited:
+          type: integer
+        lastEditedByUser:
+          type: integer
+        completedByUser:
+          type: integer
+        assetID:
+          type: integer
+        completedUserWage:
+          type: integer
+        priority:
+          type: integer
+        priorityID:
+          type: integer
+        downtime:
+          type: integer
+        completionNotes:
+          type: string
+          nullable: true
+        requestorName:
+          type: string
+          nullable: true
+        requestorEmail:
+          type: string
+          nullable: true
+        requestorPhone:
+          type: string
+          nullable: true
+        requestTitle:
+          type: string
+          nullable: true
+        requestField1:
+          type: string
+          nullable: true
+        requestField2:
+          type: string
+          nullable: true
+        requestField3:
+          type: string
+          nullable: true
+        requestDropdown1:
+          type: string
+          nullable: true
+        requestDropdown2:
+          type: string
+          nullable: true
+        requestDropdown3:
+          type: string
+          nullable: true
+        requestorDescription:
+          type: string
+          nullable: true
+        meta1:
+          type: string
+          nullable: true
+        meta2:
+          type: string
+          nullable: true
+        meta3:
+          type: string
+          nullable: true
+        statusID:
+          type: integer
+        type:
+          type: integer
+        status:
+          type: integer
+    ErrorResponse:
+      description: 'Error response body. The API emits two shapes today: the standard `{ message }` shape returned by the central error handler and most controllers, and the legacy `{ error, success, msg }` shape returned by the auth middleware. Some controllers also include extra fields (e.g. `success`, conflict metadata).'
+      oneOf:
+      - type: object
+        required:
+        - message
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          raw:
+            description: Optional raw error object (validation errors).
+      - type: object
+        required:
+        - error
+        - msg
+        properties:
+          error:
+            type: integer
+            description: Numeric HTTP status echoed in the body.
+          success:
+            type: boolean
+          msg:
+            type: string
+    TaskInstruction:
+      type: object
+      properties:
+        instructionID:
+          type: integer
+        taskID:
+          type: integer
+        parentInstructionID:
+          type: integer
+        instruction:
+          type: string
+        type:
+          type: integer
+        options:
+          type: array
+        response:
+          type: boolean
+        instructionFiles:
+          type: array
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
