@@ -1,0 +1,135 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets General Ledgers API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "General Ledgers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get General Ledgers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/gl",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what glID you want to start receiving results at. e.g. passing 137 here will only get you GLs with an ID greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "name",
+                "value": "%office%",
+                "type": "query",
+                "description": "This is a parameter used to string search for a name or partial name of a GL. This parameter expects a string with the wildcard %."
+              },
+              {
+                "name": "abbr",
+                "value": "%off%",
+                "type": "query",
+                "description": "This is a parameter used to string search for an abbreviation or partial abbreviation of a GL. This parameter expects a string with the wildcard %."
+              },
+              {
+                "name": "locations",
+                "value": "1,163,2",
+                "type": "query",
+                "description": "This parameter is used to only get GLs that are linked to a location. This parameter accepts a comma delimited list of location IDs."
+              },
+              {
+                "name": "gls",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "This parameter is used to only get specific GLs. This parameter accepts a comma delimited list of GL IDs."
+              },
+              {
+                "name": "assets",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "This parameter is used to only get GLs that are linked to an asset. This parameter accepts a comma delimited list of asset IDs."
+              }
+            ]
+          },
+          "docs": "This request returns your GLs in Limble. \n\nReturn data description\n\nProperty: glID, Description: The GL's unique identifier.\nProperty: abbr, Description: An abbreviation for the GL.\nProperty: name, Description: The full name of the GL.\nProperty: locationID, Description: Which Location this GL belongs to.\nProperty: description, Description: An optional bit of descriptive text for the GL.\nProperty: assetID, Description: Which Asset this GL belongs to."
+        },
+        {
+          "info": {
+            "name": "New General Ledger",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/gl",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request creates a new General Ledger.\n\nParameter: locationID, Type: Int, Required?: Required, Description: The ID of the location this GL will be created for.\nParameter: assetID, Type: Int, Required?: Required, Description: The ID of the asset that this GL will be associated with.\nParameter: abbr, Type: String, Required?: Required, Description: An short version of this GLs name.\nParameter: name, Type: String, Required?: Required, Description: A full title for this GL.\nParameter: description"
+        },
+        {
+          "info": {
+            "name": "Update General Ledger",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/gl/:glID",
+            "params": [
+              {
+                "name": "glID",
+                "value": "46",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request updates a General Ledger.\n\nParameter: assetID, Type: Int, Required?: Optional, Description: The ID of the asset that this GL will be associated with. Must be a valid assetID that belongs to the current GL's location.\nParameter: abbr, Type: String, Required?: Optional, Description: An new short version of this GLs name.\nParameter: name, Type: String, Required?: Optional, Description: A new title for this GL.\nParameter: description, Type: String, Required?: Optional, Description: Any "
+        },
+        {
+          "info": {
+            "name": "Delete General Ledger",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/gl/:glID",
+            "params": [
+              {
+                "name": "glID",
+                "value": "46",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request deletes a GL. If any PO Items are associated to this GL, their glID will be set to 0."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,133 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Options API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Options",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Instruction Options",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/instructions/:instructionID/options",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "11429",
+                "type": "path",
+                "description": "taskID of the task you are getting the option/dropdown list."
+              },
+              {
+                "name": "instructionID",
+                "value": "49343",
+                "type": "path",
+                "description": "instructionID of the option/dropdown list you are getting the options for."
+              }
+            ]
+          },
+          "docs": "This request gets all the Options for an Instruction Option or Dropdown list associated with a Task."
+        },
+        {
+          "info": {
+            "name": "New Instruction Option",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/instructions/:instructionID/options",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "11429",
+                "type": "path",
+                "description": "taskID of the task you are getting the option/dropdown list."
+              },
+              {
+                "name": "instructionID",
+                "value": "49343",
+                "type": "path",
+                "description": "instructionID of the option/dropdown list you are getting the options for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request will create a new Option for a Dropdown or Option instruction of a task.\n\nParameter: instruction, Type: string, Required?: Required, Description: The text that guides the User for selecting the option.\nParameter: instructionOptionOrder, Type: Int, Required?: Optional, Description: If this is set the option is created at that position of the list. This value cannot be greater than the total number of option present in the list. If not set the option is added to the end of the list."
+        },
+        {
+          "info": {
+            "name": "Update Instruction Option",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions/:instructionID/options/:instructionOptionID",
+            "params": [
+              {
+                "name": "instructionID",
+                "value": "49343",
+                "type": "path",
+                "description": "instructionID of the instruction whose option you are editing."
+              },
+              {
+                "name": "instructionOptionID",
+                "value": "7097",
+                "type": "path",
+                "description": "instructionOptionID of the option you are editing."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update Instruction Option"
+        },
+        {
+          "info": {
+            "name": "Delete Instruction Option",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions/:instructionID/options/:instructionOptionID",
+            "params": [
+              {
+                "name": "instructionID",
+                "value": "49343",
+                "type": "path",
+                "description": "instructionID of the instruction whose option you are editing."
+              },
+              {
+                "name": "instructionOptionID",
+                "value": "7097",
+                "type": "path",
+                "description": "instructionOptionID of the option you are editing."
+              }
+            ]
+          },
+          "docs": "This request will delete an option from a Dropdown or Option instruction."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,63 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Image API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Image",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add Asset Main Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/assets/:assetID/image",
+            "params": [
+              {
+                "name": "assetID",
+                "value": "{{assetID}}",
+                "type": "path",
+                "description": "assetID of the asset you are removing the main image from."
+              }
+            ]
+          },
+          "docs": "Each asset can have one main image associated with it.  This request allows you to set that image."
+        },
+        {
+          "info": {
+            "name": "Delete Asset Main Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/assets/:assetID/image",
+            "params": [
+              {
+                "name": "assetID",
+                "value": "{{assetID}}",
+                "type": "path",
+                "description": "assetID of the asset you are removing the main image from."
+              }
+            ]
+          },
+          "docs": "This request removes the main image from the asset."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

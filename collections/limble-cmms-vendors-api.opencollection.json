@@ -1,0 +1,522 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Vendors API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Vendors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Vendor Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/vendors/fields",
+            "params": [
+              {
+                "name": "fields",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter is used to only get specific fields by ID. This parameter expects a comma delimited list of fieldIDs."
+              },
+              {
+                "name": "name",
+                "value": "%pic%",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "vendors",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get specific Vendors. This parameter expects a comma delimited list of Vendor IDs."
+              },
+              {
+                "name": "start",
+                "value": "1555105636",
+                "type": "query",
+                "description": "This parameter is used to only get vendor fields for vendors that were last edited after the unix timestamp passed into the start parameter. For example, all Vendors that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "1555105636",
+                "type": "query",
+                "description": "This parameter is used to only get vendor fields for vendors that were last edited *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what fieldID you want to start receiving results at. e.g. passing 137 here will only get you vendor fields with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "value",
+                "value": "355",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by value. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              },
+              {
+                "name": "values",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter is used to get vendor fields by their valueID. This parameter expects a comma delimited list of Value IDs."
+              }
+            ]
+          },
+          "docs": "This request gets detailed information about Vendor Fields such as contact information, contracts and any other custom set field.\n\nThis request will return an array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link.\n\n**Note:** this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information."
+        },
+        {
+          "info": {
+            "name": "New Vendor Suggested Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/vendors/fields"
+          },
+          "docs": "This request adds a new Field to the list of Suggested Fields that can later be attached to Vendors.\n\nParameter: locationID, Type: Int, Required?: Required, Description: The location ID of the Location to add the new Field to.\nParameter: name, Type: String, Required?: Required, Description: The name of the new Field. Some custom field names such as \"Vendor Name\" are not allowed and reserved for internal use. This will result in a 409 error.\nParameter: fieldType, Type: Int, Required?: Required, D"
+        },
+        {
+          "info": {
+            "name": "Vendor Suggested Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/vendors/fields/suggested",
+            "params": [
+              {
+                "name": "fields",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter can be used to get a single Vendor Fields or a list of Vendor Fields in a comma-separated list."
+              },
+              {
+                "name": "name",
+                "value": "%pic%",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what fieldID you want to start receiving results at. e.g. passing 137 here will only get you vendor fields with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request gets all possible fields a Vendor can pick from when deciding which fields it should have."
+        },
+        {
+          "info": {
+            "name": "Update Vendor Field Value",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/vendors/fields/:valueID",
+            "params": [
+              {
+                "name": "valueID",
+                "value": "182",
+                "type": "path",
+                "description": "valueID of the field you are removing."
+              }
+            ]
+          },
+          "docs": "This request updates a Vendor's field value.\n\nParameter: value, Type: Depends on fieldType, Required?: Required, Description: The value that will be written to the field. \"value\" must correspond to the fieldType of the field. For example, if the field is a \"number\" fieldType, then \"value\" must be a number."
+        },
+        {
+          "info": {
+            "name": "Delete Vendor Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/vendors/fields/:valueID",
+            "params": [
+              {
+                "name": "valueID",
+                "value": "182",
+                "type": "path",
+                "description": "valueID of the field you are removing."
+              }
+            ]
+          },
+          "docs": "This request deletes a custom field attached to a Vendor."
+        },
+        {
+          "info": {
+            "name": "Attach Field to Vendor",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID/fields",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "1",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request attaches a Suggested Field to a Vendor."
+        },
+        {
+          "info": {
+            "name": "Add Vendor Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID/image",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "{{vendorID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request adds the main image to a Vendor."
+        },
+        {
+          "info": {
+            "name": "Delete Vendor Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID/image",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "{{vendorID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request removes the main image from a Vendor."
+        },
+        {
+          "info": {
+            "name": "Delete Vendor Log File",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/vendors/logs/file/:fileID",
+            "params": [
+              {
+                "name": "fileID",
+                "value": "7",
+                "type": "path",
+                "description": "The ID of the file attached to the log."
+              }
+            ]
+          },
+          "docs": "This requests deletes a file attached to a log."
+        },
+        {
+          "info": {
+            "name": "Add Vendor Log File",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID/logs/:logID/file",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "9",
+                "type": "path",
+                "description": "The ID of the vendor the log belongs to."
+              },
+              {
+                "name": "logID",
+                "value": "11",
+                "type": "path",
+                "description": "The ID of the log to attach the file to."
+              }
+            ]
+          },
+          "docs": "This request adds files to a log.\n\nReturn data description\n\nfileID | The ID of the file attached to the log."
+        },
+        {
+          "info": {
+            "name": "Vendor Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID/logs",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "9",
+                "type": "path",
+                "description": "The ID of the vendor for which the log will be created."
+              },
+              {
+                "name": "logs",
+                "value": "2,3",
+                "type": "query",
+                "description": "This parameter is used to only get specific logs. This parameter accepts a comma delimited list of logIDs."
+              },
+              {
+                "name": "users",
+                "value": "340",
+                "type": "query",
+                "description": "This parameter is used to only get logs created by specific users. This parameter accepts a comma delimited list of userIDs."
+              },
+              {
+                "name": "logEntry",
+                "value": "%test%",
+                "type": "query",
+                "description": "This is a parameter used to string search for manual log entry. This parameter expects a string with the wildcard %."
+              },
+              {
+                "name": "start",
+                "value": "1555085800",
+                "type": "query",
+                "description": "This parameter is used to only get logs that were last edited after the unix timestamp passed into the start parameter. "
+              },
+              {
+                "name": "end",
+                "value": "1555087900",
+                "type": "query",
+                "description": "This parameter is used to only get logs that were last edited before the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              },
+              {
+                "name": "limit",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what ID you want to start receiving results at. "
+              }
+            ]
+          },
+          "docs": "This request returns the manual log entries for a vendor.\n\nThis request returns logs created manually by users on vendors. Logs related to tasks with vendors will not be returned.\n\n**Note:** this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information.\n\nReturn data description\n\nlogID | The unique logID of the log.\ndateCreated | The date the log was created as a UNIX timestamp.\nvendorD | The ID of the vendor the log belongs to.\nlogEntry | The l"
+        },
+        {
+          "info": {
+            "name": "New Vendor Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID/logs",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "9",
+                "type": "path",
+                "description": "The ID of the vendor for which the log will be created."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This creates a manual log entry for a vendor.\n\nuserID | Int | Required | The ID of the user creating the log.\nlogEntry | String | Required | Details of the log."
+        },
+        {
+          "info": {
+            "name": "Update Vendor Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/vendors/logs/:logID",
+            "params": [
+              {
+                "name": "logID",
+                "value": "10",
+                "type": "path",
+                "description": "The ID of the log to be deleted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request updates a manual log entry for a vendor."
+        },
+        {
+          "info": {
+            "name": "Delete Vendor Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/vendors/logs/:logID",
+            "params": [
+              {
+                "name": "logID",
+                "value": "10",
+                "type": "path",
+                "description": "The ID of the log to be deleted."
+              }
+            ]
+          },
+          "docs": "This request deleted a manual log entry for a vendor."
+        },
+        {
+          "info": {
+            "name": "Vendors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/vendors",
+            "params": [
+              {
+                "name": "vendors",
+                "value": "9",
+                "type": "query",
+                "description": "This parameter is used to only get specific Vendors. This parameter expects a comma delimited list of Vendor IDs."
+              },
+              {
+                "name": "locations",
+                "value": "163",
+                "type": "query",
+                "description": "This parameter is used to only get Vendors at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs."
+              },
+              {
+                "name": "name",
+                "value": "%test%",
+                "type": "query",
+                "description": "This parameter is used to only get specific vendor by name. This parameter expects a string full name of a vendor or partial name with the wildcard %."
+              },
+              {
+                "name": "start",
+                "value": "1560233040",
+                "type": "query",
+                "description": "This parameter is used to only get Vendors that were last edited after the unix timestamp passed into the start parameter. For example, all Vendors that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "1613665140",
+                "type": "query",
+                "description": "This parameter is used to only get Vendors that were last edited *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what vendorID you want to start receiving results at. e.g. passing 137 here will only get you vendors with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              }
+            ]
+          },
+          "docs": "This request gets information such as VendorIDs, Vendor Names, etc.\n\nThis call returns a \"meta\" object containing URLs that can be used to get data related to a vendor.\n\nThis call will also return an image array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link.\n\n**Note:** this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information."
+        },
+        {
+          "info": {
+            "name": "New Vendor",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/vendors"
+          },
+          "docs": "This request creates a new Vendor.\n\nname | String | Required | The name of the Vendor.\nlocationID | string | Required | The locationID of the Location the Vendor will be at.\nemail | string | Optional | The Vendor's email address.\ncontact | string | Optional | The Vendor's primary contact.\nphone | string | Optional | The Vendor's phone number.\naddress | string | Optional | The Vendor's address."
+        },
+        {
+          "info": {
+            "name": "Update Vendor",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "{{vendorID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This Request updates a Vendor's name, phone, email, contact, address, etc.\n\nname | String | Optional | The name of the Vendor.\nlocationID | string | Required | The locationID of the Location the Vendor will be at.\nemail | string | Optional | The Vendor's email address.\ncontact | string | Optional | The Vendor's primary contact.\naddress | string | Optional | The Vendor's address.\nphone | string | Optional | The Vendor's phone number."
+        },
+        {
+          "info": {
+            "name": "Delete Vendor",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "{{vendorID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request deletes a Vendor."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

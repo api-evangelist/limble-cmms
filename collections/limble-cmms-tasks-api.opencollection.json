@@ -1,0 +1,1204 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Tasks API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tasks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Attach a file to an invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices/:invoiceID/file",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the invoice you want remove the file from."
+              },
+              {
+                "name": "invoiceID",
+                "value": "311",
+                "type": "path",
+                "description": "The invoiceID of the invoice you want to remove the file from."
+              }
+            ]
+          },
+          "docs": "This request will attach a text or image file to an invoice on an **open** Task (i.e. task status=0)."
+        },
+        {
+          "info": {
+            "name": "Delete file from Invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices/:invoiceID/file",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the invoice you want remove the file from."
+              },
+              {
+                "name": "invoiceID",
+                "value": "311",
+                "type": "path",
+                "description": "The invoiceID of the invoice you want to remove the file from."
+              }
+            ]
+          },
+          "docs": "This request removes a file attached to an invoice on an open Task (i.e. task status = 0)."
+        },
+        {
+          "info": {
+            "name": "Invoices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/invoices",
+            "params": [
+              {
+                "name": "invoices",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get specific invoices or invoices. This parameter accepts a comma delimited list of invoice IDs."
+              },
+              {
+                "name": "tasks",
+                "value": "8250",
+                "type": "query",
+                "description": "This parameter is used to only get invoices on a task or tasks. This parameter accepts a comma delimited list of task IDs."
+              },
+              {
+                "name": "start",
+                "value": "1459391400",
+                "type": "query",
+                "description": "This parameter is used to only get invoices that were logged after the unix timestamp passed into the start parameter. For example, all Invoices that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "1518826313",
+                "type": "query",
+                "description": "This parameter is used to only get invoices that were logged *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what invoiceID you want to start receiving results at. e.g. passing 137 here will only get you tasks with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request gets all Invoices associated with Tasks."
+        },
+        {
+          "info": {
+            "name": "Attach an Invoice to task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the task you're attaching an invoice to."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "StartFragment\n\n.expect('Content-Type', /json/);\n\nEndFragment"
+        },
+        {
+          "info": {
+            "name": "Update an Invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices/:invoiceID",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the task the invoice is attached to"
+              },
+              {
+                "name": "invoiceID",
+                "value": "290",
+                "type": "path",
+                "description": "The invoiceID that needs to be updated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request will update an invoice attached to an **open** Task (i.e. task status=0).\n\ncost | Float | Required | The cost on the invoice.\ndescription | String | Required | Brief description for the invoice."
+        },
+        {
+          "info": {
+            "name": "Delete invoice from task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices/:invoiceID",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the task the invoice is attached to"
+              },
+              {
+                "name": "invoiceID",
+                "value": "290",
+                "type": "path",
+                "description": "The invoiceID that needs to be updated"
+              }
+            ]
+          },
+          "docs": "This request will remove an invoice from an **open** Task (i.e. task status=0)."
+        },
+        {
+          "info": {
+            "name": "Instruction Options",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/instructions/:instructionID/options",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "11429",
+                "type": "path",
+                "description": "taskID of the task you are getting the option/dropdown list."
+              },
+              {
+                "name": "instructionID",
+                "value": "49343",
+                "type": "path",
+                "description": "instructionID of the option/dropdown list you are getting the options for."
+              }
+            ]
+          },
+          "docs": "This request gets all the Options for an Instruction Option or Dropdown list associated with a Task."
+        },
+        {
+          "info": {
+            "name": "New Instruction Option",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/instructions/:instructionID/options",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "11429",
+                "type": "path",
+                "description": "taskID of the task you are getting the option/dropdown list."
+              },
+              {
+                "name": "instructionID",
+                "value": "49343",
+                "type": "path",
+                "description": "instructionID of the option/dropdown list you are getting the options for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request will create a new Option for a Dropdown or Option instruction of a task.\n\nParameter: instruction, Type: string, Required?: Required, Description: The text that guides the User for selecting the option.\nParameter: instructionOptionOrder, Type: Int, Required?: Optional, Description: If this is set the option is created at that position of the list. This value cannot be greater than the total number of option present in the list. If not set the option is added to the end of the list."
+        },
+        {
+          "info": {
+            "name": "Update Instruction Option",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions/:instructionID/options/:instructionOptionID",
+            "params": [
+              {
+                "name": "instructionID",
+                "value": "49343",
+                "type": "path",
+                "description": "instructionID of the instruction whose option you are editing."
+              },
+              {
+                "name": "instructionOptionID",
+                "value": "7097",
+                "type": "path",
+                "description": "instructionOptionID of the option you are editing."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update Instruction Option"
+        },
+        {
+          "info": {
+            "name": "Delete Instruction Option",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions/:instructionID/options/:instructionOptionID",
+            "params": [
+              {
+                "name": "instructionID",
+                "value": "49343",
+                "type": "path",
+                "description": "instructionID of the instruction whose option you are editing."
+              },
+              {
+                "name": "instructionOptionID",
+                "value": "7097",
+                "type": "path",
+                "description": "instructionOptionID of the option you are editing."
+              }
+            ]
+          },
+          "docs": "This request will delete an option from a Dropdown or Option instruction."
+        },
+        {
+          "info": {
+            "name": "Task Instructions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/instructions",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "80",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "2",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what partID you want to start receiving results at. e.g. passing 137 here will only get you parts with an id greater than 137."
+              }
+            ]
+          },
+          "docs": "This request gets all Task Instructions associated with a Task.\n\n**Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.\n\nReturn data description\n\nparentInstructionID | This is the instructionID of the Instruction's parent. If this value is 0 then this Instruction does not have a parent.\ninstruction | The text that guides a User on what to do on this Instruction.\ntype | The type of the Instruction. See the request Post New Task Ins"
+        },
+        {
+          "info": {
+            "name": "New Task Instruction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/instructions",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "80",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request will create a new Instruction for a Task.\n\nParameter: type, Type: Int, Required?: Required, Description: The type of each checklist item., 1 = Check Box; 2 = Option List; 3 = Text Box; 4 = Dropdown List; 5 = Date Picker; 7 = Label; 9 = File or Picture Attachment; 11 = Deadline Date Picker; 13 = Number; 14 = Start WO; 15 = Capture Signature., Item types not listed here are not currently supported. If you would like another item type to be supported, please contact us at product@limbl"
+        },
+        {
+          "info": {
+            "name": "Get Task Instruction by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions/:instructionID",
+            "params": [
+              {
+                "name": "instructionID",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request retrieves a single Task Instruction by its instructionID.\n\n**Path Parameters:**\n- `instructionID` (required): The ID of the instruction to retrieve\n\n**Return data description:**\n\nReturns a single instruction object with the following properties:\n\n| Property | Description |\n|----------|-------------|\n| instructionID | The unique identifier for this instruction |\n| taskID | The ID of the task this instruction belongs to |\n| parentInstructionID | This is the instructionID of the Instru"
+        },
+        {
+          "info": {
+            "name": "Update Task Instruction",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions/:instructionID",
+            "params": [
+              {
+                "name": "instructionID",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request updates an Task Instruction.\n\nParameter: instruction, Type: string, Required?: Optional, Description: The text that guides a User on what to do on this Instruction.\nParameter: parentInstructionID, Type: Int, Required?: Optional, Description: If this is set this Instruction is a 'child' or sub-instruction. This value of parentInstructionID is the id of the Instruction's parent. A value of 0 means this Instruction does not have a parent Instruction."
+        },
+        {
+          "info": {
+            "name": "Delete Task Instruction",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions/:instructionID",
+            "params": [
+              {
+                "name": "instructionID",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request removes a Task Instruction from a Task."
+        },
+        {
+          "info": {
+            "name": "Batch Task Instructions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions",
+            "params": [
+              {
+                "name": "tasks",
+                "value": "1,2,3,4,5,6,7",
+                "type": "query",
+                "description": "CSV of task IDs "
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "Page size (1..1000)"
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "Page-based pagination (mutually exclusive with cursor)"
+              }
+            ]
+          },
+          "docs": "Retrieves instructions across multiple tasks, by taskID.\n\nReturn data description\n\nparentInstructionID | This is the instructionID of the Instruction's parent. If this value is 0 then this Instruction does not have a parent.\ninstruction | The text that guides a User on what to do on this Instruction.\ntype | The type of the Instruction. See the request Post New Task Instruction to see a list of possible types and their meaning.\ninstructionFiles | Array of objects that have a file name and a link "
+        },
+        {
+          "info": {
+            "name": "Task Instruction Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions/:instructionID/image",
+            "params": [
+              {
+                "name": "instructionID",
+                "value": "59271",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request adds instructional images to an Instruction.\n\nReturn data description\n\nfilename | The name of the file after being uploaded to Limble."
+        },
+        {
+          "info": {
+            "name": "Delete Task Instruction Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions/:instructionID/image",
+            "params": [
+              {
+                "name": "instructionID",
+                "value": "59271",
+                "type": "path"
+              },
+              {
+                "name": "filename",
+                "value": "165040769563793-pic.png",
+                "type": "query",
+                "description": "The name of the instruction file that needs to be deleted. This is an optional parameter. If not given, **all** the files attached to an instruction will be deleted."
+              }
+            ]
+          },
+          "docs": "This request removes an instructional image from an Instruction."
+        },
+        {
+          "info": {
+            "name": "Upload Task Main Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/image",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "555",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Uploads a main image to a task.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| taskID | path | integer | yes |  | Task identifier |\n| image | form-data | file | yes |  | Image file (≤ 50MB). Types: JPEG, PNG, JPG, GIF |"
+        },
+        {
+          "info": {
+            "name": "Delete Task Main Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/image",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "555",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes the task's main image.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| taskID | path | integer | yes |  | Task identifier |\n\nResponses:\n- 200 OK: Image cleared.\n- 404 Not Found: No image exists for this task."
+        },
+        {
+          "info": {
+            "name": "Task Labor",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/labor",
+            "params": [
+              {
+                "name": "tasks",
+                "value": "6,11",
+                "type": "query",
+                "description": "This parameter is used to only get specific Tasks. This parameter accepts a comma delimited list of task IDs."
+              },
+              {
+                "name": "users",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is used to only get labor records for a specific user or set of users in a comma delimited list."
+              },
+              {
+                "name": "start",
+                "value": "1564895015",
+                "type": "query",
+                "description": "This parameter is used to only get labor that was logged after the unix timestamp passed into the start parameter. For example, all Assets that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "1564895015",
+                "type": "query",
+                "description": "This parameter is used to only get labor that was logged *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what taskID you want to start receiving results at. e.g. passing 137 here will only get you tasks with an id greater than 137."
+              },
+              {
+                "name": "locations",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is used to retrieve labor entries for particular locations. This parameter accepts a comma delimited list of location IDs."
+              },
+              {
+                "name": "orderBy",
+                "value": "-dateLogged",
+                "type": "query",
+                "description": "This parameter is used to order results by their dateLogged property instead of the default ordering. CANNOT be provided alongside the cursor parameter. to paginate in this ordering, use the start or end parameters."
+              }
+            ]
+          },
+          "docs": "This request gets the labor (time spent) on a Task. A single Task can have multiple times logged onto it.\n\nReturn data description\n\nmeta | This property contains shortcuts to other requests that can be used to get more information regarding the Task the labor was logged on and the user who logged the time.\ntaskID | The Task ID associated with this labor entry.\ntimeSpent | The amount of time measure in seconds.\nuserWage | The wage per hour.\ndescription | A description of the labor entry.\ndateLogg"
+        },
+        {
+          "info": {
+            "name": "Get Labor Categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/labor/categories",
+            "params": [
+              {
+                "name": "name",
+                "value": "%tech%",
+                "type": "query",
+                "description": "This is a parameter used to string search for a name or partial name of a category this parameter expects a string with the wildcard %."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what taskID you want to start receiving results at. e.g. passing 137 here will only get you tasks with an id greater than 137."
+              }
+            ]
+          },
+          "docs": "This request gets the labor categories.\n\nReturn data description\n\nProperty: categoryID, Description: The unique ID for this billing category.\nProperty: categoryName, Description: The name of this billing category.\nProperty: categoryRate, Description: The rate per hour of this billing category."
+        },
+        {
+          "info": {
+            "name": "Get attached parts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/parts",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "{{taskID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Gets parts attached to a task.\n\nThis request gets parts associated with a task. A single Task can have multiple parts associated with it.\n\nReturn data description\n\nProperty: partID, Description: The partID of the part associated to this task.\nProperty: quantity, Description: The quantity of this part associated to this task.\nProperty: usedPrice, Description: The price of the part at the time of use.\nProperty: partName, Description: The name of the part.\nProperty: poItemID, Description: The uniqu"
+        },
+        {
+          "info": {
+            "name": "Attach part to task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/parts",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "{{taskID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request associates a part to a task."
+        },
+        {
+          "info": {
+            "name": "Get all attached parts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/parts",
+            "params": [
+              {
+                "name": "tasks",
+                "value": "5,10,12",
+                "type": "query",
+                "description": "This parameter is used to get parts attached to a list of tasks. This parameter accepts a comma delimited list of task IDs."
+              },
+              {
+                "name": "parts",
+                "value": "121,112,553",
+                "type": "query",
+                "description": "This parameter is used to get only certain. This parameter accepts a comma delimited list of task IDs."
+              },
+              {
+                "name": "cursor",
+                "value": "137",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what id you want to start receiving results at. e.g. passing 137 here will only get you assets with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "Gets parts attached to all tasks.\n\nThis request gets parts associated with any task. A single Task can have multiple parts associated with it.\n\nReturn data description\n\nProperty: relationID, Description: The identifier that associates parts to tasks.\nProperty: partID, Description: The partID of the part associated to this task.\nProperty: taskID, Description: The taskID this part is assoicated with.\nProperty: quantity, Description: The quantity of this part associated to this task.\nProperty: last"
+        },
+        {
+          "info": {
+            "name": "Delete part from task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/:partID",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "{{taskID}}",
+                "type": "path"
+              },
+              {
+                "name": "partID",
+                "value": "{{partID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request deletes a part from a task."
+        },
+        {
+          "info": {
+            "name": "Task Comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/comments",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "19696",
+                "type": "path",
+                "description": "taskID of the task you are adding a comment to."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what commentID you want to start receiving results at. e.g. passing 137 here will only get you parts with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request gets all Task Comments associated with a Task.\n\nReturn data description\n\ncommentID | This is the commentID of comment.\ncomment | The text comment that was entered by the user.\ntimestamp | The date this comment was created. This is a unix timestamp.\nuserID | The ID of the user that made the comment.\ncommentEmailAddress | The email address of the external user that made this comment. This is only populated if the comment was made by an external user via the comment reply system.\nshowE"
+        },
+        {
+          "info": {
+            "name": "Add Task Comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/comments",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "19696",
+                "type": "path",
+                "description": "taskID of the task you are adding a comment to."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request adds a comment to a task.\n\ncomment | String | Required | The comment to be added.\nshowExternalUsers | Boolean | Optional | This will show the comment to external users. The default value is true."
+        },
+        {
+          "info": {
+            "name": "Tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/tags",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "1160",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request gets all Custom Tags associated with a Task.\n\nReturn data description\n\n| Property | Description |\n| --- | --- |\n| tags | An array of custom tags associated with the task. |"
+        },
+        {
+          "info": {
+            "name": "PUT Apply Task Tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/tags",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "1160",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Applies one or more existing custom tags to a task. Tags must already exist at the account level (see POST /v2/tags to create new tags).\n\nBody:\n- tags: string[] — List of tags, or\n- tag: string — Single tag.\n\nSuccess Response (200):\n- created: true\n- name?: string — Present when a single tag was added; canonical without trailing ';'.\n- sanitizations?: string[] — Applied normalizations.\n- note?: string — Present when input had multiple '@' characters.\n- tags: string[] — Updated canonical tags wit"
+        },
+        {
+          "info": {
+            "name": "DELETE Remove Task Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/tags/:tagRaw",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "tagRaw",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Removes a single custom tag from a task.\n\nPath:\n- tag: string — Tag to remove; may be raw or canonical; server normalizes.\n\nSuccess Response (200):\n- deleted: true\n- name: string — Canonical tag (includes trailing ';').\n- tags: string[] — Updated canonical tags.\n\nErrors:\n- 404: { message: 'Tag not found' }\n- 400: { removed: null, message: string } — Invalid input."
+        },
+        {
+          "info": {
+            "name": "List WR Submissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/work-requests/work-request-submissions",
+            "params": [
+              {
+                "name": "orderBy",
+                "value": "createdAt",
+                "type": "query",
+                "description": "This parameter is used to order results by their createdAt, status, requestTitle, workRequestSubmissionID, and location property instead of the default ordering. each property can be flipped reverse by putting a minus before the property e.g. \"-createdAt\"."
+              },
+              {
+                "name": "search",
+                "value": "pump",
+                "type": "query",
+                "description": "Free-text search"
+              },
+              {
+                "name": "locationIDs",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get work requests at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs."
+              },
+              {
+                "name": "statuses",
+                "value": "open",
+                "type": "query",
+                "description": "CSV of statuses"
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "Max rows"
+              },
+              {
+                "name": "columns",
+                "value": "",
+                "type": "query",
+                "description": "CSV of field names (letters only); forwarded upstream as array"
+              },
+              {
+                "name": "createdDateStart",
+                "value": "2025-06-20T20:51:13.000Z",
+                "type": "query",
+                "description": "ISO 8601 start"
+              },
+              {
+                "name": "createdDateEnd",
+                "value": "2025-06-20T20:51:13.000Z",
+                "type": "query",
+                "description": "ISO 8601 end (≥ start)"
+              },
+              {
+                "name": "workRequestIDs",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "CSV of WR IDs"
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "Page-based pagination (mutually exclusive with cursor)"
+              },
+              {
+                "name": "cursor",
+                "value": "1",
+                "type": "query",
+                "description": "Cursor for pagination (forbidden with page)"
+              }
+            ]
+          },
+          "docs": "Lists WR submissions\n\nReturn data description:\n\n| **Property** | **Description** |\n| --- | --- |\n| workRequestSubmissionId | The unique identifier of the work request submission. |\n| status | Pending, Approved or Rejected. |\n| createdByUserId | The unique identifier of the user who created the work request submission. |\n| createdAt | The date the work request submission was created. The timestamp is in the following format: YYYY-MM-DD (2025-07-02) HH:MM:SS (21:36:31) |\n| updatedAt | The date the"
+        },
+        {
+          "info": {
+            "name": "Create WR Submission",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/work-requests/work-request-submissions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new work request submission. The submission enters a pending state and must be approved or declined by a reviewer.\n\n`locationID` and `dueDateUnit` are required. All other fields are optional."
+        },
+        {
+          "info": {
+            "name": "Approve WR Submission",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/work-requests/work-request-submissions/:workRequestSubmissionID/approve",
+            "params": [
+              {
+                "name": "workRequestSubmissionID",
+                "value": "42",
+                "type": "path",
+                "description": "The ID of the work request submission to approve."
+              }
+            ]
+          },
+          "docs": "Approves a pending work request submission, generating a task from it."
+        },
+        {
+          "info": {
+            "name": "Decline WR Submission",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/work-requests/work-request-submissions/:workRequestSubmissionID/decline",
+            "params": [
+              {
+                "name": "workRequestSubmissionID",
+                "value": "42",
+                "type": "path",
+                "description": "The ID of the work request submission to decline."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Declines a pending work request submission.\n\nBoth `declineReason` and `additionalNotes` are optional strings."
+        },
+        {
+          "info": {
+            "name": "Tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks",
+            "params": [
+              {
+                "name": "tasks",
+                "value": "9109",
+                "type": "query",
+                "description": "This parameter is used to only get specific Tasks. This parameter accepts a comma delimited list of task IDs."
+              },
+              {
+                "name": "assets",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get Tasks that are linked to an asset. This parameter accepts a comma delimited list of asset IDs."
+              },
+              {
+                "name": "locations",
+                "value": "73",
+                "type": "query",
+                "description": "This parameter is used to only get Tasks at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs."
+              },
+              {
+                "name": "type",
+                "value": "6",
+                "type": "query",
+                "description": "This parameter is used to only get Tasks of a specific type. This parameter accepts a comma delimited list of task types."
+              },
+              {
+                "name": "name",
+                "value": "%test%",
+                "type": "query",
+                "description": "This is a parameter used to string search for a name or partial name of a task this parameter expects a string with the wildcard %."
+              },
+              {
+                "name": "start",
+                "value": "1000000000",
+                "type": "query",
+                "description": "This parameter is used to only get Tasks that were last edited after the unix timestamp passed into the start parameter. For example, all Tasks that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "2500000000",
+                "type": "query",
+                "description": "This parameter is used to only get Tasks that were last edited before the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what taskID you want to start receiving results at. e.g. passing 137 here will only get you tasks with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              },
+              {
+                "name": "completedStart",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is used to only get Tasks that were completed after the unix timestamp passed into this parameter. For example, all Assets that were completed after April 18th, 2018."
+              },
+              {
+                "name": "completedEnd",
+                "value": "2500000000",
+                "type": "query",
+                "description": "This parameter is used to only get Tasks that were completed before the unix timestamp passed into this parameter."
+              },
+              {
+                "name": "scheduledStart",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is used as the start of a scheduled-date window. Tasks are returned when their scheduled date range overlaps this timestamp."
+              },
+              {
+                "name": "scheduledEnd",
+                "value": "2500000000",
+                "type": "query",
+                "description": "This parameter is used as the end of a scheduled-date window. Tasks are returned when their scheduled date range overlaps this timestamp."
+              },
+              {
+                "name": "orderBy",
+                "value": "-createdDate",
+                "type": "query",
+                "description": "This parameter sorts based on the value you pass. Negative parameters are used to reverse sort order. This supports sorting by due, createdDate, dateCompleted, scheduledStart, scheduledEnd, and lastEdited."
+              },
+              {
+                "name": "geoLocation",
+                "value": "true",
+                "type": "query",
+                "description": "This parameter is used to filter results that contain a geoLocation property. By default it is false and will return all tasks with and without geoLocation property. If true, it will only return tasks with a geoLocation property."
+              },
+              {
+                "name": "users",
+                "value": "11",
+                "type": "query",
+                "description": "This parameter filters tasks by assignee user IDs. It returns tasks directly assigned to those users and tasks assigned through team/profile membership (including multi-user assignments). This parameter accepts a comma delimited list of user IDs."
+              },
+              {
+                "name": "teams",
+                "value": "500",
+                "type": "query",
+                "description": "This parameter is used to only get Tasks assigned to specific teams/profiles. This parameter accepts a comma delimited list of team IDs."
+              },
+              {
+                "name": "lastEditedByUsers",
+                "value": "0,340,341",
+                "type": "query",
+                "description": "This parameter is used to filter tasks by users who last edited the task."
+              },
+              {
+                "name": "status",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to filter tasks by completed status. 1 - Complete  0 - Incomplete"
+              },
+              {
+                "name": "meta1",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to filter tasks by task meta data. This does not show in the web application, but can be used to track items between integrated systems."
+              },
+              {
+                "name": "meta2",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is used to filter tasks by task meta data. This does not show in the web application, but can be used to track items between integrated systems."
+              },
+              {
+                "name": "meta3",
+                "value": "3",
+                "type": "query",
+                "description": "This parameter is used to filter tasks by task meta data. This does not show in the web application, but can be used to track items between integrated systems."
+              },
+              {
+                "name": "statusIDs",
+                "value": "0,1,2",
+                "type": "query",
+                "description": "This parameter is used to filter tasks by their associated statusID."
+              },
+              {
+                "name": "tag",
+                "value": "@My Custom Tag;",
+                "type": "query",
+                "description": "This parameter is used to filter results that contain a certain custom tag. The tag must match exactly, i.e. \"Tag\" would not match \"My Custom Tag\". Searching for \"@My Custom Tag;\" is equivalent to searching for \"My Custom Tag\" but because custom tags are stored with an at sign (\"@\") at the beginning and a semicolon (\";\") at the end it is recommended that the param follows the same format."
+              }
+            ]
+          },
+          "docs": "This request gets top level information about Tasks such as completed date, assignment, assetID, etc.\n\n**Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.\n\nReturn data description\n\nmeta | This property has shortcuts to get other information related to the Task such as the Task's invoices, labor parts usage and instructions.\nname | The Task's name.\nuserID | The id of the user this Task is assigned to. A Task can not be assigned "
+        },
+        {
+          "info": {
+            "name": "New Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/tasks",
+            "params": [
+              {
+                "name": "name",
+                "value": "\"Priority Test\"",
+                "type": "query"
+              },
+              {
+                "name": "locationID",
+                "value": "34190",
+                "type": "query"
+              },
+              {
+                "name": "due",
+                "value": "1749680211",
+                "type": "query"
+              },
+              {
+                "name": "type",
+                "value": "2",
+                "type": "query"
+              },
+              {
+                "name": "templateID",
+                "value": "9",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request will create an empty Task, assign to a User or Team, etc.\n\nname | String | Required | The name of the Task.\nlocationID | Int | Required | The id of the Location this Task is assigned to. Must be the Location's unique ID number.\ndue | Int | Required | The time at which the Task is due. Must be a unix timestamp.\ntype | Int | Required | The type of Task according to this legend:, 1 = Preventative Maintanance (PM)., 2 = Unplanned Work Order (WO);, 4 = Planned Work Order (WO);, 6 = Work "
+        },
+        {
+          "info": {
+            "name": "Update Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "{{taskID}}",
+                "type": "path",
+                "description": "taskID of the task you are removing."
+              }
+            ]
+          },
+          "docs": "This request updates the top level information of a Task.\n\nname | String | Optional | The name of the task.\nlocationID | Int | Optional | The location to which the task is assigned. Must be the location's unique ID number.\ndue | Int | Optional | The time at which the task is due for completion. Must be a unix timestamp.\ntype | Int | Optional | The type of task according to this legend:, 1 = Preventative Maintanance (PM)., 2 = Unplanned Work Order (WO);, 4 = Planned Work Order (WO);, 6 = Work Req"
+        },
+        {
+          "info": {
+            "name": "Delete Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "{{taskID}}",
+                "type": "path",
+                "description": "taskID of the task you are removing."
+              }
+            ]
+          },
+          "docs": "Delete Task"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

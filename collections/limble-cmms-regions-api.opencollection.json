@@ -1,0 +1,109 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Regions API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Regions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/regions",
+            "params": [
+              {
+                "name": "regions",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get regions in the list provided. This parameter accepts a comma delimited list of Region IDs."
+              },
+              {
+                "name": "name",
+                "value": "%One%",
+                "type": "query",
+                "description": "This parameter is used to only get specific regions by name. This parameter expects a string- the full name of a region\n or partial name with the wildcard %."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what regionID you want to start receiving results at. e.g. passing 137 here will only get you regions\n with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 \nresults at one time."
+              }
+            ]
+          },
+          "docs": "This request returns your Regions in Limble. \n\nReturn data description\n\nProperty: regionID, Description: The ID of the Region\nProperty: regionName, Description: The name of the Region\nProperty: parentRegionID, Description: The regionID of the parent of a region."
+        },
+        {
+          "info": {
+            "name": "Create Region",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/regions"
+          },
+          "docs": "Creates a region.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| name | body | string | yes |  | Region name |\n| parentRegionID | body | integer | no | 0 | Parent region (≥ 0) |\n\nResponses:\n- 201 Created: { regionID } with Location header."
+        },
+        {
+          "info": {
+            "name": "Update Region",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/regions/:regionID",
+            "params": [
+              {
+                "name": "regionID",
+                "value": "123",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Updates a region.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| regionID | path | integer | yes |  | Region identifier |\n| name | body | string | no |  | New name |\n| parentRegionID | body | integer | no |  | New parent (≥ 1) |"
+        },
+        {
+          "info": {
+            "name": "Delete Region",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/regions/:regionID",
+            "params": [
+              {
+                "name": "regionID",
+                "value": "123",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a region.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| regionID | path | integer | yes |  | Region identifier |\n\nResponses:\n- 200 OK: Deleted.\n- 404 Not Found: Region does not exist."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

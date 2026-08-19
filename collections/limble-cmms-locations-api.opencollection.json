@@ -1,0 +1,128 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Locations API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Locations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Locations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/locations",
+            "params": [
+              {
+                "name": "locations",
+                "value": "73",
+                "type": "query",
+                "description": "This parameter is used to only get locations in the list provided. This parameter accepts a comma delimited list of Location IDs."
+              },
+              {
+                "name": "name",
+                "value": "%NY%",
+                "type": "query",
+                "description": "This parameter is used to only get specific locations by name. This parameter expects a string full name of a location or partial name with the wildcard %."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what locationID you want to start receiving results at. e.g. passing 137 here will only get you locations with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "regions",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is used to get locations that belong to a region.\nThis parameter expects a regionID a location may belong to."
+              },
+              {
+                "name": "geoLocation",
+                "value": "true",
+                "type": "query",
+                "description": "This parameter is used to filter results that contain a geoLocation property. By default it is false and will return **all** locations with and without geoLocation property. If true, it will only return locations with a geoLocation property."
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This request returns your Locations in Limble.\n\n**Note:** this endpoint supports pagination. Please refer to the [**Pagination**](https://desktop.postman.com/?desktopVersion=9.31.0&userId=16480856&teamId=206430) section for more information.\n\n**Note:** this endpoint supports pagination. Please refer to the [Pagination](https://desktop.postman.com/?desktopVersion=9.31.0&userId=16480856&teamId=206430) section for more information.\n\nEndFragment\n\n**Return data description**\n\nname | The name of the L"
+        },
+        {
+          "info": {
+            "name": "New Location",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/locations"
+          },
+          "docs": "This request creates a new Location.\n\n**Body parameter descriptions**\n\nname | String | Required | The new name of the Location.\ntimezone | string | Required | The timezone this location resides in. This accepts a standard tz database name, see here.\nphone | string | Required | The phone number associated with this location.\nweeklyOperationHours | Int | Optional | The hours per week this location operates.\naddress | string | Optional | The physical address of this location.\naddress2 | string | Op"
+        },
+        {
+          "info": {
+            "name": "Update Location",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/locations/:locationID",
+            "params": [
+              {
+                "name": "locationID",
+                "value": "{{locationID}}",
+                "type": "path",
+                "description": "locationID of the location you are removing."
+              }
+            ]
+          },
+          "docs": "This request updates a Location.\n\n**Body parameter descriptions**\n\nname | String | Optional | The new name of the Location.\ntimezone | string | Optional | The timezone this location resides in. This accepts a standard tz database name, see here.\nphone | string | Optional | The phone number associated with this location.\nweeklyOperationHours | Int | Optional | The number of hours your Assets run at this location per week. This is used to help calculate MTBF.\naddress | string | Optional | The phys"
+        },
+        {
+          "info": {
+            "name": "Delete Location",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/locations/:locationID",
+            "params": [
+              {
+                "name": "locationID",
+                "value": "{{locationID}}",
+                "type": "path",
+                "description": "locationID of the location you are removing."
+              }
+            ]
+          },
+          "docs": "This request removes a Location from your Limble account.  This will also remove everything else at this locaiton including Assets, Parts, Tasks, etc.  Be VERY careful using this call."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

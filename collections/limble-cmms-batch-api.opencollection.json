@@ -1,0 +1,40 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Batch API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Batch",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Batch Update Asset Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/assets/fields/batch/update",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request will update multiple asset fields values at a time. The request expects an array of asset fields values. The array needs to have atleast two asset field values and atmost 100 asset field values. The request expects an array made up of asset field values that need to be updated. Only asset fields values of type Text (1), Date (2), Number (5) and Currency (6) can be updated using this request.\n\nThe response returns `{ sucess:true }` if all field values are updated successfully. The re"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,102 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Priorities API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Priorities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Priorities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/priorities",
+            "params": [
+              {
+                "name": "priorities",
+                "value": "118",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This request returns your priorities in Limble. \n\nReturn data description\n\nProperty: priorityID, Description: The priority's unique identifier.\nProperty: name, Description: The full name of the priority.\nProperty: priorityLevel, Description: A number representing ordering or indicator of severity.\nProperty: color, Description: A hex-color string that will be used to color tasks associated to this priority.\nProperty: isDefault, Description: A boolean representing whether or not this is the priori"
+        },
+        {
+          "info": {
+            "name": "New Priority",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/priorities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request creates a new Priority.\n\nWhen providing priorityLevel or isDefault, calls to this endpoint may reorder or otherwise adjust other priorities.\n\nParameter: name, Type: String, Required?: Required, Description: The title of this priority.\nParameter: priorityLevel, Type: Int, Required?: Required, Description: What level is this priority? If we're inserting a priority in the middle of the levels, priorities with a priorityLevel equal-to or greater-than the specified priorityLevel will hav"
+        },
+        {
+          "info": {
+            "name": "Update Priority",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/priorities/:priorityID",
+            "params": [
+              {
+                "name": "priorityID",
+                "value": "8",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request updates a Priority.\n\n**When providing priorityLevel or isDefault, calls to this endpoint may reorder or otherwise adjust** _**other**_ **priorities.**\n\nname | String | Optional | The title of this priority.\npriorityLevel | Int | Optional | What level is this priority? When moving a priority to a different priorityLevel, be mindful that this will shift other priorities' priorityLevels in order to accommodate this change. If provided, this can only be between the numbers 1 and the cur"
+        },
+        {
+          "info": {
+            "name": "Delete Priority",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/priorities/:priorityID",
+            "params": [
+              {
+                "name": "priorityID",
+                "value": "8",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This call simply removes a priority from Limble.\n\nThings to keep in mind when using this endpoint:\n\n- \nCalls to this endpoint will potentially adjust other priorities' priorityLevels.\n\n- If you delete a priority that isDefault, you will not have a default priority anymore, and that may cause issues.\n\n- If you delete a priority that has tasks associated to it, those tasks will have their priority removed."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

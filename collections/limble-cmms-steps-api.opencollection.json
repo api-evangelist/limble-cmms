@@ -1,0 +1,146 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Steps API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Steps",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "New Step",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/budgets/:budgetID/steps",
+            "params": [
+              {
+                "name": "budgetID",
+                "value": "1",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request creates a new Budget Step (sometimes called a PO Workflow Step).\n\nParameter: name, Type: String, Required?: Required, Description: The title of this budget.\nParameter: assignmentType, Type: Enum, Required?: Required, Description: What type ('user' or 'team') should we interpret the assignment value as?\nParameter: assignment, Type: Int or Array of Ints, Required?: Required, Description: When POs belonging to this step's budget enter this step, who will they be assigned to? If awaitin"
+        },
+        {
+          "info": {
+            "name": "Update Step",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/budgets/:budgetID/steps/:stepID",
+            "params": [
+              {
+                "name": "budgetID",
+                "value": "9",
+                "type": "path"
+              },
+              {
+                "name": "stepID",
+                "value": "10",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request updates a Budget Step (sometimes called a PO Workflow Step).\n\nParameter: name, Type: String, Required?: Optional, Description: The title of this budget.\nParameter: assignmentType, Type: Enum, Required?: Optional, Description: What type ('user' or 'team') should we interpret the assignment value as? This is required when the assignment property is present.\nParameter: assignment, Type: Int or Array of Ints, Required?: Optional, Description: When POs belonging to this step's budget ent"
+        },
+        {
+          "info": {
+            "name": "Delete Step",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/budgets/:budgetID/steps/:stepID",
+            "params": [
+              {
+                "name": "budgetID",
+                "value": "9",
+                "type": "path"
+              },
+              {
+                "name": "stepID",
+                "value": "10",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request deletes a step from a budget."
+        },
+        {
+          "info": {
+            "name": "Get Steps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/budgets/steps",
+            "params": [
+              {
+                "name": "name",
+                "value": "%test%",
+                "type": "query",
+                "description": "This is a parameter used to string search for a name or partial name of a budget. This parameter expects a string with the wildcard %."
+              },
+              {
+                "name": "steps",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "This parameter is used to only get specific steps. This parameter accepts a comma delimited list of step IDs."
+              },
+              {
+                "name": "budgets",
+                "value": "158",
+                "type": "query",
+                "description": "This parameter is used to only get steps that are linked to a budget. This parameter accepts a comma delimited list of budget IDs."
+              },
+              {
+                "name": "locations",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "This parameter is used to only get steps that are linked to a budget at a specific location. This parameter accepts a comma delimited list of location IDs."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what stepID you want to start receiving results at. e.g. passing 137 here will only get you steps with an ID greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "Get Steps"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,201 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Invoices API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Invoices",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Attach a file to an invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices/:invoiceID/file",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the invoice you want remove the file from."
+              },
+              {
+                "name": "invoiceID",
+                "value": "311",
+                "type": "path",
+                "description": "The invoiceID of the invoice you want to remove the file from."
+              }
+            ]
+          },
+          "docs": "This request will attach a text or image file to an invoice on an **open** Task (i.e. task status=0)."
+        },
+        {
+          "info": {
+            "name": "Delete file from Invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices/:invoiceID/file",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the invoice you want remove the file from."
+              },
+              {
+                "name": "invoiceID",
+                "value": "311",
+                "type": "path",
+                "description": "The invoiceID of the invoice you want to remove the file from."
+              }
+            ]
+          },
+          "docs": "This request removes a file attached to an invoice on an open Task (i.e. task status = 0)."
+        },
+        {
+          "info": {
+            "name": "Invoices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/invoices",
+            "params": [
+              {
+                "name": "invoices",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get specific invoices or invoices. This parameter accepts a comma delimited list of invoice IDs."
+              },
+              {
+                "name": "tasks",
+                "value": "8250",
+                "type": "query",
+                "description": "This parameter is used to only get invoices on a task or tasks. This parameter accepts a comma delimited list of task IDs."
+              },
+              {
+                "name": "start",
+                "value": "1459391400",
+                "type": "query",
+                "description": "This parameter is used to only get invoices that were logged after the unix timestamp passed into the start parameter. For example, all Invoices that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "1518826313",
+                "type": "query",
+                "description": "This parameter is used to only get invoices that were logged *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what invoiceID you want to start receiving results at. e.g. passing 137 here will only get you tasks with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request gets all Invoices associated with Tasks."
+        },
+        {
+          "info": {
+            "name": "Attach an Invoice to task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the task you're attaching an invoice to."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "StartFragment\n\n.expect('Content-Type', /json/);\n\nEndFragment"
+        },
+        {
+          "info": {
+            "name": "Update an Invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices/:invoiceID",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the task the invoice is attached to"
+              },
+              {
+                "name": "invoiceID",
+                "value": "290",
+                "type": "path",
+                "description": "The invoiceID that needs to be updated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request will update an invoice attached to an **open** Task (i.e. task status=0).\n\ncost | Float | Required | The cost on the invoice.\ndescription | String | Required | Brief description for the invoice."
+        },
+        {
+          "info": {
+            "name": "Delete invoice from task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices/:invoiceID",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the task the invoice is attached to"
+              },
+              {
+                "name": "invoiceID",
+                "value": "290",
+                "type": "path",
+                "description": "The invoiceID that needs to be updated"
+              }
+            ]
+          },
+          "docs": "This request will remove an invoice from an **open** Task (i.e. task status=0)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

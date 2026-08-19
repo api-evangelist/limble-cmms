@@ -1,0 +1,155 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Transactions API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add Bill Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/bills/:billID/transactions",
+            "params": [
+              {
+                "name": "billID",
+                "value": "425",
+                "type": "path",
+                "description": "The ID of the bill for which an item needs to be added."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request creates a Bill transaction by adding a Bill Item to an unclosed Bill.\n\nParameter: poItemID, Type: Int, Required?: Required, Description: The ID of the item that has to be added to the Bill.\nParameter: qtyReceived, Type: Int, Required?: Required, Description: The item quantity received on this Bill."
+        },
+        {
+          "info": {
+            "name": "Bill Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/bills/transactions",
+            "params": [
+              {
+                "name": "bills",
+                "value": "423",
+                "type": "query",
+                "description": "This parameter is used to only get specific Bill Transactions by billID. This parameter expects a comma delimited list of billIDs."
+              },
+              {
+                "name": "items",
+                "value": "358",
+                "type": "query",
+                "description": "This parameter is used to only get specific Bill Transactions by items in a Bill. This parameter expects a comma delimited list of poItem IDs."
+              },
+              {
+                "name": "start",
+                "value": "1630611650",
+                "type": "query",
+                "description": "This parameter is used to only get Bill Transactions that were created after or on the unix timestamp passed into it. "
+              },
+              {
+                "name": "end",
+                "value": "1630611660",
+                "type": "query",
+                "description": "This parameter is used to only get Bill transactions that were created before or on the unix timestamp passed into it. "
+              },
+              {
+                "name": "transactions",
+                "value": "397",
+                "type": "query",
+                "description": "This parameter is used to only get specific Bill Transactions. This parameter expects a comma delimited list of transactionIDs."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "locations",
+                "value": "163",
+                "type": "query",
+                "description": "This parameter is used to only get Bill Transactions at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request gets information about the transactions made for a Bill."
+        },
+        {
+          "info": {
+            "name": "Update Bill Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/bills/:billID/transactions/:transactionID",
+            "params": [
+              {
+                "name": "billID",
+                "value": "425",
+                "type": "path",
+                "description": "The ID of the Bill for which the transaction needs to be updated."
+              },
+              {
+                "name": "transactionID",
+                "value": "399",
+                "type": "path",
+                "description": "The ID of the transaction which needs ot be updated."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update Bill Transaction"
+        },
+        {
+          "info": {
+            "name": "Bill Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/bills/transactions/:transactionID",
+            "params": [
+              {
+                "name": "transactionID",
+                "value": "399",
+                "type": "path",
+                "description": "The ID of the Bill Transaction to be deleted."
+              }
+            ]
+          },
+          "docs": "Bill Transaction"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

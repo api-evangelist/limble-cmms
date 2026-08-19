@@ -1,0 +1,108 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Schedules API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Schedules",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Capacity Schedules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/users/capacity/schedules",
+            "params": [
+              {
+                "name": "locations",
+                "value": "1,3",
+                "type": "query",
+                "description": "Required comma-separated location IDs to scope users."
+              },
+              {
+                "name": "users",
+                "value": "42,57",
+                "type": "query",
+                "description": "Optional comma-separated user IDs filter."
+              },
+              {
+                "name": "startDate",
+                "value": "2026-01-05",
+                "type": "query",
+                "description": "Required start date (YYYY-MM-DD)."
+              },
+              {
+                "name": "endDate",
+                "value": "2026-01-07",
+                "type": "query",
+                "description": "Required end date (YYYY-MM-DD), must be >= startDate and within 31 days."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "Optional zero-based user offset for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "Optional page size (1-100)."
+              }
+            ]
+          },
+          "docs": "Returns per-user daily capacity rows for a date range, including applied precedence details.\n\nPrecedence order:\n`exception > holiday > userSchedule > profileSchedule > default`.\n\nPagination:\n- `cursor` is a zero-based offset.\n- `limit` max is 100.\n\nDate limits:\n- `startDate` and `endDate` are required (YYYY-MM-DD).\n- Date range cannot exceed 31 days.\n\nResponse notes:\n- `range` now contains only `startDate` and `endDate`.\n- `pagination` contains `cursor`, `limit`, `totalUsers`, and `nextCursor`."
+        },
+        {
+          "info": {
+            "name": "Create Capacity Schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/users/capacity/schedules",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new capacity schedule for a user or team profile at a specific location.\n\nExactly one of `userID` or `profileID` must be provided (mutually exclusive).\n\nWhen `rotationPatternEnabled` is true, both `rotationWeeksOn` and `rotationWeeksOff` are required.\n\nCapacity values are in minutes per day (0-1440). Time values use HH:MM or HH:MM:SS format."
+        },
+        {
+          "info": {
+            "name": "Delete Capacity Schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/users/capacity/schedules/:scheduleID",
+            "params": [
+              {
+                "name": "scheduleID",
+                "value": "1201",
+                "type": "path",
+                "description": "The ID of the capacity schedule to delete."
+              }
+            ]
+          },
+          "docs": "Deletes a capacity schedule by its ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

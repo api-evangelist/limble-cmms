@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets State API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "State",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Change PO State",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/po/:poID/state",
+            "params": [
+              {
+                "name": "poID",
+                "value": "31939",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Updates the state of the specified PO. \n\nImportant Note: Currently POs can only move forward one state per state change request.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n| --- | --- | --- | --- | --- | --- |\n| poID | path | integer | yes | | Purchase Order identifier |\n| newState | body | string | yes | | All PO states: 0 (setup), 1–96 (custom), 97 (ready_to_receive), 98 (partially_received), 99 (fully_received), 100 (closed), 101 (disapproved). API accepts numb"
+        },
+        {
+          "info": {
+            "name": "Get PO State Transitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/po/:poID/state/transitions",
+            "params": [
+              {
+                "name": "poID",
+                "value": "31939",
+                "type": "path",
+                "description": "Purchase Order identifier"
+              }
+            ]
+          },
+          "docs": "Returns the list of valid next states for the specified PO.\n\nParameters:\n\n| Parameter | Type | Required | Default | Description |\n| --- | --- | --- | --- | --- |\n| poID | integer | yes |  | Purchase Order identifier |\n\nReturn data:  \n  \nArray of JSON objects listing possible next state transitions for the selected PO."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,194 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Roles API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Roles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get User Roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/users/:userID/roles",
+            "params": [
+              {
+                "name": "userID",
+                "value": "{{userID}}",
+                "type": "path",
+                "description": "userID of the role user you are removing the Role from."
+              },
+              {
+                "name": "roles",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter expects a comma-separated list of roleIDs to filter teams by"
+              },
+              {
+                "name": "locations",
+                "value": "163,202",
+                "type": "query",
+                "description": "This parameter expects a comma-separated list of locationIDs to filter roles by"
+              },
+              {
+                "name": "name",
+                "value": "%Manager%",
+                "type": "query",
+                "description": "This parameter is used to only get specific role by name. This parameter expects a string full name of a user or partial name with the wildcard %."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what teamID you want to start receiving results at. e.g. passing 137 here will only get you tasks with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request gets all of the Roles a User has and what Location they have that Role at."
+        },
+        {
+          "info": {
+            "name": "Add User To Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/users/:userID/roles",
+            "params": [
+              {
+                "name": "userID",
+                "value": "{{userID}}",
+                "type": "path",
+                "description": "userID of the role user you are removing the Role from."
+              }
+            ]
+          },
+          "docs": "This request adds a User to a Role."
+        },
+        {
+          "info": {
+            "name": "Remove Role From User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/users/:userID/roles",
+            "params": [
+              {
+                "name": "userID",
+                "value": "{{userID}}",
+                "type": "path",
+                "description": "userID of the role user you are removing the Role from."
+              }
+            ]
+          },
+          "docs": "This request removes a Role from a User."
+        },
+        {
+          "info": {
+            "name": "Get Roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/roles",
+            "params": [
+              {
+                "name": "roles",
+                "value": "1032",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "%view%",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This request returns a list of Roles."
+        },
+        {
+          "info": {
+            "name": "Create Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/roles"
+          },
+          "docs": "This request creates a new Role. Roles are used for access management in Limble. Once a Role is created you can assign permissions to that Role via the web application and then assign Users to that Role to control what that User can do in Limble.\n\nParameter: name, Type: String, Required?: Required, Description: The name of the role."
+        },
+        {
+          "info": {
+            "name": "Update Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/roles/:roleID",
+            "params": [
+              {
+                "name": "roleID",
+                "value": "{{roleID}}",
+                "type": "path",
+                "description": "The roleID of the role you are deleting"
+              }
+            ]
+          },
+          "docs": "This request updates a Role's name.\n\nParameter: name, Type: String, Required?: Required, Description: The name of the role."
+        },
+        {
+          "info": {
+            "name": "Delete Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/roles/:roleID",
+            "params": [
+              {
+                "name": "roleID",
+                "value": "{{roleID}}",
+                "type": "path",
+                "description": "The roleID of the role you are deleting"
+              }
+            ]
+          },
+          "docs": "This Request deletes a Role.  This will also remove the Role from any User it is assigned to."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

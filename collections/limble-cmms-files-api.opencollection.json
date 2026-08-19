@@ -1,0 +1,163 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Files API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Delete Asset Log File",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/assets/logs/file/:fileID",
+            "params": [
+              {
+                "name": "fileID",
+                "value": "58",
+                "type": "path",
+                "description": "The ID of the file to be deleted."
+              }
+            ]
+          },
+          "docs": "This requests deletes a file attached to a log."
+        },
+        {
+          "info": {
+            "name": "Add Asset Log File",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/assets/:assetID/logs/:logID/file",
+            "params": [
+              {
+                "name": "assetID",
+                "value": "1",
+                "type": "path",
+                "description": "The ID of the asset the log belongs to."
+              },
+              {
+                "name": "logID",
+                "value": "7257",
+                "type": "path",
+                "description": "The ID of the log to attach the file to."
+              }
+            ]
+          },
+          "docs": "This request adds files to a log.\n\nReturn data description\n\nfileID | The ID of the file attached to the log."
+        },
+        {
+          "info": {
+            "name": "Attach a file to an invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices/:invoiceID/file",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the invoice you want remove the file from."
+              },
+              {
+                "name": "invoiceID",
+                "value": "311",
+                "type": "path",
+                "description": "The invoiceID of the invoice you want to remove the file from."
+              }
+            ]
+          },
+          "docs": "This request will attach a text or image file to an invoice on an **open** Task (i.e. task status=0)."
+        },
+        {
+          "info": {
+            "name": "Delete file from Invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/invoices/:invoiceID/file",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "15188",
+                "type": "path",
+                "description": "The taskID of the invoice you want remove the file from."
+              },
+              {
+                "name": "invoiceID",
+                "value": "311",
+                "type": "path",
+                "description": "The invoiceID of the invoice you want to remove the file from."
+              }
+            ]
+          },
+          "docs": "This request removes a file attached to an invoice on an open Task (i.e. task status = 0)."
+        },
+        {
+          "info": {
+            "name": "Delete Vendor Log File",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/vendors/logs/file/:fileID",
+            "params": [
+              {
+                "name": "fileID",
+                "value": "7",
+                "type": "path",
+                "description": "The ID of the file attached to the log."
+              }
+            ]
+          },
+          "docs": "This requests deletes a file attached to a log."
+        },
+        {
+          "info": {
+            "name": "Add Vendor Log File",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID/logs/:logID/file",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "9",
+                "type": "path",
+                "description": "The ID of the vendor the log belongs to."
+              },
+              {
+                "name": "logID",
+                "value": "11",
+                "type": "path",
+                "description": "The ID of the log to attach the file to."
+              }
+            ]
+          },
+          "docs": "This request adds files to a log.\n\nReturn data description\n\nfileID | The ID of the file attached to the log."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

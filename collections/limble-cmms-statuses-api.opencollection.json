@@ -1,0 +1,121 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Statuses API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Statuses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Statuses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/statuses",
+            "params": [
+              {
+                "name": "limit",
+                "value": "3",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "1",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "%ogr%",
+                "type": "query"
+              },
+              {
+                "name": "statuses",
+                "value": "1",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This request returns your custom task statuses in Limble.\n\nReturn data description\n\nProperty: statusID, Description: A unique identifier for this status.\nProperty: name, Description: A custom string that labels this status.\nProperty: description, Description: An optional description that elaborates on what this status means."
+        },
+        {
+          "info": {
+            "name": "Create Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/statuses",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new custom status for the customer account.\n\n**Request Body:**\n\n- `name` (string, required) - Status name, 1-100 characters, must be unique (case-insensitive)\n    \n- `description` (string, optional) - Status description, max 65535 characters\n    \n- `sortOrder` (integer, optional) - Display order, 0-99, auto-assigned if omitted\n    \n\n**Response (201 Created):**\n\n- `statusID` (number) - ID of the newly created status\n    \n- Location header: `/v2/statuses?statuses={statusID}`\n    \n\n**Vali"
+        },
+        {
+          "info": {
+            "name": "Update Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/statuses/:statusID",
+            "params": [
+              {
+                "name": "statusID",
+                "value": "10",
+                "type": "path",
+                "description": "The ID of the status to delete"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing custom status. Default statuses (0, 1, 2) cannot be modified.\n\n**IMPORTANT NOTE:** Changes to statuses automatically propogate to all tasks currently assigned that status.\n\n**Path Parameters:**\n\n- `statusID` (number, required) - ID of the status to update\n    \n\n**Request Body (at least one field required):**\n\n- `name` (string, optional) - New status name, 1-100 characters, must be unique\n    \n- `description` (string, optional) - New description, max 65535 characters\n    \n- `s"
+        },
+        {
+          "info": {
+            "name": "Delete Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/statuses/:statusID",
+            "params": [
+              {
+                "name": "statusID",
+                "value": "10",
+                "type": "path",
+                "description": "The ID of the status to delete"
+              },
+              {
+                "name": "replacementStatusID",
+                "value": "1",
+                "type": "query",
+                "description": "ID of the status to reassign tasks to (required)"
+              }
+            ]
+          },
+          "docs": "Deletes a custom status and reassigns all tasks using it. Default statuses (0, 1, 2) cannot be deleted.\n\n**IMPORTANT NOTE:** Deleting task statuses that are currently in use will result in all tasks assigned that status being reset to status 0 (open).\n\n**Path Parameters:**\n\n- `statusID` (number, required) - ID of the status to delete\n    \n\n**Query Parameters:**\n\n- `replacementStatusID` (number, required) - ID of the status to assign to tasks currently using the deleted status. Can be a default s"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

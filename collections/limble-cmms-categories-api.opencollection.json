@@ -1,0 +1,99 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Categories API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Categories",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/categories",
+            "params": [
+              {
+                "name": "categories",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get specific part categories. This parameter accepts a comma delimited list of categoryIDs."
+              },
+              {
+                "name": "name",
+                "value": "Electronics",
+                "type": "query",
+                "description": "This parameter is used to string search part categories names either partial or full name with the wildcard %."
+              }
+            ]
+          },
+          "docs": "Get Categories"
+        },
+        {
+          "info": {
+            "name": "Create Part Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/parts/categories"
+          },
+          "docs": "Creates a part category to help you organize your parts.\n\nParameter: name, Type: string, Required?: Required, Description: The name of your new part category (i.e. \"Lawn Mower Parts\")"
+        },
+        {
+          "info": {
+            "name": "Update Part Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/parts/categories/:categoryID",
+            "params": [
+              {
+                "name": "categoryID",
+                "value": "{{categoryID}}",
+                "type": "path",
+                "description": "categoryID of the category you wish to remove."
+              }
+            ]
+          },
+          "docs": "This request updates a Part Category's name.\n\nParameter: name, Type: string, Required?: Required, Description: The name of your new part category (i.e. \"Filters\")"
+        },
+        {
+          "info": {
+            "name": "Delete Part Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/parts/categories/:categoryID",
+            "params": [
+              {
+                "name": "categoryID",
+                "value": "{{categoryID}}",
+                "type": "path",
+                "description": "categoryID of the category you wish to remove."
+              }
+            ]
+          },
+          "docs": "This request will remove the Part Category from all Parts and from possible Categories."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

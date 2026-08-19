@@ -1,0 +1,640 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Fields API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fields",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Asset Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/assets/fields",
+            "params": [
+              {
+                "name": "name",
+                "value": "Model",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "fields",
+                "value": "107",
+                "type": "query",
+                "description": "This parameter can be used to get a single Asset Fields or a list of Asset Fields in a comma-separated list."
+              },
+              {
+                "name": "start",
+                "value": "1555105636",
+                "type": "query",
+                "description": "This parameter is used to only get Asset Fields for Assets that were last edited after the unix timestamp passed into the start parameter. For example, all Assets that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "1555105636",
+                "type": "query",
+                "description": "This parameter is used to only get Asset Fields for Assets that were last edited *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what id you want to start receiving results at. e.g. passing 137 here will only get you asset fields with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "locations",
+                "value": "163",
+                "type": "query",
+                "description": "This parameter can be used to get a group of asset fields in a location in a comma-separated list."
+              },
+              {
+                "name": "value",
+                "value": "F250",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by value. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "assetName",
+                "value": "%fork%",
+                "type": "query",
+                "description": "This parameter is used to only get specific fields by asset name. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "fieldType[0]",
+                "value": "Text",
+                "type": "query",
+                "description": "This parameter is used to only get specific fields by type. This parameter expects an array of strings \"Text, Date, Pictures, Documents, Number, Currency, Dropdown\""
+              },
+              {
+                "name": "fieldType[1]",
+                "value": "Documents",
+                "type": "query",
+                "description": "This parameter is used to only get specific fields by type. This parameter expects an array of strings \"Text, Date, Pictures, Documents, Number, Currency, Dropdown\""
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              },
+              {
+                "name": "values",
+                "value": "",
+                "type": "query",
+                "description": "This parameter is used to get asset fields by their valueID. This parameter expects a comma delimited list of Value IDs."
+              },
+              {
+                "name": "assets",
+                "value": "171",
+                "type": "query",
+                "description": "This parameter can be used to get a group of asset fields for a specific set of asset ids in a comma-separated list."
+              }
+            ]
+          },
+          "docs": "This request gets detailed information about asset fields such as Make, Model and any other custom field.\n\nThis call also returns \"files\" which is an array of objects that have a file name and a link you can use to download that file. All links are only valid for 15 minutes, a new call will generate a new link.\n\n**Note:** this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information."
+        },
+        {
+          "info": {
+            "name": "New Asset Suggested Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/assets/fields"
+          },
+          "docs": "This request creates a new Suggested Field.\n\nSuggested Fields are the full list of possible Fields that can be added to Assets at that Location.\n\nParameter: locationID, Type: Int, Required?: Required, Description: The location ID of the Asset to add the new Field to.\nParameter: name, Type: String, Required?: Required, Description: The name of the new Field. Some custom field names such as \"Asset\" are not allowed and reserved for internal use. This will result in a 409 error.\nParameter: fieldType"
+        },
+        {
+          "info": {
+            "name": "Asset Suggested Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/assets/fields/suggested",
+            "params": [
+              {
+                "name": "fields",
+                "value": "16",
+                "type": "query",
+                "description": "This parameter can be used to get a single Asset Fields or a list of Asset Fields in a comma-separated list."
+              },
+              {
+                "name": "name",
+                "value": "%S%",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what id you want to start receiving results at. e.g. passing 137 here will only get you asset fields with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "locations",
+                "value": "163",
+                "type": "query",
+                "description": "This parameter is used to only get fields at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs."
+              }
+            ]
+          },
+          "docs": "This request gets all possible fields an Asset can pick from when deciding which fields it should have.  \n\nTo understand this concept, let's pretend you have the following assets:  \n\nYour first Asset (a Truck) has the fields Make, Model, and VIN.  \n\nYour second Asset (a HVAC) has the fields Make, Model, and Serial Number.  \n\nThis would mean there are 4 suggested fields that exist:  Make, Model, VIN and Serial Number.  If I added a third new asset I could pick from any of the 4 suggested fields.\n"
+        },
+        {
+          "info": {
+            "name": "Asset Field History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/assets/fields/history",
+            "params": [
+              {
+                "name": "assets",
+                "value": "4864, 4865",
+                "type": "query",
+                "description": "This parameter can be used to get a single Asset or a list of Assets in a comma-separated list."
+              },
+              {
+                "name": "fields",
+                "value": "321, 202",
+                "type": "query",
+                "description": "This parameter can be used to get a single Asset Fields or a list of Asset Fields in a comma-separated list."
+              },
+              {
+                "name": "start",
+                "value": "1555105636",
+                "type": "query",
+                "description": "This parameter is used to only get Asset Fields for Assets that were last edited after the unix timestamp passed into the start parameter. For example, all Assets that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "1555105636",
+                "type": "query",
+                "description": "This parameter is used to only get Asset Fields for Assets that were last edited *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what id you want to start receiving results at. e.g. passing 137 here will only get you asset fields with an id greater than 137."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "Any time an Asset's field is changed an entry is inserted into a history.  \n\nThis request allows you to pull that information so you can see trends over time."
+        },
+        {
+          "info": {
+            "name": "Attach Field to Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/assets/:assetID/fields",
+            "params": [
+              {
+                "name": "assetID",
+                "value": "{{assetID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request attaches a Suggested Field to an Asset. The field and asset must belong to the same location.\n\nFor example, let's say I have an Asset called Truck - 001. This Truck doesn't have any Fields attached to it, but I want to track its Make so I can set that this Truck is a Dodge. This is the request I would use to attach the Make Field to the Truck and then I would use the Update Asset Field Value request to set it to Dodge.\n\nParameter: locationID, Type: Int, Required?: Required, Descript"
+        },
+        {
+          "info": {
+            "name": "Update Asset Field Value",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/assets/fields/:valueID",
+            "params": [
+              {
+                "name": "valueID",
+                "value": "45612",
+                "type": "path",
+                "description": "valueID of the field you are removing."
+              }
+            ]
+          },
+          "docs": "This request updates the value of a Field that is attached to an Asset. \n\nParameter: value, Type: Varies depending on the Field's type, Required?: Required, Description: The value that will be written to the field, overwriting the previous value and creating an entry in the field history. \"value\" must correspond to the fieldType of the field. For example, if the field is a \"number\" fieldType, then \"value\" must be a number."
+        },
+        {
+          "info": {
+            "name": "Delete Asset Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/assets/fields/:valueID",
+            "params": [
+              {
+                "name": "valueID",
+                "value": "45612",
+                "type": "path",
+                "description": "valueID of the field you are removing."
+              }
+            ]
+          },
+          "docs": "This request deletes a field attached to an Asset."
+        },
+        {
+          "info": {
+            "name": "Part Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/fields",
+            "params": [
+              {
+                "name": "fields",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter is used to only get specific fields by ID. This parameter expects a comma delimited list of fieldIDs."
+              },
+              {
+                "name": "name",
+                "value": "%text%",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "parts",
+                "value": "2992",
+                "type": "query",
+                "description": "This parameter is used to only get part fields for a specific Part. This parameter expects a partID."
+              },
+              {
+                "name": "start",
+                "value": "1580016200",
+                "type": "query",
+                "description": "This parameter is used to only get part fields for parts that were last edited after the unix timestamp passed into the start parameter."
+              },
+              {
+                "name": "end",
+                "value": "1610602900",
+                "type": "query",
+                "description": "This parameter is used to only get parts fields for part fields that were last edited *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what fieldID you want to start receiving results at. e.g. passing 137 here will only get you vendor fields with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "5",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "value",
+                "value": "%3%",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by value. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "locations",
+                "value": "38469,38472",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              },
+              {
+                "name": "values",
+                "value": "27",
+                "type": "query",
+                "description": "This parameter is used to get part fields by their valueID. This parameter expects a comma delimited list of Value IDs."
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This request gets detailed information about custom set Part Fields.\n\nThis request will return an array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link.\n\n**Note:** this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information."
+        },
+        {
+          "info": {
+            "name": "New Part Suggested Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/parts/fields"
+          },
+          "docs": "This request adds a new Field to the list of Suggested Fields that can later be attached to Parts.\n\nParameter: locationID, Type: Int, Required?: Required, Description: The location ID of the Location to add the new Field to.\nParameter: name, Type: String, Required?: Required, Description: The name of the new Field. Some custom field names such as \"Part Name\" are not allowed and reserved for internal use. This will result in a 409 error.\nParameter: fieldType, Type: Int, Required?: Required, Descr"
+        },
+        {
+          "info": {
+            "name": "Part Suggested Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/fields/suggested",
+            "params": [
+              {
+                "name": "fields",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter can be used to get a single Part Fields or a list of Part Fields in a comma-separated list."
+              },
+              {
+                "name": "name",
+                "value": "%text%",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what fieldID you want to start receiving results at. e.g. passing 137 here will only get you vendor fields with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request gets all possible fields a Part can pick from when deciding which fields it should have."
+        },
+        {
+          "info": {
+            "name": "Update Part Field Value",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/parts/fields/:valueID",
+            "params": [
+              {
+                "name": "valueID",
+                "value": "172",
+                "type": "path",
+                "description": "valueID of the field you are removing."
+              }
+            ]
+          },
+          "docs": "This request updates a Part's field value.\n\nParameter: value, Type: Depends on fieldType, Required?: Required, Description: The value that will be written to the field. \"value\" must correspond to the fieldType of the field. For example, if the field is a \"number\" fieldType, then \"value\" must be a number."
+        },
+        {
+          "info": {
+            "name": "Delete Part Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/parts/fields/:valueID",
+            "params": [
+              {
+                "name": "valueID",
+                "value": "172",
+                "type": "path",
+                "description": "valueID of the field you are removing."
+              }
+            ]
+          },
+          "docs": "This request deletes a custom field attached to a Part."
+        },
+        {
+          "info": {
+            "name": "Attach Field to Part",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/parts/:partID/fields",
+            "params": [
+              {
+                "name": "partID",
+                "value": "1030",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request attaches a Suggested Field to a Part."
+        },
+        {
+          "info": {
+            "name": "Vendor Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/vendors/fields",
+            "params": [
+              {
+                "name": "fields",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter is used to only get specific fields by ID. This parameter expects a comma delimited list of fieldIDs."
+              },
+              {
+                "name": "name",
+                "value": "%pic%",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "vendors",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get specific Vendors. This parameter expects a comma delimited list of Vendor IDs."
+              },
+              {
+                "name": "start",
+                "value": "1555105636",
+                "type": "query",
+                "description": "This parameter is used to only get vendor fields for vendors that were last edited after the unix timestamp passed into the start parameter. For example, all Vendors that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "1555105636",
+                "type": "query",
+                "description": "This parameter is used to only get vendor fields for vendors that were last edited *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what fieldID you want to start receiving results at. e.g. passing 137 here will only get you vendor fields with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "value",
+                "value": "355",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by value. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              },
+              {
+                "name": "values",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter is used to get vendor fields by their valueID. This parameter expects a comma delimited list of Value IDs."
+              }
+            ]
+          },
+          "docs": "This request gets detailed information about Vendor Fields such as contact information, contracts and any other custom set field.\n\nThis request will return an array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link.\n\n**Note:** this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information."
+        },
+        {
+          "info": {
+            "name": "New Vendor Suggested Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/vendors/fields"
+          },
+          "docs": "This request adds a new Field to the list of Suggested Fields that can later be attached to Vendors.\n\nParameter: locationID, Type: Int, Required?: Required, Description: The location ID of the Location to add the new Field to.\nParameter: name, Type: String, Required?: Required, Description: The name of the new Field. Some custom field names such as \"Vendor Name\" are not allowed and reserved for internal use. This will result in a 409 error.\nParameter: fieldType, Type: Int, Required?: Required, D"
+        },
+        {
+          "info": {
+            "name": "Vendor Suggested Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/vendors/fields/suggested",
+            "params": [
+              {
+                "name": "fields",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter can be used to get a single Vendor Fields or a list of Vendor Fields in a comma-separated list."
+              },
+              {
+                "name": "name",
+                "value": "%pic%",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what fieldID you want to start receiving results at. e.g. passing 137 here will only get you vendor fields with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request gets all possible fields a Vendor can pick from when deciding which fields it should have."
+        },
+        {
+          "info": {
+            "name": "Update Vendor Field Value",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/vendors/fields/:valueID",
+            "params": [
+              {
+                "name": "valueID",
+                "value": "182",
+                "type": "path",
+                "description": "valueID of the field you are removing."
+              }
+            ]
+          },
+          "docs": "This request updates a Vendor's field value.\n\nParameter: value, Type: Depends on fieldType, Required?: Required, Description: The value that will be written to the field. \"value\" must correspond to the fieldType of the field. For example, if the field is a \"number\" fieldType, then \"value\" must be a number."
+        },
+        {
+          "info": {
+            "name": "Delete Vendor Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/vendors/fields/:valueID",
+            "params": [
+              {
+                "name": "valueID",
+                "value": "182",
+                "type": "path",
+                "description": "valueID of the field you are removing."
+              }
+            ]
+          },
+          "docs": "This request deletes a custom field attached to a Vendor."
+        },
+        {
+          "info": {
+            "name": "Attach Field to Vendor",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID/fields",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "1",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request attaches a Suggested Field to a Vendor."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,989 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Parts API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Parts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Asset Parts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/assets/parts",
+            "params": [
+              {
+                "name": "assets",
+                "value": "172,253",
+                "type": "query",
+                "description": "This parameter is used to only get specific Assets. This parameter expects a comma delimited list of Asset IDs."
+              },
+              {
+                "name": "limit",
+                "value": "3",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "page",
+                "value": "3",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              },
+              {
+                "name": "cursor",
+                "value": "49",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what ID you want to start receiving results at. Without ordering, this will return results with an ID greater than the value of cursor. With ordering, this will return results starting at the next item in the order, regardless of whether its ID is greater than or lesser than the value of cursor."
+              },
+              {
+                "name": "parts",
+                "value": "46,172",
+                "type": "query",
+                "description": "This parameter is used to only get specific Parts. This parameter accepts a comma delimited list of part IDs."
+              },
+              {
+                "name": "relations",
+                "value": "1,10",
+                "type": "query",
+                "description": "This parameter is used to only get specific relations. This parameter expects a comma delimited list of relation IDs."
+              },
+              {
+                "name": "start",
+                "value": "1334570141",
+                "type": "query",
+                "description": "This parameter is used to only get relations that were last edited after the unix timestamp passed into the start parameter. For example, all relations that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "1784570141",
+                "type": "query",
+                "description": "This parameter is used to only get relations that were last edited *before* the unix timestamp passed into the end parameter."
+              }
+            ]
+          },
+          "docs": "This request returns a list of Part Asset Relations with top level information such as part, asset, qty, last edited, etc.\n\n**Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.\n\nReturn data description\n\nrelationID | The Relations ID. e.g. 1\npartID | The ID of the Part in this Relation\nassetID | The ID of the Asset in this Relation\nqty | The qty of the Part related to this Asset\ncreatedAt | The unix timestamp at which this Relati"
+        },
+        {
+          "info": {
+            "name": "Add Part Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/parts/:partID/image",
+            "params": [
+              {
+                "name": "partID",
+                "value": "{{partID}}",
+                "type": "path",
+                "description": "partID of the part you are removing the image for."
+              }
+            ]
+          },
+          "docs": "This request adds the main image for a Part."
+        },
+        {
+          "info": {
+            "name": "Delete Part Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/parts/:partID/image",
+            "params": [
+              {
+                "name": "partID",
+                "value": "{{partID}}",
+                "type": "path",
+                "description": "partID of the part you are removing the image for."
+              }
+            ]
+          },
+          "docs": "This request removes the main image from a Part."
+        },
+        {
+          "info": {
+            "name": "Get Categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/categories",
+            "params": [
+              {
+                "name": "categories",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get specific part categories. This parameter accepts a comma delimited list of categoryIDs."
+              },
+              {
+                "name": "name",
+                "value": "Electronics",
+                "type": "query",
+                "description": "This parameter is used to string search part categories names either partial or full name with the wildcard %."
+              }
+            ]
+          },
+          "docs": "Get Categories"
+        },
+        {
+          "info": {
+            "name": "Create Part Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/parts/categories"
+          },
+          "docs": "Creates a part category to help you organize your parts.\n\nParameter: name, Type: string, Required?: Required, Description: The name of your new part category (i.e. \"Lawn Mower Parts\")"
+        },
+        {
+          "info": {
+            "name": "Update Part Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/parts/categories/:categoryID",
+            "params": [
+              {
+                "name": "categoryID",
+                "value": "{{categoryID}}",
+                "type": "path",
+                "description": "categoryID of the category you wish to remove."
+              }
+            ]
+          },
+          "docs": "This request updates a Part Category's name.\n\nParameter: name, Type: string, Required?: Required, Description: The name of your new part category (i.e. \"Filters\")"
+        },
+        {
+          "info": {
+            "name": "Delete Part Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/parts/categories/:categoryID",
+            "params": [
+              {
+                "name": "categoryID",
+                "value": "{{categoryID}}",
+                "type": "path",
+                "description": "categoryID of the category you wish to remove."
+              }
+            ]
+          },
+          "docs": "This request will remove the Part Category from all Parts and from possible Categories."
+        },
+        {
+          "info": {
+            "name": "Part Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/fields",
+            "params": [
+              {
+                "name": "fields",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter is used to only get specific fields by ID. This parameter expects a comma delimited list of fieldIDs."
+              },
+              {
+                "name": "name",
+                "value": "%text%",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "parts",
+                "value": "2992",
+                "type": "query",
+                "description": "This parameter is used to only get part fields for a specific Part. This parameter expects a partID."
+              },
+              {
+                "name": "start",
+                "value": "1580016200",
+                "type": "query",
+                "description": "This parameter is used to only get part fields for parts that were last edited after the unix timestamp passed into the start parameter."
+              },
+              {
+                "name": "end",
+                "value": "1610602900",
+                "type": "query",
+                "description": "This parameter is used to only get parts fields for part fields that were last edited *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what fieldID you want to start receiving results at. e.g. passing 137 here will only get you vendor fields with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "5",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "value",
+                "value": "%3%",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by value. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "locations",
+                "value": "38469,38472",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              },
+              {
+                "name": "values",
+                "value": "27",
+                "type": "query",
+                "description": "This parameter is used to get part fields by their valueID. This parameter expects a comma delimited list of Value IDs."
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This request gets detailed information about custom set Part Fields.\n\nThis request will return an array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link.\n\n**Note:** this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information."
+        },
+        {
+          "info": {
+            "name": "New Part Suggested Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/parts/fields"
+          },
+          "docs": "This request adds a new Field to the list of Suggested Fields that can later be attached to Parts.\n\nParameter: locationID, Type: Int, Required?: Required, Description: The location ID of the Location to add the new Field to.\nParameter: name, Type: String, Required?: Required, Description: The name of the new Field. Some custom field names such as \"Part Name\" are not allowed and reserved for internal use. This will result in a 409 error.\nParameter: fieldType, Type: Int, Required?: Required, Descr"
+        },
+        {
+          "info": {
+            "name": "Part Suggested Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/fields/suggested",
+            "params": [
+              {
+                "name": "fields",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter can be used to get a single Part Fields or a list of Part Fields in a comma-separated list."
+              },
+              {
+                "name": "name",
+                "value": "%text%",
+                "type": "query",
+                "description": "This parameter is used to only get specific field by name. This parameter expects a string full name of a field or partial name with the wildcard %."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what fieldID you want to start receiving results at. e.g. passing 137 here will only get you vendor fields with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request gets all possible fields a Part can pick from when deciding which fields it should have."
+        },
+        {
+          "info": {
+            "name": "Update Part Field Value",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/parts/fields/:valueID",
+            "params": [
+              {
+                "name": "valueID",
+                "value": "172",
+                "type": "path",
+                "description": "valueID of the field you are removing."
+              }
+            ]
+          },
+          "docs": "This request updates a Part's field value.\n\nParameter: value, Type: Depends on fieldType, Required?: Required, Description: The value that will be written to the field. \"value\" must correspond to the fieldType of the field. For example, if the field is a \"number\" fieldType, then \"value\" must be a number."
+        },
+        {
+          "info": {
+            "name": "Delete Part Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/parts/fields/:valueID",
+            "params": [
+              {
+                "name": "valueID",
+                "value": "172",
+                "type": "path",
+                "description": "valueID of the field you are removing."
+              }
+            ]
+          },
+          "docs": "This request deletes a custom field attached to a Part."
+        },
+        {
+          "info": {
+            "name": "Attach Field to Part",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/parts/:partID/fields",
+            "params": [
+              {
+                "name": "partID",
+                "value": "1030",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request attaches a Suggested Field to a Part."
+        },
+        {
+          "info": {
+            "name": "Part Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/:partID/logs",
+            "params": [
+              {
+                "name": "partID",
+                "value": "159",
+                "type": "path"
+              },
+              {
+                "name": "logs",
+                "value": "21524",
+                "type": "query",
+                "description": "This parameter is used to only get specific logs. This parameter accepts a comma delimited list of logIDs."
+              },
+              {
+                "name": "sources",
+                "value": "4",
+                "type": "query",
+                "description": "This parameter is used to only get logs for a specific sourceID. This parameter accepts a comma delimited list of sourceIDs."
+              },
+              {
+                "name": "users",
+                "value": "340",
+                "type": "query",
+                "description": "This parameter is used to only get logs created by specific users. This parameter accepts a comma delimited list of userIDs."
+              },
+              {
+                "name": "logEntry",
+                "value": "%new%",
+                "type": "query",
+                "description": "This is a parameter used to string search for manual log entry (sourceID: 4). This parameter expects a string with the wildcard %."
+              },
+              {
+                "name": "start",
+                "value": "1663018000",
+                "type": "query",
+                "description": "This parameter is used to only get logs that were last edited after the unix timestamp passed into the start parameter. "
+              },
+              {
+                "name": "end",
+                "value": "1663018900",
+                "type": "query",
+                "description": "This parameter is used to only get logs that were last edited before the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what ID you want to start receiving results at. "
+              }
+            ]
+          },
+          "docs": "This request returns the log entries for a part.\n\n**Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.\n\nReturn data description\n\nlogID | The unique logID of the log.\ndateCreated | The date the log was created as a UNIX timestamp.\npartID | The partID the log belongs to.\nsourceID | The sourceID of the source of the log. The sourceID can be as follows:, 1: Part name was changed., 2: Part Number was changed., 3: Parts were added/rem"
+        },
+        {
+          "info": {
+            "name": "New Part Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/parts/:partID/logs",
+            "params": [
+              {
+                "name": "partID",
+                "value": "159",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request creates a manual log entry for a part.\n\nThis request adds a new Field to the list of Suggested Fields that can later be attached to Parts.\n\nuserID | Int | Required | The ID of the user creating the log.\nlogEntry | String | Required | Details of the log."
+        },
+        {
+          "info": {
+            "name": "Update Part Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/parts/logs/:logID",
+            "params": [
+              {
+                "name": "logID",
+                "value": "21524",
+                "type": "path",
+                "description": "The ID of the log to be deleted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This requests updates a manual log entry. Only logs with a sourceID=4 can be updated."
+        },
+        {
+          "info": {
+            "name": "Delete Part Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/parts/logs/:logID",
+            "params": [
+              {
+                "name": "logID",
+                "value": "21524",
+                "type": "path",
+                "description": "The ID of the log to be deleted."
+              }
+            ]
+          },
+          "docs": "This request deletes manual log entries (sourceID=4)."
+        },
+        {
+          "info": {
+            "name": "All Part Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/logs",
+            "params": [
+              {
+                "name": "logs",
+                "value": "1",
+                "type": "query"
+              },
+              {
+                "name": "sources",
+                "value": "20",
+                "type": "query"
+              },
+              {
+                "name": "users",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "logEntry",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query"
+              },
+              {
+                "name": "parts",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "5",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This request returns all part logs across your Limble account.\n\n**Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.\n\nReturn data description\n\nlogID | The unique logID of the log.\ndateCreated | The date the log was created as a UNIX timestamp.\npartID | The partID the log belongs to.\nsourceID | The sourceID of the source of the log. The sourceID can be as follows:, 1: Part name was changed., 2: Part Number was changed., 3: Parts "
+        },
+        {
+          "info": {
+            "name": "Get Purchasables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/:partID/purchasables",
+            "params": [
+              {
+                "name": "partID",
+                "value": "11",
+                "type": "path",
+                "description": "The ID of the part you need purchasables for."
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              },
+              {
+                "name": "limit",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "nameStartsWith",
+                "value": "Box of",
+                "type": "query",
+                "description": "Filter purchasables that have a name which starts with this string."
+              }
+            ]
+          },
+          "docs": "This endpoint makes an HTTP GET request to retrieve a part's purchasable data. The response of this request is documented as a JSON schema.\n\nReturn data description\n\n| **Property** | **Description** |\n| --- | --- |\n| partID | The ID of the part the purchasable belongs to. |\n| name | The name of the purchasable. |\n| size | The size of the purchasable. |\n| orderUnitCode | The unit that describes how this purchasable is ordered. E.g. \"by the box\", or \"by the foot\". |\n| sizeUnitCode | The unit that "
+        },
+        {
+          "info": {
+            "name": "Get Part Vendor Associations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/vendors/associations",
+            "params": [
+              {
+                "name": "parts",
+                "value": "158,159",
+                "type": "query",
+                "description": "This parameter is used to only get associations for specific parts. This parameter accepts a comma delimited list of part IDs."
+              },
+              {
+                "name": "vendors",
+                "value": "12,34",
+                "type": "query",
+                "description": "This parameter is used to only get associations for specific vendors. This parameter accepts a comma delimited list of vendor IDs."
+              },
+              {
+                "name": "vendorPartNumber",
+                "value": "%ABC%",
+                "type": "query",
+                "description": "This parameter is used to search for associations by vendor part number. This parameter expects a string with the wildcard % for partial matching."
+              },
+              {
+                "name": "vendorName",
+                "value": "%Acme%",
+                "type": "query",
+                "description": "This parameter is used to search for associations by vendor name. This parameter expects a string with the wildcard % for partial matching."
+              },
+              {
+                "name": "start",
+                "value": "1700000000",
+                "type": "query",
+                "description": "This parameter is used to only get associations that were last updated after the unix timestamp passed into the start parameter."
+              },
+              {
+                "name": "end",
+                "value": "1800000000",
+                "type": "query",
+                "description": "This parameter is used to only get associations that were last updated before the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what relationID you want to start receiving results at. This will return results with a relationID greater than the value of cursor."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time. The maximum is 1000."
+              },
+              {
+                "name": "orderBy",
+                "value": "relationID",
+                "type": "query",
+                "description": "This parameter is used to order results. Accepted values: relationID, -relationID, createdAt, -createdAt, updatedAt, -updatedAt, partName, -partName, vendorName, -vendorName. Prefix with - for descending order."
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of vendor-part associations for the customer.\n\n**Note:** this endpoint supports both cursor-based and page-based pagination. Please refer to the [**Pagination**](#pagination) section for more information.\n\nReturn data description\n\nProperty: relationID, Description: The unique ID of this vendor-part association.\nProperty: partID, Description: The ID of the associated part.\nProperty: vendorID, Description: The ID of the associated vendor.\nProperty: vendorPartNumber, Descri"
+        },
+        {
+          "info": {
+            "name": "Create Part Vendor Association",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/parts/vendors/associations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new manual vendor-part association. The part and vendor must both exist and the vendor must be accessible at the part's location.\n\nReturns `201 Created` with the new association details. Returns `409 Conflict` if the association already exists."
+        },
+        {
+          "info": {
+            "name": "Delete Part Vendor Association",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/parts/vendors/associations/:relationID",
+            "params": [
+              {
+                "name": "relationID",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a vendor-part association by its `relationID`. Only manually created associations (associationType: `manual`) can be deleted through this endpoint.\n\nReturns `204 No Content` on success. Returns `404 Not Found` if the association does not exist or does not belong to your account."
+        },
+        {
+          "info": {
+            "name": "Parts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts",
+            "params": [
+              {
+                "name": "parts",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter is used to only get specific Parts. This parameter accepts a comma delimited list of part IDs."
+              },
+              {
+                "name": "locations",
+                "value": "73",
+                "type": "query",
+                "description": "This parameter is used to only get Parts at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs."
+              },
+              {
+                "name": "name",
+                "value": "%blade%",
+                "type": "query",
+                "description": "This parameter is used to only get specific parts. This parameter expects a string either a full name of a part or a partial name with the wildcard %."
+              },
+              {
+                "name": "start",
+                "value": "1564895015",
+                "type": "query",
+                "description": "This parameter is used to only get Parts that were last edited after the unix timestamp passed into the start parameter. For example, all Parts that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "1564895015",
+                "type": "query",
+                "description": "This parameter is used to only get Parts that were last edited *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what partID you want to start receiving results at. e.g. passing 137 here will only get you parts with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "numbers",
+                "value": "25x25x1 - Vendor b - location 2",
+                "type": "query",
+                "description": "This parameter is used to only get parts with part numbers that match the list provided. This parameter accepts a comma delimited list of Part Numbers."
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information. "
+              }
+            ]
+          },
+          "docs": "This request returns a list of Parts with top level information such as name, last edited, etc.\n\n**Note:** this endpoint supports pagination. Please refer to the [Pagination](#pagination) section for more information.\n\nReturn data description\n\nnumber | The Part's Number. e.g. 25x25x1\nname | The Part's Name. e.g. Filter\ngeneralStock | How many of this Part you have in stock. Not including purchase orders.\nunitCode | The unit code displayed for the part. This represents the unit of measure assigne"
+        },
+        {
+          "info": {
+            "name": "Create Part",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/parts"
+          },
+          "docs": "This request adds new Parts to inventory list.\n\nlocationID | Int | Required | The location of the Part to be updated. Must be the Location's unique ID number.\nname | String | Required | The new name of the Part.\nnumber | String | Optional | The new number of the Part.\ngeneralStock | number | Optional | How many of this Part are now in stock. Not including purchase orders\ngeneralPrice | number | Optional | The new price of the Part. Not considering purchase order prices.\nunitCode | String | Optio"
+        },
+        {
+          "info": {
+            "name": "Update Part",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/parts/:partID",
+            "params": [
+              {
+                "name": "partID",
+                "value": "{{partID}}",
+                "type": "path",
+                "description": "partID of the part you are removing."
+              }
+            ]
+          },
+          "docs": "This request updates an Part's information such as a Part's quantity.\n\nlocationID | Int | Required | The location of the Part to be updated. Must be the Location's unique ID number.\nname | String | Optional | The new name of the Part.\nnumber | String | Optional | The new number of the Part.\ngeneralStock | number | Optional | How many of this Part are now in stock. Not including purchase orders.\ngeneralPrice | number | Optional | The new price of the Part. Not considering purchase order prices.\nu"
+        },
+        {
+          "info": {
+            "name": "Delete Part",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/parts/:partID",
+            "params": [
+              {
+                "name": "partID",
+                "value": "{{partID}}",
+                "type": "path",
+                "description": "partID of the part you are removing."
+              }
+            ]
+          },
+          "docs": "This request removes a Part from your inventory list."
+        },
+        {
+          "info": {
+            "name": "Parts Usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/usage",
+            "params": [
+              {
+                "name": "parts",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is used to only get specific Parts. This parameter accepts a comma delimited list of part IDs."
+              },
+              {
+                "name": "tasks",
+                "value": "8,10",
+                "type": "query",
+                "description": "This parameter is used to only get Parts at a specific group of Tasks. This parameter accepts a comma delimited list of Task IDs."
+              },
+              {
+                "name": "start",
+                "value": "1457663400",
+                "type": "query",
+                "description": "This parameter is used to only get Parts that were last edited after the unix timestamp passed into the start parameter. For example, all Assets that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "end",
+                "value": "1457663400",
+                "type": "query",
+                "description": "This parameter is used to only get Parts that were last edited *before* the unix timestamp passed into the end parameter."
+              },
+              {
+                "name": "name",
+                "value": "%Pro%",
+                "type": "query",
+                "description": "This parameter is used to string search part names either partial or full name with the wildcard %."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what partID you want to start receiving results at. e.g. passing 137 here will only get you part usage records with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request gets your Parts usage log.\n\nReturn data description\n\nProperty: meta, Description: A call which can be used to quickly look up the Task that this part's usage was recorded on.\nProperty: name, Description: The name of the part used.\nProperty: taskID, Description: The associated Task where this part was used.\nProperty: usedCount, Description: The number of parts that were used.\nProperty: usedPrice, Description: The price per 1 part.\nProperty: usedOn, Description: The date when the part"
+        },
+        {
+          "info": {
+            "name": "Get attached parts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/parts",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "{{taskID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Gets parts attached to a task.\n\nThis request gets parts associated with a task. A single Task can have multiple parts associated with it.\n\nReturn data description\n\nProperty: partID, Description: The partID of the part associated to this task.\nProperty: quantity, Description: The quantity of this part associated to this task.\nProperty: usedPrice, Description: The price of the part at the time of use.\nProperty: partName, Description: The name of the part.\nProperty: poItemID, Description: The uniqu"
+        },
+        {
+          "info": {
+            "name": "Attach part to task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/parts",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "{{taskID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request associates a part to a task."
+        },
+        {
+          "info": {
+            "name": "Get all attached parts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/parts",
+            "params": [
+              {
+                "name": "tasks",
+                "value": "5,10,12",
+                "type": "query",
+                "description": "This parameter is used to get parts attached to a list of tasks. This parameter accepts a comma delimited list of task IDs."
+              },
+              {
+                "name": "parts",
+                "value": "121,112,553",
+                "type": "query",
+                "description": "This parameter is used to get only certain. This parameter accepts a comma delimited list of task IDs."
+              },
+              {
+                "name": "cursor",
+                "value": "137",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what id you want to start receiving results at. e.g. passing 137 here will only get you assets with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "Gets parts attached to all tasks.\n\nThis request gets parts associated with any task. A single Task can have multiple parts associated with it.\n\nReturn data description\n\nProperty: relationID, Description: The identifier that associates parts to tasks.\nProperty: partID, Description: The partID of the part associated to this task.\nProperty: taskID, Description: The taskID this part is assoicated with.\nProperty: quantity, Description: The quantity of this part associated to this task.\nProperty: last"
+        },
+        {
+          "info": {
+            "name": "Delete part from task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/:partID",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "{{taskID}}",
+                "type": "path"
+              },
+              {
+                "name": "partID",
+                "value": "{{partID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request deletes a part from a task."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

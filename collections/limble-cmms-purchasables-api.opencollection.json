@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Purchasables API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Purchasables",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Purchasables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/parts/:partID/purchasables",
+            "params": [
+              {
+                "name": "partID",
+                "value": "11",
+                "type": "path",
+                "description": "The ID of the part you need purchasables for."
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              },
+              {
+                "name": "limit",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "nameStartsWith",
+                "value": "Box of",
+                "type": "query",
+                "description": "Filter purchasables that have a name which starts with this string."
+              }
+            ]
+          },
+          "docs": "This endpoint makes an HTTP GET request to retrieve a part's purchasable data. The response of this request is documented as a JSON schema.\n\nReturn data description\n\n| **Property** | **Description** |\n| --- | --- |\n| partID | The ID of the part the purchasable belongs to. |\n| name | The name of the purchasable. |\n| size | The size of the purchasable. |\n| orderUnitCode | The unit that describes how this purchasable is ordered. E.g. \"by the box\", or \"by the foot\". |\n| sizeUnitCode | The unit that "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,407 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Bills API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Bills",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add Bill Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/bills/:billID/transactions",
+            "params": [
+              {
+                "name": "billID",
+                "value": "425",
+                "type": "path",
+                "description": "The ID of the bill for which an item needs to be added."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request creates a Bill transaction by adding a Bill Item to an unclosed Bill.\n\nParameter: poItemID, Type: Int, Required?: Required, Description: The ID of the item that has to be added to the Bill.\nParameter: qtyReceived, Type: Int, Required?: Required, Description: The item quantity received on this Bill."
+        },
+        {
+          "info": {
+            "name": "Bill Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/bills/transactions",
+            "params": [
+              {
+                "name": "bills",
+                "value": "423",
+                "type": "query",
+                "description": "This parameter is used to only get specific Bill Transactions by billID. This parameter expects a comma delimited list of billIDs."
+              },
+              {
+                "name": "items",
+                "value": "358",
+                "type": "query",
+                "description": "This parameter is used to only get specific Bill Transactions by items in a Bill. This parameter expects a comma delimited list of poItem IDs."
+              },
+              {
+                "name": "start",
+                "value": "1630611650",
+                "type": "query",
+                "description": "This parameter is used to only get Bill Transactions that were created after or on the unix timestamp passed into it. "
+              },
+              {
+                "name": "end",
+                "value": "1630611660",
+                "type": "query",
+                "description": "This parameter is used to only get Bill transactions that were created before or on the unix timestamp passed into it. "
+              },
+              {
+                "name": "transactions",
+                "value": "397",
+                "type": "query",
+                "description": "This parameter is used to only get specific Bill Transactions. This parameter expects a comma delimited list of transactionIDs."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "locations",
+                "value": "163",
+                "type": "query",
+                "description": "This parameter is used to only get Bill Transactions at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request gets information about the transactions made for a Bill."
+        },
+        {
+          "info": {
+            "name": "Update Bill Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/bills/:billID/transactions/:transactionID",
+            "params": [
+              {
+                "name": "billID",
+                "value": "425",
+                "type": "path",
+                "description": "The ID of the Bill for which the transaction needs to be updated."
+              },
+              {
+                "name": "transactionID",
+                "value": "399",
+                "type": "path",
+                "description": "The ID of the transaction which needs ot be updated."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update Bill Transaction"
+        },
+        {
+          "info": {
+            "name": "Bill Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/bills/transactions/:transactionID",
+            "params": [
+              {
+                "name": "transactionID",
+                "value": "399",
+                "type": "path",
+                "description": "The ID of the Bill Transaction to be deleted."
+              }
+            ]
+          },
+          "docs": "Bill Transaction"
+        },
+        {
+          "info": {
+            "name": "Bill Comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/bills/:billID/comments",
+            "params": [
+              {
+                "name": "billID",
+                "value": "2001",
+                "type": "path"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what commentID you want to start receiving results at. e.g. passing 100 here will only get you comments with an id greater than 100"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request gets all Bill Comments associated with a Bill.\n\nReturn data description\n\ncommentID | This is the commentID of comment.\ncomment | The text comment that was entered by the user.\ntimestamp | The date this comment was created. This is a unix timestamp.\nuserID | The ID of the user that made the comment.\ncommentEmailAddress | The email address of the external user that made this comment. This is only populated if the comment was made by an external user via the comment reply system.\ncomme"
+        },
+        {
+          "info": {
+            "name": "Create Bill Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/bills/:billID/comments",
+            "params": [
+              {
+                "name": "billID",
+                "value": "2001",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Adds a comment to a Bill.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| billID | path | integer | yes |  | Bill identifier |\n| comment | body | string | yes |  | Comment text |\n| showExternalUsers | body | boolean | no | true | Visible to external users |\n\nResponses:\n- 201 Created: Returns commentID."
+        },
+        {
+          "info": {
+            "name": "Upload Bill Comment File",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/bills/:billID/comments/:commentID/file",
+            "params": [
+              {
+                "name": "billID",
+                "value": "2001",
+                "type": "path"
+              },
+              {
+                "name": "commentID",
+                "value": "12",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Uploads a file to a Bill comment.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| billID | path | integer | yes |  | Bill identifier |\n| commentID | path | integer | yes |  | Comment identifier |\n| file | form-data | file | yes |  | File to upload (max 50MB). Same types as PO comment files |"
+        },
+        {
+          "info": {
+            "name": "Delete Bill Comment File",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/bills/:billID/comments/:commentID/file",
+            "params": [
+              {
+                "name": "billID",
+                "value": "2001",
+                "type": "path"
+              },
+              {
+                "name": "commentID",
+                "value": "12",
+                "type": "path"
+              },
+              {
+                "name": "filename",
+                "value": "receipt.png",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Deletes a file from a Bill comment.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| billID | path | integer | yes |  | Bill identifier |\n| commentID | path | integer | yes |  | Comment identifier |\n| filename | query | string | yes |  | Exact filename to remove |\n\nResponses:\n- 200 OK: Deleted.\n- 404 Not Found: File not found."
+        },
+        {
+          "info": {
+            "name": "Delete Bill Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/bills/:billID/comments/:commentID",
+            "params": [
+              {
+                "name": "billID",
+                "value": "2001",
+                "type": "path"
+              },
+              {
+                "name": "commentID",
+                "value": "12",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a Bill comment.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| billID | path | integer | yes |  | Bill identifier |\n| commentID | path | integer | yes |  | Comment identifier |\n\nResponses:\n- 200 OK: Deleted.\n- 404 Not Found: Comment not found."
+        },
+        {
+          "info": {
+            "name": "Get Bills",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/bills",
+            "params": [
+              {
+                "name": "bills",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get specific Bills. This parameter expects a comma delimited list of billIDs."
+              },
+              {
+                "name": "numbers",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get specific Bills by Number. This parameter expects a comma delimited list of billNumbers."
+              },
+              {
+                "name": "status",
+                "value": "0,1",
+                "type": "query",
+                "description": "This parameter is used to only get specific Bills by their status. The bill status could be 0,1 or 2\n"
+              },
+              {
+                "name": "end",
+                "value": "1697443800",
+                "type": "query",
+                "description": "This parameter is used to only get Bills that were created before or on the unix timestamp passed into it. "
+              },
+              {
+                "name": "limit",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "pos",
+                "value": "5",
+                "type": "query",
+                "description": "This parameter is used to only get specific Bills by POs. This parameter expects a comma delimited list of PO IDs."
+              },
+              {
+                "name": "start",
+                "value": "1597443703",
+                "type": "query",
+                "description": "This parameter is used to only get Bills that were created after or on the unix timestamp passed into it. "
+              },
+              {
+                "name": "locations",
+                "value": "163",
+                "type": "query",
+                "description": "This parameter is used to only get Bills at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what billID you want to start receiving results at. e.g. passing 130 here will only get you bills with an id greater than 130."
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              }
+            ]
+          },
+          "docs": "This request gets information such as Bill IDs, Bill Numbers, etc.\n\nThis call returns a \"meta\" object containing URLs that can be used to get data related to the Bill.\n\nNote: this endpoint supports pagination. Please refer to the [**Pagination**](#pagination) section for more information.\n\nReturn data description\n\nProperty: meta, Description: useful links relating to this Bill\nProperty: billID, Description: The unique ID of the Bill.\nProperty: billNumber, Description: The bill number assigned to"
+        },
+        {
+          "info": {
+            "name": "New Bill",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/bills",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request creates a new Bill for a Purchase Order.\n\nParameter: poID, Type: Int, Required?: Required, Description: The poID for which the Bill is made.\nParameter: userID, Type: Int, Required?: Optional, Description: The ID of the user that this Bill will be assigned to."
+        },
+        {
+          "info": {
+            "name": "Update Bill",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/bills/:billID",
+            "params": [
+              {
+                "name": "billID",
+                "value": "226",
+                "type": "path",
+                "description": "The ID of the Bill to be deleted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request updates a Bill. \n\nParameter: userID, Type: Int, Required?: Optional, Description: The ID of the user that this Bill will be assigned to.\nParameter: status, Type: Int, Required?: Optional, Description: The status of this Bill. Refer to GET Bill to understand what values status can be. A bill status cannot be reduced once it is changed."
+        },
+        {
+          "info": {
+            "name": "Delete Bill",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/bills/:billID",
+            "params": [
+              {
+                "name": "billID",
+                "value": "226",
+                "type": "path",
+                "description": "The ID of the Bill to be deleted."
+              }
+            ]
+          },
+          "docs": "This request deletes a Bill. This will also delete any Bill transactions for PO Items that were received on this Bill. The qty and price of the PO Items on the Bill will be recalculated."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

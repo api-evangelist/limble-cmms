@@ -1,0 +1,468 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Purchase Orders API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Purchase Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Purchase Order Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/po/items",
+            "params": [
+              {
+                "name": "pos",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "This parameter is used to only get specific POs. This parameter expects a comma delimited list of PO IDs."
+              },
+              {
+                "name": "items",
+                "value": "45,8998,3434",
+                "type": "query",
+                "description": "This parameter is used to only get specific PO Items by ID. This parameter expects a comma delimited list of poItem IDs."
+              },
+              {
+                "name": "numbers",
+                "value": "1,2",
+                "type": "query",
+                "description": "This parameter is used to only get specific POs by Number. This parameter expects a comma delimited list of PO Numbers."
+              },
+              {
+                "name": "cursor",
+                "value": "112",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what vendorID you want to start receiving results at. e.g. passing 137 here will only get you vendors with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "lastEditedStart",
+                "value": "1518559856",
+                "type": "query",
+                "description": "This parameter is used to only get PO items that were last edited after the unix timestamp passed into the start parameter. For example, all PO items that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "lastEditedEnd",
+                "value": "1518559856",
+                "type": "query",
+                "description": "This parameter is used to only get POs items that were last edited *before* the unix timestamp passed in."
+              }
+            ]
+          },
+          "docs": "This request gets information associated with PO items. Every line item on a PO is an item returned by this call.\n\nReturn data description\n\npoID | The unique ID of the purchase order associated to this item.\npoItemID | The unqiue ID of this Purchase Order Item\nitemType | Which type (Part, Service, or Other) this item is.\nname | The name of the item.\ndescription | A more detailed description of the item.\nglID | The unique ID of the GL associated to this item.\npartID | The unique ID of the part as"
+        },
+        {
+          "info": {
+            "name": "New Purchase Order Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/po/:poID/items",
+            "params": [
+              {
+                "name": "poID",
+                "value": "1",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request creates a new Purchase Order Item.\n\nitemType | Int | Required | A number describing what type of PO Item this is. Valid values are: 1 (Part), 2 (Service), 4 (Other). If itemType is 1, name and taskID cannot be present and partID is required. If itemType is 2 or 4, name is required and partID cannot be present. If itemType is 2, a checklistID is required.\nname | String | Optional | A short line-item title for this PO Item.\ndescription | String | Optional | A more detailed description"
+        },
+        {
+          "info": {
+            "name": "Receive PO Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/po/:poID/items/:poItemID",
+            "params": [
+              {
+                "name": "poID",
+                "value": "1",
+                "type": "path"
+              },
+              {
+                "name": "poItemID",
+                "value": "1",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request marks a quantity of a PO item as having been received and generates a bill for the receipt of the item.\n\nParameter: quantity, Type: Int, Required?: Required, Description: A positive number representing the received number of items. The sum of all receipts cannot be greater than the total quantity on the PO item., For example: if a PO item has a quantity of 5, then we use this request to receive 3, that will mark 3 of the PO item as received and generate a bill for that receipt of 3 "
+        },
+        {
+          "info": {
+            "name": "Update Purchase Order Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/po/:poID/items/:poItemID",
+            "params": [
+              {
+                "name": "poID",
+                "value": "1",
+                "type": "path"
+              },
+              {
+                "name": "poItemID",
+                "value": "1",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request updates a Purchase Order Item. Considering the validation for this route is non-trivial -- keep in mind that before this update takes place, we validate the resulting PO Item, so the itemType must be valid with any existing or updated properties. For example, if you have a PO Item of itemType 1 (Part) and attempt to send a PATCH that only provides a checklistID, you will get an error back saying that this is an invalid combination.\n\nTo remove an associated ID, pass in the value 0.\n\n"
+        },
+        {
+          "info": {
+            "name": "Delete PO Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/po/:poID/items/:poItemID",
+            "params": [
+              {
+                "name": "poID",
+                "value": "1",
+                "type": "path"
+              },
+              {
+                "name": "poItemID",
+                "value": "1",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request deletes a PO Item, which will also remove any relationships between the PO Item, Parts, and Tasks, and will clean up any history of transactions on this PO Item."
+        },
+        {
+          "info": {
+            "name": "PO Comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/po/:poID/comments",
+            "params": [
+              {
+                "name": "poID",
+                "value": "1234",
+                "type": "path"
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what commentID you want to start receiving results at. e.g. passing 137 here will only get you comments with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request gets all PO Comments associated with a PO.\n\nReturn data description\n\ncommentID | This is the commentID of comment.\ncomment | The text comment that was entered by the user.\ntimestamp | The date this comment was created. This is a unix timestamp.\nuserID | The ID of the user that made the comment.\ncommentEmailAddress | The email address of the external user that made this comment. This is only populated if the comment was made by an external user via the comment reply system.\ncommentFi"
+        },
+        {
+          "info": {
+            "name": "Create PO Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/po/:poID/comments",
+            "params": [
+              {
+                "name": "poID",
+                "value": "1234",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Adds a comment to the specified PO.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| poID | path | integer | yes |  | Purchase Order identifier |\n| comment | body | string | yes |  | Comment text |\n| showExternalUsers | body | boolean | no | true | Visible to external users |\n\nResponses:\n- 201 Created: Returns commentID."
+        },
+        {
+          "info": {
+            "name": "Upload PO Comment File",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/po/:poID/comments/:commentID/file",
+            "params": [
+              {
+                "name": "poID",
+                "value": "1234",
+                "type": "path"
+              },
+              {
+                "name": "commentID",
+                "value": "5678",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Uploads a file to a PO comment.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| poID | path | integer | yes |  | Purchase Order identifier |\n| commentID | path | integer | yes |  | Comment identifier |\n| file | form-data | file | yes |  | File to upload (max 50MB). Types: PDF, PNG, JPEG, GIF, TIFF, SVG, DOC, DOCX, XLS, XLSX, ZIP, RAR, RFC822, octet-stream |"
+        },
+        {
+          "info": {
+            "name": "Delete PO Comment File",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/po/:poID/comments/:commentID/file",
+            "params": [
+              {
+                "name": "poID",
+                "value": "1234",
+                "type": "path"
+              },
+              {
+                "name": "commentID",
+                "value": "5678",
+                "type": "path"
+              },
+              {
+                "name": "filename",
+                "value": "invoice.pdf",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Deletes a file from a PO comment.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| poID | path | integer | yes |  | Purchase Order identifier |\n| commentID | path | integer | yes |  | Comment identifier |\n| filename | query | string | yes |  | Exact filename to remove |\n\nResponses:\n- 200 OK: Deleted.\n- 404 Not Found: File not found."
+        },
+        {
+          "info": {
+            "name": "Delete PO Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/po/:poID/comments/:commentID",
+            "params": [
+              {
+                "name": "poID",
+                "value": "1",
+                "type": "path"
+              },
+              {
+                "name": "commentID",
+                "value": "5678",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a PO comment.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| poID | path | integer | yes |  | Purchase Order identifier |\n| commentID | path | integer | yes |  | Comment identifier |\n\nResponses:\n- 200 OK: Deleted.\n- 404 Not Found: Comment not found."
+        },
+        {
+          "info": {
+            "name": "Change PO State",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/po/:poID/state",
+            "params": [
+              {
+                "name": "poID",
+                "value": "31939",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Updates the state of the specified PO. \n\nImportant Note: Currently POs can only move forward one state per state change request.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n| --- | --- | --- | --- | --- | --- |\n| poID | path | integer | yes | | Purchase Order identifier |\n| newState | body | string | yes | | All PO states: 0 (setup), 1–96 (custom), 97 (ready_to_receive), 98 (partially_received), 99 (fully_received), 100 (closed), 101 (disapproved). API accepts numb"
+        },
+        {
+          "info": {
+            "name": "Get PO State Transitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/po/:poID/state/transitions",
+            "params": [
+              {
+                "name": "poID",
+                "value": "31939",
+                "type": "path",
+                "description": "Purchase Order identifier"
+              }
+            ]
+          },
+          "docs": "Returns the list of valid next states for the specified PO.\n\nParameters:\n\n| Parameter | Type | Required | Default | Description |\n| --- | --- | --- | --- | --- |\n| poID | integer | yes |  | Purchase Order identifier |\n\nReturn data:  \n  \nArray of JSON objects listing possible next state transitions for the selected PO."
+        },
+        {
+          "info": {
+            "name": "Get Purchase Orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/po",
+            "params": [
+              {
+                "name": "pos",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get specific POs. This parameter expects a comma delimited list of PO IDs."
+              },
+              {
+                "name": "vendors",
+                "value": "9",
+                "type": "query",
+                "description": "This parameter is used to only get specific Vendors. This parameter expects a comma delimited list of Vendor IDs."
+              },
+              {
+                "name": "locations",
+                "value": "73",
+                "type": "query",
+                "description": "This parameter is used to only get POs at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs."
+              },
+              {
+                "name": "numbers",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get specific POs by Number. This parameter expects a comma delimited list of PO Numbers."
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what poID you want to start receiving results at. e.g. passing 137 here will only get you PO with an id greater than 137."
+              },
+              {
+                "name": "limit",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              },
+              {
+                "name": "lastEditedStart",
+                "value": "1629737835",
+                "type": "query",
+                "description": "This parameter is used to only get POs that were last edited after the unix timestamp passed into the start parameter. For example, all POs that were last edited after April 18th, 2018."
+              },
+              {
+                "name": "lastEditedEnd",
+                "value": "1630121871",
+                "type": "query",
+                "description": "This parameter is used to only get POs that were last edited *before* the unix timestamp passed in."
+              },
+              {
+                "name": "status",
+                "value": "97,99",
+                "type": "query",
+                "description": "This parameter is used to only get POs for a specific group of status."
+              },
+              {
+                "name": "page",
+                "value": "3",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information."
+              }
+            ]
+          },
+          "docs": "meta | useful links relating to this Purchase order\npoID | The unique ID of the Purchase Order.\npoNumber | The user-set Purchase Order number.\nbudgetID | The unique ID of the budget associated with this Purchase Order.\nvendorID | The unique ID of the vendor associated with this Purchase Order.\nlocationID | The unique ID of the location associated with this Purchase Order.\nuserIDStarted | The unique ID of the user that started this Purchase Order.\nuserID | The unique ID of the user this Purchase "
+        },
+        {
+          "info": {
+            "name": "New Purchase Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/po",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request creates a new Purchase Order.\n\nParameter: locationID, Type: Int, Required?: Required, Description: The ID of the location this PO will be created for.\nParameter: vendorID, Type: Int, Required?: Required, Description: The ID of the vendor that this PO will be associated with.\nParameter: userID, Type: Int, Required?: Required, Description: The ID of the user that this PO will be assigned to.\nParameter: taskID, Type: Int, Required?: Optional, Description: The ID of the task that this P"
+        },
+        {
+          "info": {
+            "name": "Update Purchase Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/po/:poID",
+            "params": [
+              {
+                "name": "poID",
+                "value": "{{poID}}",
+                "type": "path",
+                "description": "poID of the PO that you are deleting."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request updates a Purchase Order. Currently, changing the locationID that a PO belongs to is unsupported.\n\nParameter: vendorID, Type: Int, Required?: Optional, Description: The ID of the vendor that this PO will be associated with.\nParameter: userID, Type: Int, Required?: Optional, Description: The ID of the user that this PO will be assigned to.\nParameter: taskID, Type: Int, Required?: Optional, Description: The ID of the task that this PO will be associated with.\nParameter: budgetID, Type"
+        },
+        {
+          "info": {
+            "name": "Delete PO",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/po/:poID",
+            "params": [
+              {
+                "name": "poID",
+                "value": "{{poID}}",
+                "type": "path",
+                "description": "poID of the PO that you are deleting."
+              }
+            ]
+          },
+          "docs": "This request deletes a PO. This will also delete any PO Items that belong to this PO, which will also remove any relationships between PO Items, Parts, and Tasks, and will clean up any history of transactions on these PO Items."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

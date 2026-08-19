@@ -1,0 +1,159 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Tags API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tags",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/tags",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "1160",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request gets all Custom Tags associated with a Task.\n\nReturn data description\n\n| Property | Description |\n| --- | --- |\n| tags | An array of custom tags associated with the task. |"
+        },
+        {
+          "info": {
+            "name": "PUT Apply Task Tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/tags",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "1160",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Applies one or more existing custom tags to a task. Tags must already exist at the account level (see POST /v2/tags to create new tags).\n\nBody:\n- tags: string[] — List of tags, or\n- tag: string — Single tag.\n\nSuccess Response (200):\n- created: true\n- name?: string — Present when a single tag was added; canonical without trailing ';'.\n- sanitizations?: string[] — Applied normalizations.\n- note?: string — Present when input had multiple '@' characters.\n- tags: string[] — Updated canonical tags wit"
+        },
+        {
+          "info": {
+            "name": "DELETE Remove Task Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/tags/:tagRaw",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "tagRaw",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Removes a single custom tag from a task.\n\nPath:\n- tag: string — Tag to remove; may be raw or canonical; server normalizes.\n\nSuccess Response (200):\n- deleted: true\n- name: string — Canonical tag (includes trailing ';').\n- tags: string[] — Updated canonical tags.\n\nErrors:\n- 404: { message: 'Tag not found' }\n- 400: { removed: null, message: string } — Invalid input."
+        },
+        {
+          "info": {
+            "name": "Get Tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/tags",
+            "params": [
+              {
+                "name": "name",
+                "value": "safety",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This request returns your tags in Limble.\n\nReturn data description\n\nProperty: name, Description: A search-string for tags."
+        },
+        {
+          "info": {
+            "name": "Create Account Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/tags",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new account-level custom tag. The tag is normalized and validated before creation.\n\n**Request Body:**\n- `name` (string, required) - Tag name with or without leading '@', must not contain ';'\n\n**Response (200 OK):**\n- `created` (boolean) - Always true on success\n- `name` (string) - Canonical tag name without trailing ';' (e.g., `@Food Safety`)\n- `sanitizations` (array, optional) - List of normalization actions applied\n- `tags` (array) - All account tags in canonical format with trailing"
+        },
+        {
+          "info": {
+            "name": "Rename Account Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/tags/:oldName",
+            "params": [
+              {
+                "name": "oldName",
+                "value": "@Food Safety",
+                "type": "path",
+                "description": "Tag name (URL encode spaces and special characters)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Renames an account-level custom tag.  \n  \n**IMPORTANT NOTE:** The change propagates to all data entities using this tag (Tasks, dashboards, notifications, etc).\n\n**Path Parameters:**\n\n- `oldName` (string, required) - Existing tag name (with or without '@', without trailing ';')\n    - URL encode special characters (e.g., `@Food%20Safety` for `@Food Safety`)\n\n**Request Body:**\n\n- `newName` (string, required) - New tag name (with or without '@', without trailing ';')\n\n**Response (200 OK):**\n\n- `ren"
+        },
+        {
+          "info": {
+            "name": "Delete Account Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tags/:oldName",
+            "params": [
+              {
+                "name": "oldName",
+                "value": "@Food Safety",
+                "type": "path",
+                "description": "Tag name (URL encode spaces and special characters)"
+              }
+            ]
+          },
+          "docs": "Deletes an account-level custom tag.\n\n**IMPORTANT NOTE:** The change propagates to all data entities using this tag (Tasks, dashboards, notifications, etc).\n\n**Path Parameters:**\n\n- `oldName` (string, required) - Tag name to delete (with or without '@', without trailing ';')\n    - URL encode special characters (e.g., `@Food%20Safety` for `@Food Safety`)\n\n**Response (200 OK):**\n\n- `deleted` (boolean) - Always true on success\n    \n- `name` (string) - Canonical tag name that was deleted (without tr"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

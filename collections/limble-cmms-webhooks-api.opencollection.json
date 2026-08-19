@@ -1,0 +1,135 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Webhooks API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Webhooks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/webhooks",
+            "params": [
+              {
+                "name": "webhooks",
+                "value": "24",
+                "type": "query",
+                "description": "This parameter is used to only get specific Webhooks. This parameter expects a comma delimited list of webhookIDs."
+              },
+              {
+                "name": "endpoint",
+                "value": "%hello.com",
+                "type": "query",
+                "description": "This parameter is used for a string search by the webhook endpoint. This parameter expects a URL or partial URL of a webhook using a string with the wildcard %."
+              },
+              {
+                "name": "type",
+                "value": "task",
+                "type": "query",
+                "description": "This parameter is used to only get Webhooks of a specific type. This parameter accepts a comma delimited list of webhook types."
+              },
+              {
+                "name": "enabled",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to get Webooks which are enabled. This paramter expects 1: Enabled or 0: Disabled"
+              },
+              {
+                "name": "cursor",
+                "value": "0",
+                "type": "query",
+                "description": "This parameter is a cursor that selects what webhookID you want to start receiving results at. e.g. passing 10 here will only get you webhooks with an id greater than 10."
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+              }
+            ]
+          },
+          "docs": "This request returns your Webhooks configured for Limble. \n\nReturn data description\n\nProperty: webhhokID, Description: The ID of the Webhook\nProperty: endpoint, Description: The webhook URL.\nProperty: type, Description: The type of webhook. Webhooks can be of type task, po, poItem.\nProperty: enabled, Description: Determines if the webhook is enabled. 0 = Disabled 1=Enabled"
+        },
+        {
+          "info": {
+            "name": "New Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/webhooks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This requests creates a new Webhook.\n\nParameter\nType\nRequired?\nDescription\n\nendpoint\nURL\nRequired\nThe webhook URL.\n\ntype\nString\nRequired\nThe type of webhook. Refer to GET webhooks for type values\n\nenabled\nInt\nOptional\nShould the webhook be enabled or disabled. It is enabled(1) by default."
+        },
+        {
+          "info": {
+            "name": "Update Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/webhooks/:webhookID",
+            "params": [
+              {
+                "name": "webhookID",
+                "value": "42",
+                "type": "path",
+                "description": "This parameter expects a webhookID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This requests updates a Webhook.\n\nParameter\nType\nRequired?\nDescription\n\nendpoint\nURL\nOptional\nThe webhook URL.\n\ntype\nString\nOptional\nThe type of webhook. Refer to GET webhooks for type values\n\nenabled\nInt\nOptional\nEnable (1) or disable a webhook(0)"
+        },
+        {
+          "info": {
+            "name": "Delete Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/webhooks/:webhookID",
+            "params": [
+              {
+                "name": "webhookID",
+                "value": "42",
+                "type": "path",
+                "description": "This parameter expects a webhookID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This request deletes a Webhook."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

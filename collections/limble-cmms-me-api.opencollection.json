@@ -1,0 +1,36 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Me API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Me",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Me",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/me"
+          },
+          "docs": "Identifies the current customer. This route can be used to test that authentication to the Limble API was successful.\n\nReturn data description\n\ncustomerName | The name of the customer that your API keys are valid for.\ncustomerPlan | The Limble plan the customer is currently subscribed to. The customerPlan can have one of following values:, starter, professional, business, enterprise, legacy - The plan the customer is currently subscribed to has been deprecated., For more information about variou"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

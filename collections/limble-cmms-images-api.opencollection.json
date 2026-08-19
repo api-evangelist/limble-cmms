@@ -1,0 +1,177 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Images API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Images",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add Part Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/parts/:partID/image",
+            "params": [
+              {
+                "name": "partID",
+                "value": "{{partID}}",
+                "type": "path",
+                "description": "partID of the part you are removing the image for."
+              }
+            ]
+          },
+          "docs": "This request adds the main image for a Part."
+        },
+        {
+          "info": {
+            "name": "Delete Part Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/parts/:partID/image",
+            "params": [
+              {
+                "name": "partID",
+                "value": "{{partID}}",
+                "type": "path",
+                "description": "partID of the part you are removing the image for."
+              }
+            ]
+          },
+          "docs": "This request removes the main image from a Part."
+        },
+        {
+          "info": {
+            "name": "Task Instruction Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions/:instructionID/image",
+            "params": [
+              {
+                "name": "instructionID",
+                "value": "59271",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request adds instructional images to an Instruction.\n\nReturn data description\n\nfilename | The name of the file after being uploaded to Limble."
+        },
+        {
+          "info": {
+            "name": "Delete Task Instruction Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/instructions/:instructionID/image",
+            "params": [
+              {
+                "name": "instructionID",
+                "value": "59271",
+                "type": "path"
+              },
+              {
+                "name": "filename",
+                "value": "165040769563793-pic.png",
+                "type": "query",
+                "description": "The name of the instruction file that needs to be deleted. This is an optional parameter. If not given, **all** the files attached to an instruction will be deleted."
+              }
+            ]
+          },
+          "docs": "This request removes an instructional image from an Instruction."
+        },
+        {
+          "info": {
+            "name": "Upload Task Main Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/image",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "555",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Uploads a main image to a task.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| taskID | path | integer | yes |  | Task identifier |\n| image | form-data | file | yes |  | Image file (≤ 50MB). Types: JPEG, PNG, JPG, GIF |"
+        },
+        {
+          "info": {
+            "name": "Delete Task Main Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/tasks/:taskID/image",
+            "params": [
+              {
+                "name": "taskID",
+                "value": "555",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes the task's main image.\n\nParameters:\n\n| Parameter | In | Type | Required | Default | Description |\n|---|---|---|---|---|---|\n| taskID | path | integer | yes |  | Task identifier |\n\nResponses:\n- 200 OK: Image cleared.\n- 404 Not Found: No image exists for this task."
+        },
+        {
+          "info": {
+            "name": "Add Vendor Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID/image",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "{{vendorID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request adds the main image to a Vendor."
+        },
+        {
+          "info": {
+            "name": "Delete Vendor Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.limblecmms.com/v2/vendors/:vendorID/image",
+            "params": [
+              {
+                "name": "vendorID",
+                "value": "{{vendorID}}",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This request removes the main image from a Vendor."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

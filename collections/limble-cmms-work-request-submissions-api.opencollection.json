@@ -1,0 +1,161 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Work Request Submissions API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Work Request Submissions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List WR Submissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/work-requests/work-request-submissions",
+            "params": [
+              {
+                "name": "orderBy",
+                "value": "createdAt",
+                "type": "query",
+                "description": "This parameter is used to order results by their createdAt, status, requestTitle, workRequestSubmissionID, and location property instead of the default ordering. each property can be flipped reverse by putting a minus before the property e.g. \"-createdAt\"."
+              },
+              {
+                "name": "search",
+                "value": "pump",
+                "type": "query",
+                "description": "Free-text search"
+              },
+              {
+                "name": "locationIDs",
+                "value": "1",
+                "type": "query",
+                "description": "This parameter is used to only get work requests at a specific group of Locations. This parameter accepts a comma delimited list of Location IDs."
+              },
+              {
+                "name": "statuses",
+                "value": "open",
+                "type": "query",
+                "description": "CSV of statuses"
+              },
+              {
+                "name": "limit",
+                "value": "100",
+                "type": "query",
+                "description": "Max rows"
+              },
+              {
+                "name": "columns",
+                "value": "",
+                "type": "query",
+                "description": "CSV of field names (letters only); forwarded upstream as array"
+              },
+              {
+                "name": "createdDateStart",
+                "value": "2025-06-20T20:51:13.000Z",
+                "type": "query",
+                "description": "ISO 8601 start"
+              },
+              {
+                "name": "createdDateEnd",
+                "value": "2025-06-20T20:51:13.000Z",
+                "type": "query",
+                "description": "ISO 8601 end (≥ start)"
+              },
+              {
+                "name": "workRequestIDs",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "CSV of WR IDs"
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "Page-based pagination (mutually exclusive with cursor)"
+              },
+              {
+                "name": "cursor",
+                "value": "1",
+                "type": "query",
+                "description": "Cursor for pagination (forbidden with page)"
+              }
+            ]
+          },
+          "docs": "Lists WR submissions\n\nReturn data description:\n\n| **Property** | **Description** |\n| --- | --- |\n| workRequestSubmissionId | The unique identifier of the work request submission. |\n| status | Pending, Approved or Rejected. |\n| createdByUserId | The unique identifier of the user who created the work request submission. |\n| createdAt | The date the work request submission was created. The timestamp is in the following format: YYYY-MM-DD (2025-07-02) HH:MM:SS (21:36:31) |\n| updatedAt | The date the"
+        },
+        {
+          "info": {
+            "name": "Create WR Submission",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/work-requests/work-request-submissions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new work request submission. The submission enters a pending state and must be approved or declined by a reviewer.\n\n`locationID` and `dueDateUnit` are required. All other fields are optional."
+        },
+        {
+          "info": {
+            "name": "Approve WR Submission",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/work-requests/work-request-submissions/:workRequestSubmissionID/approve",
+            "params": [
+              {
+                "name": "workRequestSubmissionID",
+                "value": "42",
+                "type": "path",
+                "description": "The ID of the work request submission to approve."
+              }
+            ]
+          },
+          "docs": "Approves a pending work request submission, generating a task from it."
+        },
+        {
+          "info": {
+            "name": "Decline WR Submission",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/work-requests/work-request-submissions/:workRequestSubmissionID/decline",
+            "params": [
+              {
+                "name": "workRequestSubmissionID",
+                "value": "42",
+                "type": "path",
+                "description": "The ID of the work request submission to decline."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Declines a pending work request submission.\n\nBoth `declineReason` and `additionalNotes` are optional strings."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

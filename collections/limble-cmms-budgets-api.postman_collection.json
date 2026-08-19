@@ -1,0 +1,4022 @@
+{
+  "item": [
+    {
+      "id": "22c1465b-e871-4b13-b7e2-c240ac5fe627",
+      "name": "Budgets",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5804a3e3-390e-4e99-bac2-1dea4a204141",
+          "name": "New Step",
+          "request": {
+            "name": "New Step",
+            "description": {
+              "content": "This request creates a new Budget Step (sometimes called a PO Workflow Step).\n\nParameter: name, Type: String, Required?: Required, Description: The title of this budget.\nParameter: assignmentType, Type: Enum, Required?: Required, Description: What type ('user' or 'team') should we interpret the assignment value as?\nParameter: assignment, Type: Int or Array of Ints, Required?: Required, Description: When POs belonging to this step's budget enter this step, who will they be assigned to? If awaitingAssignmentType is 'team' then this cannot be an array, and may only be one number.\nParameter: emailSend, Type: Boolean, Required?: Required, Description: When POs of this step's budget enter this step, should we send email notification(s)?\nParameter: allowPOEdit, Type: Boolean, Required?: Optional, Description: When POs belonging to this step's budget are in this step, can the PO be edited?\nParameter: allowPR, Type: Boolean, Required?: Required, Description: When POs belonging to this step's budget are in this step, can items be received?",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "budgets",
+                ":budgetID",
+                "steps"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "budgetID",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"assignment\": \"<integer>\",\n  \"emailSend\": \"<boolean>\",\n  \"allowPR\": \"<boolean>\",\n  \"allowPOEdit\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5ff1c77a-61b0-446d-a73d-799d47609452",
+              "name": "New Step",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Very important step\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 341,\n  \"emailSend\": false,\n  \"allowPR\": true,\n  \"allowPOEdit\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"stepID\": 97\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10f81f6a-1762-4f4f-9d12-a22be61f59b9",
+              "name": "The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Very important step\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 341,\n  \"emailSend\": false,\n  \"allowPR\": true,\n  \"allowPOEdit\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6c697d9c-a42e-4540-ad81-0700a98c6ec6",
+              "name": "No `Authorization` header was provided on the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Very important step\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 341,\n  \"emailSend\": false,\n  \"allowPR\": true,\n  \"allowPOEdit\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe0d9656-6316-4cce-8d7d-c99234d1bd29",
+              "name": "The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Very important step\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 341,\n  \"emailSend\": false,\n  \"allowPR\": true,\n  \"allowPOEdit\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88bbe286-baed-4e53-8a55-00c46703c5c6",
+              "name": "The referenced resource does not exist or is not visible to the authenticated customer.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Very important step\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 341,\n  \"emailSend\": false,\n  \"allowPR\": true,\n  \"allowPOEdit\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "370b9879-3e34-4d54-ac71-b3c2d4265309",
+              "name": "The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Very important step\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 341,\n  \"emailSend\": false,\n  \"allowPR\": true,\n  \"allowPOEdit\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d80b927-4db8-4684-a275-3e1fe07c45c5",
+              "name": "The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Very important step\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 341,\n  \"emailSend\": false,\n  \"allowPR\": true,\n  \"allowPOEdit\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "76248249-19b2-4b9c-a1d7-ea7da5cd69a6",
+              "name": "An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Very important step\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 341,\n  \"emailSend\": false,\n  \"allowPR\": true,\n  \"allowPOEdit\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3b09b5a8-6f1e-4ed0-abe5-21612188ed45",
+          "name": "Delete Step",
+          "request": {
+            "name": "Delete Step",
+            "description": {
+              "content": "This request deletes a step from a budget.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "budgets",
+                ":budgetID",
+                "steps",
+                ":stepID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "budgetID",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "stepID",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2b9eb330-409f-4f92-995a-bf67a280a663",
+              "name": "The operation completed successfully. The response body is empty.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "40d7ec57-89cc-43ee-b1b7-37e8912d5a3d",
+              "name": "The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "606f0534-2554-460e-b7ae-dbc4a9d0956e",
+              "name": "No `Authorization` header was provided on the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b9029b88-ba3b-431a-952a-faacf7b52237",
+              "name": "The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24aa28ac-0726-4ec1-bd5c-a454d124cffa",
+              "name": "The referenced resource does not exist or is not visible to the authenticated customer.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5bc4272c-a244-4cb2-bd78-7c49659ade00",
+              "name": "The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "908615af-899d-4549-bed1-7b415e277bbe",
+              "name": "An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b5f5bb9d-2f43-4237-8639-9366c34d7267",
+          "name": "Update Step",
+          "request": {
+            "name": "Update Step",
+            "description": {
+              "content": "This request updates a Budget Step (sometimes called a PO Workflow Step).\n\nParameter: name, Type: String, Required?: Optional, Description: The title of this budget.\nParameter: assignmentType, Type: Enum, Required?: Optional, Description: What type ('user' or 'team') should we interpret the assignment value as? This is required when the assignment property is present.\nParameter: assignment, Type: Int or Array of Ints, Required?: Optional, Description: When POs belonging to this step's budget enter this step, who will they be assigned to? If awaitingAssignmentType is 'team' then this cannot be an array, and may only be one number. This is required when the assignmentType property is present.\nParameter: emailSend, Type: Boolean, Required?: Optional, Description: When POs of this step's budget enter this step, should we send email notification(s)?\nParameter: allowPOEdit, Type: Boolean, Required?: Optional, Description: When POs belonging to this step's budget are in this step, can the PO be edited?\nParameter: allowPR, Type: Boolean, Required?: Optional, Description: When POs belonging to this step's budget are in this step, can items be received?\nParameter: order, Type: Int, Required?: Optional, Description: For the order of steps in this step's budget, which position should this step be in?",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "budgets",
+                ":budgetID",
+                "steps",
+                ":stepID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "budgetID",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "stepID",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"assignmentType\": \"<string>\",\n  \"assignment\": \"<integer>\",\n  \"emailSend\": \"<boolean>\",\n  \"allowPOEdit\": \"<boolean>\",\n  \"allowPR\": \"<boolean>\",\n  \"order\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6b60c538-cc1a-4fa7-9dda-ba59829d11f0",
+              "name": "The operation completed successfully. The response body is empty.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Get Approval\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 1,\n  \"emailSend\": true,\n  \"allowPOEdit\": true,\n  \"allowPR\": false,\n  \"order\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cde6f94e-05c5-4e18-8634-c74665e12239",
+              "name": "The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Get Approval\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 1,\n  \"emailSend\": true,\n  \"allowPOEdit\": true,\n  \"allowPR\": false,\n  \"order\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1692af1-cc0b-4743-a3e3-d2e14c11536a",
+              "name": "No `Authorization` header was provided on the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Get Approval\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 1,\n  \"emailSend\": true,\n  \"allowPOEdit\": true,\n  \"allowPR\": false,\n  \"order\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec305ef1-1854-4c2f-a66a-4abb53e18fed",
+              "name": "The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Get Approval\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 1,\n  \"emailSend\": true,\n  \"allowPOEdit\": true,\n  \"allowPR\": false,\n  \"order\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7589c41-ff4b-45ef-a50e-27e1fbda2b00",
+              "name": "The referenced resource does not exist or is not visible to the authenticated customer.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Get Approval\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 1,\n  \"emailSend\": true,\n  \"allowPOEdit\": true,\n  \"allowPR\": false,\n  \"order\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8535ee90-8036-45fa-a6ce-f694799f694f",
+              "name": "The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Get Approval\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 1,\n  \"emailSend\": true,\n  \"allowPOEdit\": true,\n  \"allowPR\": false,\n  \"order\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "adbe3670-a381-408b-92bc-104324c5fd56",
+              "name": "The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Get Approval\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 1,\n  \"emailSend\": true,\n  \"allowPOEdit\": true,\n  \"allowPR\": false,\n  \"order\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1d9d844b-2247-4e9d-97c8-c3eedba12ed9",
+              "name": "An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID",
+                    "steps",
+                    ":stepID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "stepID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Get Approval\",\n  \"assignmentType\": \"user\",\n  \"assignment\": 1,\n  \"emailSend\": true,\n  \"allowPOEdit\": true,\n  \"allowPR\": false,\n  \"order\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "167c7c20-b7ea-43f5-bc15-62c2af212da6",
+          "name": "Get Steps",
+          "request": {
+            "name": "Get Steps",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "budgets",
+                "steps"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "This is a parameter used to string search for a name or partial name of a budget. This parameter expects a string with the wildcard %."
+                },
+                {
+                  "disabled": false,
+                  "key": "steps",
+                  "value": "<string>",
+                  "description": "This parameter is used to only get specific steps. This parameter accepts a comma delimited list of step IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "budgets",
+                  "value": "<integer>",
+                  "description": "This parameter is used to only get steps that are linked to a budget. This parameter accepts a comma delimited list of budget IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "locations",
+                  "value": "<string>",
+                  "description": "This parameter is used to only get steps that are linked to a budget at a specific location. This parameter accepts a comma delimited list of location IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<integer>",
+                  "description": "This parameter is a cursor that selects what stepID you want to start receiving results at. e.g. passing 137 here will only get you steps with an ID greater than 137."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "987a7ee3-8e44-4f61-a93d-38bc7597d28e",
+              "name": "Budget Steps",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "%test%"
+                    },
+                    {
+                      "key": "steps",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "158"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"stepID\": 4315,\n    \"budgetID\": 8442,\n    \"name\": \"string\",\n    \"sortOrder\": 5923\n  },\n  {\n    \"stepID\": 898,\n    \"budgetID\": 1296,\n    \"name\": \"string\",\n    \"sortOrder\": 4773\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a4afcafe-65af-4b8b-9209-b61a67be87bb",
+              "name": "The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "%test%"
+                    },
+                    {
+                      "key": "steps",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "158"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9cb9ccf0-b0fe-4daf-9d9f-1130b170aea9",
+              "name": "No `Authorization` header was provided on the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "%test%"
+                    },
+                    {
+                      "key": "steps",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "158"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "430402a2-c3ea-4f7b-9c46-18ba1b5ba907",
+              "name": "The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "%test%"
+                    },
+                    {
+                      "key": "steps",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "158"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e1118d28-c1a9-41a3-8c4a-c22259b917cd",
+              "name": "The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "%test%"
+                    },
+                    {
+                      "key": "steps",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "158"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c08a86cb-b436-4446-9fcd-87f4f06e3fef",
+              "name": "An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    "steps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "%test%"
+                    },
+                    {
+                      "key": "steps",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "158"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "238df773-e018-4142-a07c-35a28696011a",
+          "name": "Get Budgets",
+          "request": {
+            "name": "Get Budgets",
+            "description": {
+              "content": "This request returns your Budgets in Limble. \n\nReturn data description\n\nProperty: budgetID, Description: The Budget's unique identifier.\nProperty: name, Description: The full name of the Budget.\nProperty: locationID, Description: Which Location this Budget belongs to.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "budgets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<integer>",
+                  "description": "This parameter is a cursor that selects what budgetID you want to start receiving results at. e.g. passing 137 here will only get you budgets with an ID greater than 137."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "This parameter is a result limiter. The default is set to return no more than 100 results at one time."
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "This is a parameter used to string search for a name or partial name of a budget. This parameter expects a string with the wildcard %."
+                },
+                {
+                  "disabled": false,
+                  "key": "locations",
+                  "value": "<string>",
+                  "description": "This parameter is used to only get budgets that are linked to a location. This parameter accepts a comma delimited list of location IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "budgets",
+                  "value": "<string>",
+                  "description": "This parameter is used to only get specific budgets. This parameter accepts a comma delimited list of budget IDs."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "24148a97-0c4d-44b7-a66a-fad2a0e9ae06",
+              "name": "Get Budgets",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "1"
+                    },
+                    {
+                      "key": "name",
+                      "value": "%General%"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "1,2,3"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"budgetID\": 1,\n    \"name\": \"General\",\n    \"locationID\": 1,\n    \"awaitingAllowPOEdit\": false,\n    \"awaitingUserID\": 0,\n    \"awaitingProfileID\": 437,\n    \"awaitingEmailSend\": true,\n    \"prUserID\": 0,\n    \"prProfileID\": 1,\n    \"prEmailSend\": true,\n    \"defaultBudget\": {\n      \"global\": true,\n      \"purchaseRequests\": false,\n      \"minPartQtyPOs\": true\n    },\n    \"meta\": {\n      \"steps\": \"/v2/budgets/steps?budgets=1\",\n      \"location\": \"/v2/locations?locations=1\"\n    }\n  },\n  {\n    \"budgetID\": 2,\n    \"name\": \"Purchase Request Budget\",\n    \"locationID\": 1,\n    \"awaitingAllowPOEdit\": true,\n    \"awaitingUserID\": 1,\n    \"awaitingProfileID\": 0,\n    \"awaitingEmailSend\": true,\n    \"prUserID\": 0,\n    \"prProfileID\": 0,\n    \"prEmailSend\": true,\n    \"defaultBudget\": {\n      \"global\": false,\n      \"purchaseRequests\": true,\n      \"minPartQtyPOs\": false\n    },\n    \"meta\": {\n      \"steps\": \"/v2/budgets/steps?budgets=2\",\n      \"location\": \"/v2/locations?locations=1\"\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0052b941-1ca2-4172-896b-f923ef63cabd",
+              "name": "The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "1"
+                    },
+                    {
+                      "key": "name",
+                      "value": "%General%"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "1,2,3"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b621722c-6a80-45eb-9b8b-13bee0c47813",
+              "name": "No `Authorization` header was provided on the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "1"
+                    },
+                    {
+                      "key": "name",
+                      "value": "%General%"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "1,2,3"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3486c0ad-388b-4702-97d1-1fc143a43f89",
+              "name": "The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "1"
+                    },
+                    {
+                      "key": "name",
+                      "value": "%General%"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "1,2,3"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06479457-b67f-4327-b4ee-42593580f2f3",
+              "name": "The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "1"
+                    },
+                    {
+                      "key": "name",
+                      "value": "%General%"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "1,2,3"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4ff7e991-2619-43c0-beed-dc2dab87a1d8",
+              "name": "An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "1"
+                    },
+                    {
+                      "key": "name",
+                      "value": "%General%"
+                    },
+                    {
+                      "key": "locations",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "budgets",
+                      "value": "1,2,3"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8f2b4015-810d-453a-a01f-5f67c806f4c8",
+          "name": "New Budget",
+          "request": {
+            "name": "New Budget",
+            "description": {
+              "content": "This request creates a new Budget.\n\nParameter: locationID, Type: Int, Required?: Required, Description: The ID of the location this budget will belong to.\nParameter: name, Type: String, Required?: Required, Description: The title of this budget.\nParameter: awaitingAllowPOEdit, Type: Boolean, Required?: Required, Description: When POs belonging to this budget are in the \"ready to receive\" state, will they be editable?\nParameter: awaitingEmailSend, Type: Boolean, Required?: Required, Description: When POs belonging to this budget enter the \"ready to receive\" state, should the assignee(s) be emailed?\nParameter: awaitingAssignmentType, Type: Enum, Required?: Required, Description: What type ('user' or 'team') should we interpret the awaitingAssignment value as?\nParameter: awaitingAssignment, Type: Int or Array of Ints, Required?: Required, Description: When POs belonging to this budget enter the \"ready to receive\" state, who will they be assigned to? If awaitingAssignmentType is 'team' then this cannot be an array, and may only be one number.\nParameter: prEmailSend, Type: Boolean, Required?: Required, Description: When PO items are received on POs that belong to this budget in the \"ready to receive\" or \"partially received\" states, should we send email notification(s)?\nParameter: prAssignmentType, Type: Enum, Required?: Required, Description: What type ('user' or 'team') should we interpret the prAssignment value as?\nParameter: prAssignment, Type: Int or Array of Ints, Required?: Required, Description: When bills are generated for PO items on POs that belong to this budget, who should the bills be assigned to? If prAssignmentType is 'team' then this cannot be an array, and may only be one number.\nParameter: defaultBudget, Type: Object, Required?: Required, Description: An object containing Boolean flags for global, purchaseRequests, and minPartQtyPOs. Setting any of these flags to true will set the same value for any other budgets at this location to false (we cannot have two default budgets). All properties of this object are required. global: Should this be the default budget for this location? purchaseRequests: When purchase requests are created from tasks, should this be the default budget? minPartQtyPOs: When a PO is automatically created due to part quantity threshold, should this be the default budget?",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "budgets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"locationID\": \"<integer>\",\n  \"name\": \"<string>\",\n  \"awaitingAllowPOEdit\": \"<boolean>\",\n  \"awaitingEmailSend\": \"<boolean>\",\n  \"awaitingAssignmentType\": \"<string>\",\n  \"awaitingAssignment\": \"<integer>\",\n  \"prEmailSend\": \"<boolean>\",\n  \"prAssignmentType\": \"<string>\",\n  \"prAssignment\": \"<integer>\",\n  \"defaultBudget\": {\n    \"global\": \"<boolean>\",\n    \"purchaseRequests\": \"<boolean>\",\n    \"minPartQtyPOs\": \"<boolean>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7260b747-a767-45aa-bacb-178067bc534c",
+              "name": "New Budget",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locationID\": 163,\n  \"name\": \"Awesome Test Budget\",\n  \"awaitingAllowPOEdit\": true,\n  \"awaitingEmailSend\": true,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 437,\n  \"prEmailSend\": true,\n  \"prAssignmentType\": \"team\",\n  \"prAssignment\": 437,\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": true,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"budgetID\": 98\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dd948f07-c4f3-4421-95b4-a52005665962",
+              "name": "The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locationID\": 163,\n  \"name\": \"Awesome Test Budget\",\n  \"awaitingAllowPOEdit\": true,\n  \"awaitingEmailSend\": true,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 437,\n  \"prEmailSend\": true,\n  \"prAssignmentType\": \"team\",\n  \"prAssignment\": 437,\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": true,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d8864321-84ee-40a2-b518-530c5d780088",
+              "name": "No `Authorization` header was provided on the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locationID\": 163,\n  \"name\": \"Awesome Test Budget\",\n  \"awaitingAllowPOEdit\": true,\n  \"awaitingEmailSend\": true,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 437,\n  \"prEmailSend\": true,\n  \"prAssignmentType\": \"team\",\n  \"prAssignment\": 437,\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": true,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "16e4d432-f418-412a-82fa-432ed483cc87",
+              "name": "The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locationID\": 163,\n  \"name\": \"Awesome Test Budget\",\n  \"awaitingAllowPOEdit\": true,\n  \"awaitingEmailSend\": true,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 437,\n  \"prEmailSend\": true,\n  \"prAssignmentType\": \"team\",\n  \"prAssignment\": 437,\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": true,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7493a847-0ae2-4458-a880-552cb441873d",
+              "name": "The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locationID\": 163,\n  \"name\": \"Awesome Test Budget\",\n  \"awaitingAllowPOEdit\": true,\n  \"awaitingEmailSend\": true,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 437,\n  \"prEmailSend\": true,\n  \"prAssignmentType\": \"team\",\n  \"prAssignment\": 437,\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": true,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "60714153-4fe0-4481-ad41-7fb84c637536",
+              "name": "The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locationID\": 163,\n  \"name\": \"Awesome Test Budget\",\n  \"awaitingAllowPOEdit\": true,\n  \"awaitingEmailSend\": true,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 437,\n  \"prEmailSend\": true,\n  \"prAssignmentType\": \"team\",\n  \"prAssignment\": 437,\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": true,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c5a1fd92-4d78-4762-ae06-8aa63f8a77b2",
+              "name": "An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locationID\": 163,\n  \"name\": \"Awesome Test Budget\",\n  \"awaitingAllowPOEdit\": true,\n  \"awaitingEmailSend\": true,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 437,\n  \"prEmailSend\": true,\n  \"prAssignmentType\": \"team\",\n  \"prAssignment\": 437,\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": true,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f6b03f9e-1b8a-4be3-92a4-36dd3a7ee99c",
+          "name": "Delete Budget",
+          "request": {
+            "name": "Delete Budget",
+            "description": {
+              "content": "This request deletes a budget.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "budgets",
+                ":budgetID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "budgetID",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "71e1b4d0-1385-486c-ad45-d77b87bd6c30",
+              "name": "The operation completed successfully. The response body is empty.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2bf3b79d-6f01-4cfc-afef-e48cedbda592",
+              "name": "The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1ecc8da2-dfff-4511-9d37-d90398f9915d",
+              "name": "No `Authorization` header was provided on the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d2f87462-f9eb-4b6d-98a0-a2e88763c60b",
+              "name": "The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b359d16-2138-498a-b73b-bcd23eb5da79",
+              "name": "The referenced resource does not exist or is not visible to the authenticated customer.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93a3bba0-8cbe-4952-b1f5-c6ec633c7fa9",
+              "name": "The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "158963f5-365d-4634-a44c-5114dd3bca4d",
+              "name": "An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "157754ed-2bc9-4742-ab87-d9230edcfc54",
+          "name": "Update Budget",
+          "request": {
+            "name": "Update Budget",
+            "description": {
+              "content": "This request updates an existing Budget.\n\nParameter: name, Type: String, Required?: Optional, Description: The title of this budget.\nParameter: awaitingAllowPOEdit, Type: Boolean, Required?: Optional, Description: When POs belonging to this budget are in the \"ready to receive\" state, will they be editable?\nParameter: awaitingEmailSend, Type: Boolean, Required?: Optional, Description: When POs belonging to this budget enter the \"ready to receive\" state, should the assignee(s) be emailed?\nParameter: awaitingAssignmentType, Type: Enum, Required?: Optional, Description: What type ('user' or 'team') should we interpret the awaitingAssignment value as? Required when awaitingAssignment is provided.\nParameter: awaitingAssignment, Type: Int or Array of Ints, Required?: Optional, Description: When POs belonging to this budget enter the \"ready to receive\" state, who will they be assigned to? If awaitingAssignmentType is 'team' then this cannot be an array, and may only be one number. Required when awaitingAssignmentType is provided.\nParameter: prEmailSend, Type: Boolean, Required?: Optional, Description: When PO items are received on POs that belong to this budget in the \"ready to receive\" or \"partially received\" states, should we send email notification(s)?\nParameter: prAssignmentType, Type: Enum, Required?: Optional, Description: What type ('user' or 'team') should we interpret the prAssignment value as? Required when prAssignment is provided.\nParameter: prAssignment, Type: Int or Array of Ints, Required?: Optional, Description: When bills are generated for PO items on POs that belong to this budget, who should the bills be assigned to? If prAssignmentType is 'team' then this cannot be an array, and may only be one number. Required when prAssignmentType is provided.\nParameter: defaultBudget, Type: Object, Required?: Optional, Description: An object containing Boolean flags for global, purchaseRequests, and minPartQtyPOs. Setting any of these flags to true will set the same value for any other budgets at this location to false (we cannot have two default budgets). All properties of this object are required when the object is provided. global: Should this be the default budget for this location? purchaseRequests: When purchase requests are created from tasks, should this be the default budget? minPartQtyPOs: When a PO is automatically created due to part quantity threshold, should this be the default budget?",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "budgets",
+                ":budgetID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "budgetID",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"awaitingAllowPOEdit\": \"<boolean>\",\n  \"awaitingEmailSend\": \"<boolean>\",\n  \"awaitingAssignmentType\": \"<string>\",\n  \"awaitingAssignment\": \"<integer>\",\n  \"prEmailSend\": \"<boolean>\",\n  \"prAssignmentType\": \"<string>\",\n  \"prAssignment\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"defaultBudget\": {\n    \"global\": \"<boolean>\",\n    \"purchaseRequests\": \"<boolean>\",\n    \"minPartQtyPOs\": \"<boolean>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c6fc088f-e19f-42b2-a78f-0edb7dcdb60c",
+              "name": "The operation completed successfully. The response body is empty.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Extremely Cool Budget\",\n  \"awaitingAllowPOEdit\": false,\n  \"awaitingEmailSend\": false,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 1,\n  \"prEmailSend\": false,\n  \"prAssignmentType\": \"user\",\n  \"prAssignment\": [\n    1,\n    2,\n    3\n  ],\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": false,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "15f217d6-9144-496f-bd62-69ce75876e4a",
+              "name": "The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Extremely Cool Budget\",\n  \"awaitingAllowPOEdit\": false,\n  \"awaitingEmailSend\": false,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 1,\n  \"prEmailSend\": false,\n  \"prAssignmentType\": \"user\",\n  \"prAssignment\": [\n    1,\n    2,\n    3\n  ],\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": false,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bb1e6f02-5b5f-4a59-bf0d-717148b87b56",
+              "name": "No `Authorization` header was provided on the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Extremely Cool Budget\",\n  \"awaitingAllowPOEdit\": false,\n  \"awaitingEmailSend\": false,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 1,\n  \"prEmailSend\": false,\n  \"prAssignmentType\": \"user\",\n  \"prAssignment\": [\n    1,\n    2,\n    3\n  ],\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": false,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "47783987-01fa-441c-9a6d-73556cefe52b",
+              "name": "The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Extremely Cool Budget\",\n  \"awaitingAllowPOEdit\": false,\n  \"awaitingEmailSend\": false,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 1,\n  \"prEmailSend\": false,\n  \"prAssignmentType\": \"user\",\n  \"prAssignment\": [\n    1,\n    2,\n    3\n  ],\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": false,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3622b027-e02a-4609-a2d4-d05975d650a5",
+              "name": "The referenced resource does not exist or is not visible to the authenticated customer.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Extremely Cool Budget\",\n  \"awaitingAllowPOEdit\": false,\n  \"awaitingEmailSend\": false,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 1,\n  \"prEmailSend\": false,\n  \"prAssignmentType\": \"user\",\n  \"prAssignment\": [\n    1,\n    2,\n    3\n  ],\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": false,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5a2e577e-5958-44af-92ba-f191a335358c",
+              "name": "The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Extremely Cool Budget\",\n  \"awaitingAllowPOEdit\": false,\n  \"awaitingEmailSend\": false,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 1,\n  \"prEmailSend\": false,\n  \"prAssignmentType\": \"user\",\n  \"prAssignment\": [\n    1,\n    2,\n    3\n  ],\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": false,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4a9c7d1-b3cd-4803-b126-2566f6759fe3",
+              "name": "The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Extremely Cool Budget\",\n  \"awaitingAllowPOEdit\": false,\n  \"awaitingEmailSend\": false,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 1,\n  \"prEmailSend\": false,\n  \"prAssignmentType\": \"user\",\n  \"prAssignment\": [\n    1,\n    2,\n    3\n  ],\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": false,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2c4b27ad-942a-42d9-bfb5-b5369a58f2e9",
+              "name": "An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "budgets",
+                    ":budgetID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "budgetID",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Extremely Cool Budget\",\n  \"awaitingAllowPOEdit\": false,\n  \"awaitingEmailSend\": false,\n  \"awaitingAssignmentType\": \"team\",\n  \"awaitingAssignment\": 1,\n  \"prEmailSend\": false,\n  \"prAssignmentType\": \"user\",\n  \"prAssignment\": [\n    1,\n    2,\n    3\n  ],\n  \"defaultBudget\": {\n    \"global\": true,\n    \"purchaseRequests\": false,\n    \"minPartQtyPOs\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"success\": true,\n  \"raw\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.limblecmms.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "92ab2a29-36e1-4eff-8f66-feac80238187",
+    "name": "Limble API V2 Assets Budgets API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Getting Started!\n\nWelcome to Limble CMMS’s API documentation.\n\nYou can use this documentation to configure connections to the Limble CMMS API over https using RESTful standards.\n\nUsing the API you can get information about the following portions of your system:\n\n- Assets\n\n- Locations\n\n- Parts (Current quantities and Usage)\n\n- Tasks (Work Orders, Preventive Maintenance, Work Requests, etc.)\n\n- Users\n\n- Vendors\n\n- Roles\n\n- Teams\n\n- Purchase Orders\n\n- General Ledgers\n\n- Budgets\n\n- Priorities\n\n- Tags\n\n- Statuses\n\n- Bills\n\n- Regions\n\n- Webhooks\n\n- Units of Measure(UOM)\n\nPlease use the correct Limble API URL to connect to our API based on the region or the type of your Limble Account.\n\n| **Limble Account (Region/Type)** | **Limble API URL** |\n| --- | --- |\n| Default | api.limblecmms.com |\n| Canada | ca-api.limblecmms.com |\n| Australia | au-api.limblecmms.com |\n| Europe | eu-api.limblecmms.com |\n| 21CFR | 21cfr-api.limblecmms.com |\n\n---\n\n# Authentication\n\nTo protect your information the Limble CMMS API uses BASIC authorization standards.\n\nEvery call to the API must include an authorization header with your base 64 encoded id and secret.\n\nClient ID\n\nYour Client ID is your unique customer identification.\n\nClient Secret\n\nYour Client Secret is used to authenticate the Client ID on each API call. This is something that must be kept secret.\n\n> How do I get my Client ID and Client Secret? \n\nTo obtain your Client ID and Client Secret login to your Limble account as a **Super Administrator** and go to **Settings** -> **Configuration**, on this page scroll down to the **API Settings** section and click **Generate API Keys**. Keep this information **secret**, you will only be able to see your Client Secret once upon initial generation. If you lose your secret you will need to regenerate it and update your integration accordingly.\n\n> Example Header \nAuthorization: Basic \\[BASE64 ENCODED YOUR_CLIENT_ID:YOUR_CLIENT_SECRET \n\nBelow is a code example for PHP:\n\n```\n$curl = curl_init();\n$id = 'your_client_id';\n$secret = 'your_client_id';\n$headers = array(\n'Content-Type:application/json',\n'Authorization: Basic '. base64_encode($id.':'.$secret)\n);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, $headers);\ncurl_setopt_array($curl, array(\nCURLOPT_URL => 'https://api.limblecmms.com:443/v2/tasks/',\nCURLOPT_RETURNTRANSFER => true,\nCURLOPT_ENCODING => \"\",\nCURLOPT_MAXREDIRS => 10,\nCURLOPT_TIMEOUT => 0,\nCURLOPT_FOLLOWLOCATION => false,\nCURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\nCURLOPT_CUSTOMREQUEST => \"GET\",\n));\n$response = curl_exec($curl);\n$err = curl_error($curl);\ncurl_close($curl);\nif ($err) {\necho \"cURL Error #:\" . $err;\n} else {\necho $response;\n} ?>\n\n```\n\nBelow is a code example for NodeJS:\n\n```\nconst https = require('https');\nconst id = 'your_client_id';\nconst secret = 'your_client_secret';\nconst options = {\n'method': 'GET',\n'hostname': 'api.limblecmms.com',\n'path': '/v2/tasks/?',\n'headers': {\n'Authorization': 'Basic ' + Buffer.from(`${credentials.id}:${credentials.secret}`).toString('base64')\n}\n};\nconst req = https.request(options, function (res) {\nconst chunks = [];\nres.on(\"data\", function (chunk) {\nchunks.push(chunk);\n});\nres.on(\"end\", function (chunk) {\nconst body = Buffer.concat(chunks);\nconsole.log(body.toString());\n});\nres.on(\"error\", function (error) {\nconsole.error(error);\n});\n});\nreq.end();\n\n```\n\n---\n\n# Error Codes\n\n- HTTP 400 - Data Validation Error - Malformed JSON input or incorrect data type.\n\n- HTTP 403 - Forbidden - The resource cannot be accessed.\n\n- HTTP 404 - Resource not found - The resource you are targeting does not exist.\n\n- HTTP 409 - Resource Conflict - A resource already exists with those parameters.\n\n- HTTP 422 - Unprocessable Entity - The syntax of the request is correct but cannot be processed due to semantic errors.\n\n- HTTP 429 - Too Many Requests - See the rate limiting section below.\n\n- HTTP 500 - Internal Server Error - Contact Limble for assistance.\n\n- HTTP 501 - Method Not Support - Limble's API only supports GET, POST, PATCH, PUT, and DELETE.\n\n---\n\n# Success Codes\n\n- HTTP 200 - OK - Everything was successful. PUTs, PATCHs and DELETEs on success always return an empty 200 OK.\n\n- HTTP 201 - CREATED - This is used on POST calls when new resouces are created. If a new resource was created Limble will always pass back a GET URL in the location header so a developer can easily GET the new resource.\n\n---\n\n# Overriding HTTP methods\n\nSome systems may support only the `POST` and `GET` HTTP methods. This restriction prevents using other HTTP methods such as `PUT`, `PATCH` and `DELETE`. RESTful web API implementations can work around this restriction by letting the client override the HTTP method via the custom HTTP headers.\n\nThe Limble API supports **Method Overrides** by using a `POST` request and setting the `X-HTTP-Method-Override` header with a method string value. The header value can be `PATCH` or `PUT`. This will allow Limble API users to use `PATCH` and `PUT` endpoints by sending `POST` requests to these endpoints and overriding them with the respective HTTP method.\n\n# Webhooks\n\nReceive data on certain events such as Tasks being completed.\n\nLimble's webhooks allow you to receive data whenever specific events occur.\n\nFor example, you may need to run your own script whenever a Task is completed.\n\nLimble supports adding multiple webhooks that can be triggered when actions are carried out on:\n\n- Tasks\n\n- Assets\n\n- Asset Fields\n\n- Purchase Orders\n\n- Purchase Order Items\n\nWhen an event occurs, Limble sends an HTTP POST request to a URL endpoint you configure.\n\nYou can configure this URL in the Limble Web App under:\n\n**Settings → Configuration → API Settings**\n\nAll data sent is JSON-encoded, and Limble includes the following fields in the request headers for validation:\n\n- `signature`\n\n- `timestamp`\n\n- `token`\n\nYou may register multiple webhooks for the same event type.\n\n### Important: API Key Requirement for Webhooks\n\nTo receive webhooks, the customer must have at least one active **limbleAPI key** created in API Settings.\n\n- Webhooks **will not function** without at least one valid `limbleAPI` key.\n\n- Limble uses the **first-created** **`limbleAPI`** **key** (by creation date) to generate the **signature** included in webhook headers.\n\n- The receiving system must use this key to verify the authenticity of incoming webhook requests.\n\nIf a customer has multiple `limbleAPI` keys, **only the oldest one** will be used for signing webhook requests.\n\n### Response Time and Retry Behavior\n\nYour server must respond to webhook POST requests within **10 seconds**.\n\nIf it does not, Limble will attempt to retry the webhook request.\n\nLimble handles server responses as follows:\n\n- If the server returns **200 OK**, Limble considers the webhook successful and will not retry.\n\n- If the server returns **406 Not Acceptable**, Limble considers the webhook received but intentionally ignored — no retry will occur.\n\n- For any other response (e.g., 500, timeout, etc.), Limble will retry the request.\n\n**Retry schedule:**\n\n- After 10 minutes\n\n- After 1 hour\n\n- After 2 hours\n\n- After 4 hours\n\nAfter the final retry attempt, the webhook will be **automatically disabled**.\n\n### Re-enabling a Disabled Webhook\n\nTo re-enable a disabled webhook:\n\n1. Go to **Settings → Configuration → API Settings** in the Limble Web App. \nFind the webhook and use the option to **Re-enable** the API endpoint.\n\n2. Alternatively, send a `PATCH` request using the **Update Webhook** endpoint and set `enabled = true`.\n\n### Assets\n\nBelow is an example payload you might be sent when an event occurs on an asset:\n\n```\n{\n\"assetID\": 10748, \n\"status\": \"CREATED\",\n\"category\": \"asset\", \n\"user\": \"bob@limblecmms.com\" \n}\n\n```\n\nOnce the Payload is received you can use the Get Assets API call to get the most recent Asset data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | An Asset is created\nDELETED | An Asset was deleted\nCHANGED ASSET NAME | An asset has been renamed\n\n### Asset Field\n\nBelow is an example payload you might be sent when an event occurs on an asset field:\n\n```\n{\n\"valueID\": 46490,\n\"status\": \"DELETED\",\n\"category\": \"assetField\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Asset Field API call to get the most recent Asset Field data. The following is a list of all the possible statuses that a webhook might be set to:\n\nADDED | An Asset Field was added to an Asset\nDELETED | An Asset Field was deleted from an Asset\nUPDATED | An Asset Field was updated on an Asset\n\n### Location\n\nBelow is an example payload you might be sent when an event occurs on an location field:\n\n```\n{\n\"valueID\": 46490,\n\"status\": \"DELETED\",\n\"category\": \"location\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Location API call to get the most recent Location data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | An Location was added\nDELETED | An Location was deleted\nUPDATED | An Location was updated\n\n### Parts\n\nFor Parts, you may receive a webhook that looks like this:\n\n```\n{ \n\"partID\": 3456,\n\"status\": \"CREATED\",\n\"category\": \"part\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nAll possible statuses for Parts webhooks are as follows:\n\nCREATED | A Part was created.\nDELETED | A Part was deleted.\nLOCATION UPDATED | A Part had its location updated.\nSUPPLIER UPDATED | A Part had its supplier updated.\nPRICE UPDATED | A Part had its price updated.\nNAME UPDATED | A Part had its name updated.\nQUANTITY INCREASED | The quantity of a part increased.\nQUANTITY DECREASED | The quantity of a part decreased.\n\n### Purchase Order\n\nIf you have enabled purchasing webhooks, you may receive a webhook for POs that looks like this:\n\n```\n{ \n\"poID\": 8203,\n\"status\": \"READY TO RECEIVE\",\n\"category\": \"po\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nPossible statuses for PO webhooks are:\n\nCREATED | A PO was created.\nSETUP | A PO has been reset and now has the setup status.\nCHANGE STATUS | A PO has been approved and now has a custom status.\nREADY TO RECEIVE | A PO now has the Ready to Receive status.\nPARTIALLY RECEIVED | A PO has received any number of items and now has the Partially Received status.\nFULLY RECEIVED | A PO has received all of its items and now has the Fully Received status.\nCLOSED | A PO has had all items received and all bills paid and now has the Closed status.\nDELETED | A PO was deleted.\nCHANGE BUDGET | A PO has been assigned a new budget.\nCHANGE VENDOR | A PO has been assigned a new vendor.\nCHANGE NUMBER | A PO's PO Number has been modified.\nCHANGE BILL-TO | A PO's bill-to field has been modified.\nCHANGE SHIP-TO | A PO's ship-to field has been modified.\nCHANGE NOTES TO VENDOR | A PO's \"Notes to Vendor\" field has been modified.\nCHANGE CUSTOM FIELD | Any of a PO's custom fields has been modified.\nCHANGE ASSIGNMENT | A PO has had its assignment (user, team, multi-user) modified.\nCHANGE DATE | A PO's created date has been modified.\nCHANGE DELIVERY DATE | A PO's expected delivery date has been modified.\nDISAPPROVED PURCHASE REQUEST | A Purchase Request PO has been disapproved.\nREOPENED PURCHASE REQUEST | A disapproved Purchase Request PO has been reopened.\nDISAPPROVED STEP | A PO has had its workflow step disapproved and been sent back a step.\n\n### Purchase Order Items\n\nFor PO Items, you may receive a webhook that looks like this:\n\n```\n{ \n\"poItemID\": 8203,\n\"status\": \"RECEIVED\",\n\"category\": \"poItem\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nAll possible statuses for PO Item webhooks are as follows:\n\nCREATED | A PO Item was created.\nDELETED | A PO Item was deleted.\nRECEIVED | Some quantity of a PO Item was marked as received.\nCHANGE GL | A PO Item has been assigned a new GL or its GL has been removed.\nCHANGE DESCRIPTION | A PO Item has had its description modified.\nCHANGE QUANTITY | A PO Item has had its quantity modified.\nCHANGE RATE | A PO Item has had its rate (price) modified.\nCHANGE TAX | A PO Item has had its tax percentage modified.\nCHANGE DISCOUNT | A PO Item has had its discount percentage modified.\nCHANGE SHIPPING | A PO Item has had its shipping cost modified.\n\n### Tasks\n\nBelow is an example payload you might be sent when an event occurs on a Task:\n\n```\n{\n\"taskID\": 8203, // The unique identifier for the item the webhook event describes\n\"status\": \"COMPLETE\", // The status (e.g. task created, task complete, etc.) -- see below for a full list of possible statuses.\n\"category\": \"task\", // The category of item that triggered the webhook to fire (e.g. task, po, poItem).\n\"user\": \"bob@limblecmms.com\" // The user whose action caused the webhook to fire.\n}\n\n```\n\nOnce the Payload is received you can use the Get Tasks API call to get the most recent Task data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | A Task was created\nDELETED | A Task was deleted\nCHANGED DUE DATE | A Task changed due date\nCHANGED ASSIGNMENT | A Task changed assignment\nCOMPLETE | A Task was completed.\nCHANGED COMPLETED TASK | A Task that is completed was changed.\nCOMPLETED TASK REOPENED | A task that was completed was reopened and is now open.\nCHANGED TASK NAME | A task has been renamed.\nCHANGED TASK DESCRIPTION | The description of a task has been changed.\nADDED COMMENT TO TASK | A comment was added to a task.\nCUSTOM TAG ADDED TO TASK | A custom tag was added to a task.\nCUSTOM TAG REMOVED FROM TASK | A custom tag was removed from task.\nLOGGED TIME ON TASK | A time entry was added to a task.\n\n### Task Instruction\n\nBelow is an example payload you might be sent when an event occurs on an location field:\n\n```\n{\n\"instructionID\": 46490,\n\"status\": \"Updated\",\n\"category\": \"instruction\",\n\"user\": \"bob@limblecmms.com\"\n}\n\n```\n\nOnce the Payload is received you can use the Get Instruction API call to get the task instruction data. The following is a list of all the possible statuses that a webhook might be set to:\n\nCREATED | A Task Instruction was added\nDELETED | A Task Instruction was deleted\nUPDATED | A Task Instruction was updated\nLABEL UPDATED | A Task Instruction's label was updated\nDESCRIPTION UPDATED | A Task Instruction's description was updated\nPARENT RESPONSE UPDATED | The response of a Task Instruction's parent item was updated\nSORT ORDER UPDATED | The sort order of a Task Instruction was updated.\n\n## Securing Webhooks\n\nTo ensure the authenticity and integrity of webhook events each webhook is \nsigned with a signature as well as some other data described below:\n\ntimestamp | int | A standard unix time stamp\ntoken | string | , randomly generated string that is an integrity check of the, payload.,\nsignature | String | A string generated by the HMAC algorithm\n\nTo verify the webhook is originating from LimbleCMMS you will need to:\n\n- Concatenate the timestamp and token\n\n- Encode your private API key (oldest Limble API Key) with the SHA256 algorithm\n\n- Encode the timestamp and token value with the HMAC algorithm using your hashed private key and the SHA256 method.\n\n- Compare the resulting digest to the signature provided in your webhook \nheader\n\n## Validation Code Examples\n\nCode samples to verify webhook data.\n\nPHP\n\n```\nfunction verify($timestamp, $signature, $apiKey, $token)\n//hash private key\n$apiKey = hash('sha256', $apiKey);\n$generated_signature = hash_hmac('sha256', $timestamp . $token, $apiKey);\nif($generated_signature === $signature) {\nreturn true;\n} else {\nreturn false;\n}\n} \n\n```\n\nNodeJS\n\n```\nvar crypto = require('crypto');\nconst verify = (apiKey, token, timestamp, signature) => {\n//hash private key\nconst apiKey = crypto.createHash('sha256').update(apiKey).digest('hex');\nconst value = timestamp+token;\nconst generated_signature = crypto.createHmac('sha256',apiKey).update(value).digest('hex');\nif(signature === generated_signature){\nreturn true;\n} else {\nreturn false;\n}\n};\n\n```\n\n---\n\n# Rate limit\n\nTo help protect against run-away scripts, clients who make an inordinate \nnumber of calls over a period of time may be temporarily blocked from \naccessing the service. The limits are defined in the table below. If you \nreceive an error indicating that you have exceeded the call limit, please \nwait and try again later. If you need higher limits please reach out to your dedicated account manager.\n\n## Per Hour\n\nGET | 4000 calls per hour. | 360 calls per minute.\nPATCH | 2000 calls per hour. | 240 calls per minute.\nPOST | 1000 calls per hour. | 240 calls per minute.\nPUT | 1000 calls per hour. | 240 calls per minute.\nDELETE | 100 calls per hour. | 60 calls per minute.\nBATCH REQUEST | 20 calls per hour | 5 calls per minute\n\nEvery API response is accompanied by the following set of headers to identify the status of your consumption. API calls are rate-limited on two windows of time: per-minute and per-hour. For example, if you made a request at 13:42:42, that request will expire from your per-minute window at 13:43:42 and from your per-hour window at 14:42:42.\n\nX-RateLimit-Limit | The maximum number of requests that the consumer is permitted to make per hour.\nX-RateLimit-Remaining | The number of requests remaining in the current per-hour window.\nX-RateLimit-First-Call | The time your first call was made in the current per-hour window.\nX-RateLimit-TTL | The time until more request resources become available (This only displays when you've hit your limit).\nX-RateLimit-Minute-Limit | The maximum number of requests that the consumer is permitted to make per minute.\nX-RateLimit-Minute-Remaining | The number of requests remaining in the current per-minute window.\nX-RateLimit-Minute-First-Call | The time your first call was made in the current per-minute window.\nX-RateLimit-Minute-TTL | The time until more request resources become available (This only displays when you've hit your limit).\n\n# Pagination\n\nCurrently pagination using OrderBy and cursor is supported only by **GET Tasks** and **GET Assets**. Pagination using Limit and Page is supported by many other GET endpoints including **GET Tasks** and **GET Assets**.\n\nPagination can be implemented by using the orderBy, cursor, limit and page query parameters. \n**Note: cursor and page cannot be used simultaneously for pagination.**\n\n## Pagination using Limit and Page\n\nThis uses limit and page query parameters. For a given limit and page results will be paginated. If orderBy query parameter is given the results will be ordered and paginated accordingly.\n\nThe page parameter is **required** and can be greater than or equal to 1 for this pagination method. The default limit is 100 but can be changed. The max limit is 1000.\n\nThe response headers contain information about the Previous, Next and Last Page of the result based on the limit.\n\nThe result will be empty when for a given limit, the given page does not exist. For example, if there are 100 Assets in total and limit is set at 10, only pages 1-10 are possible. An empty result will be given for page numbers greater than 10.\n\nThis pagination method is supported by various GET endpoints. Please refer to the examples for those GET endpoints for more information.\n\n## Pagination using OrderBy and Cursor\n\n**Note**: If you're implementing pagination for the first time for **GET Tasks** or **GET Assets** please follow **Pagination Using Limit and Page** as the use of **Cursor** will be deprecated in the next API version.\n\nThis uses orderBy and cursor query parameters. Generally, in all of our GET endpoints, the cursor parameter ensures that the ID will be greater than the value of cursor. This makes sense when we're ordering the results ascending by ID.\n\nIn GET Assets, when we're fetching a set of assets and ordering by lastEdited (ascending) or -lastEdited (descending), the cursor parameter will instead ensure that we're returning a set of results that begin at the next asset in the order, regardless of whether its **ID is greater or less than the value of cursor**.\n\nIf the value of cursor does not match an existing assetID, then the result set will be empty, because there is no lastEdited value to compare to. **When providing orderBy and cursor, the value of cursor must be a real assetID or the result set will be empty.**\n\nThe same applies for GET Tasks when using cursor and ordering by createdDate, dateCompleted and due.",
+      "type": "text/plain"
+    }
+  }
+}

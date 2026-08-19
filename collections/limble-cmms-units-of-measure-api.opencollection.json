@@ -1,0 +1,106 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Limble API V2 Assets Units of Measure API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Units of Measure",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Units",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.limblecmms.com/v2/uom",
+            "params": [
+              {
+                "name": "unitCodes",
+                "value": "fluid_ounce_us, W0gzuwOpmOo_dXKtrc2RL",
+                "type": "query",
+                "description": "This parameter is used to only get specific units. This parameter accepts a comma delimited list of unit codes."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "This parameter is a result limiter. The default is 20 units and the max is 100."
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "This parameter is used to paginate results based on the limit. Refer to Pagination section for more information. "
+              },
+              {
+                "name": "nameStartsWith",
+                "value": "p",
+                "type": "query",
+                "description": "Filter by units that have a name which starts with this string."
+              },
+              {
+                "name": "abbreviationStartsWith",
+                "value": "l",
+                "type": "query",
+                "description": "Filter by units that have an abbreviation which starts with this string."
+              }
+            ]
+          },
+          "docs": "This endpoint makes an HTTP GET request to retrieve the unit of measurement (UOM) data. The response of this request is documented as a JSON schema.\n\nReturn data description\n\n| **Property** | **Description** |\n| --- | --- |\n| unitCode | The identifier of this unit of measure. It is some random text for custom units (e.g. `j5VEKvW-TD8femkRe02KV`) and it is something semantic for provided units (e.g. `fluid_ounce`) |\n| name | The full name of a unit to make it clear what it is. |\n| abbreviation | "
+        },
+        {
+          "info": {
+            "name": "Create Unit",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.limblecmms.com/v2/uom",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The `POST /v2/uom` endpoint is used to create a new custom unit. The request should include a JSON payload with the `name` and `abbreviation` fields.\n\n### Request Body\n\n- `name` (string): The full name of the unit.\n    \n- `abbreviation` (string): A compact name of the unit.\n    \n\n### Response\n\nThe full unit object of your newly created unit."
+        },
+        {
+          "info": {
+            "name": "Update Unit",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.limblecmms.com/v2/uom/:unitCode",
+            "params": [
+              {
+                "name": "unitCode",
+                "value": "E979vVp936_8kV0amzLre",
+                "type": "path",
+                "description": "The unit identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The HTTP PATCH request is used to update a specific unit identified by its unit code. The request should be made to the endpoint `{{protocol}}://{{server}}:{{port}}/v2/uom/:unitCode`, where `:unitCode` is the unique identifier of the unit being updated.\n\n### Request Body\n\nThe body is interpreted slightly differently, depending on whether the `unitCode` in the url is for a custom unit or a provided unit. If it is custom, then either property can be used to update the unit. If it is a provided uni"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
