@@ -1,0 +1,73 @@
+generated: '2026-09-17'
+method: searched
+source: https://apidocs.limblecmms.com/#webhooks
+also_in: openapi/limble-solutions-limble-api-v2-openapi.yml (info.description "Webhooks")
+asyncapi: none published
+kind: webhook-catalog
+transport: HTTPS POST, JSON body
+configuration:
+  ui: Settings -> Configuration -> API Settings (Limble Web App)
+  api:
+    - operationId: getWebhooks
+      path: GET /v2/webhooks
+    - operationId: postWebhooks
+      path: POST /v2/webhooks
+      body: { endpoint: URL, type: asset|assetField|location|part|po|poItem|task|instruction, enabled: 0|1 }
+    - operationId: patchWebhooksByWebhookID
+      path: PATCH /v2/webhooks/{webhookID}
+    - operationId: deleteWebhooksByWebhookID
+      path: DELETE /v2/webhooks/{webhookID}
+  multiple_per_event: true
+  prerequisite: at least one active limbleAPI key; the OLDEST key (by creation date) signs every webhook
+signing:
+  headers: [signature, timestamp, token]
+  algorithm: >-
+    signature = HMAC-SHA256(key = SHA256(oldest limbleAPI client secret), message = timestamp + token); compare to
+    the signature header. token is a random per-delivery integrity string, timestamp a unix time.
+  code_samples: PHP and NodeJS in the docs
+delivery:
+  timeout_seconds: 10
+  success: 200 OK - no retry
+  ignored: 406 Not Acceptable - treated as received but intentionally ignored, no retry
+  retry_on: any other response or timeout
+  retry_schedule: [10 minutes, 1 hour, 2 hours, 4 hours]
+  after_final_retry: webhook automatically disabled
+  re_enable: Settings -> Configuration -> API Settings, or PATCH /v2/webhooks/{webhookID} with enabled=true
+payload:
+  shape: '{ <resource>ID: int, status: string, category: string, user: email }'
+  note: Thin notification - fetch the current record with the matching GET (Get Assets, Get Tasks, ...) after receipt.
+events:
+  - category: asset
+    id_field: assetID
+    statuses: [CREATED, DELETED, CHANGED ASSET NAME]
+    fetch: getAssets
+  - category: assetField
+    id_field: valueID
+    statuses: [ADDED, DELETED, UPDATED]
+    fetch: getAssetsFields
+  - category: location
+    id_field: locationID
+    statuses: [CREATED, DELETED, UPDATED]
+    fetch: getLocations
+  - category: part
+    id_field: partID
+    statuses: [CREATED, DELETED, LOCATION UPDATED, SUPPLIER UPDATED, PRICE UPDATED, NAME UPDATED, QUANTITY INCREASED, QUANTITY DECREASED]
+    fetch: getParts
+  - category: po
+    id_field: poID
+    statuses: [CREATED, SETUP, CHANGE STATUS, READY TO RECEIVE, PARTIALLY RECEIVED, FULLY RECEIVED, CLOSED, DELETED, CHANGE BUDGET, CHANGE VENDOR, CHANGE NUMBER, CHANGE BILL-TO, CHANGE SHIP-TO, CHANGE NOTES TO VENDOR, CHANGE CUSTOM FIELD, CHANGE ASSIGNMENT, CHANGE DATE, CHANGE DELIVERY DATE, DISAPPROVED PURCHASE REQUEST, REOPENED PURCHASE REQUEST, DISAPPROVED STEP]
+    fetch: getPo
+  - category: poItem
+    id_field: poItemID
+    statuses: [CREATED, DELETED, RECEIVED, CHANGE GL, CHANGE DESCRIPTION, CHANGE QUANTITY, CHANGE RATE, CHANGE TAX, CHANGE DISCOUNT, CHANGE SHIPPING]
+    fetch: getPoItems
+  - category: task
+    id_field: taskID
+    statuses: [CREATED, DELETED, CHANGED DUE DATE, CHANGED ASSIGNMENT, COMPLETE, CHANGED COMPLETED TASK, COMPLETED TASK REOPENED, CHANGED TASK NAME, CHANGED TASK DESCRIPTION, ADDED COMMENT TO TASK, CUSTOM TAG ADDED TO TASK, CUSTOM TAG REMOVED FROM TASK, LOGGED TIME ON TASK]
+    fetch: getTasks
+  - category: instruction
+    id_field: instructionID
+    statuses: [CREATED, DELETED, UPDATED, LABEL UPDATED, DESCRIPTION UPDATED, PARENT RESPONSE UPDATED, SORT ORDER UPDATED]
+    fetch: getTasksInstructionsByInstructionID
+event_count: 8
+status_count: 59

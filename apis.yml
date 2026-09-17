@@ -26,33 +26,23 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/limble-cmms.png
 name: Limble CMMS
-description: >-
-  Limble CMMS is a cloud-based computerized maintenance management system (CMMS) for
-  manufacturing, facilities, and fleet maintenance teams. The Limble REST API V2 provides
-  programmatic access to assets, locations, work orders, preventive maintenance schedules,
-  parts inventory, purchase orders, vendors, users, and webhooks across regionally
-  distributed endpoints covering North America, Canada, Australia, and Europe.
+description: Limble CMMS is a cloud-based computerized maintenance management system (CMMS) for manufacturing, facilities, and fleet maintenance teams. The Limble REST API V2 provides programmatic access to assets, locations, work orders, preventive maintenance schedules, parts inventory, purchase orders, vendors, users, and webhooks across regionally distributed endpoints covering North America, Canada, Australia, and Europe.
 type: Index
 url: https://raw.githubusercontent.com/api-evangelist/limble-cmms/refs/heads/main/apis.yml
 tags:
-  - CMMS
-  - Maintenance Management
-  - Asset Management
-  - Manufacturing
-  - Facility Management
-  - Work Orders
+- CMMS
+- Maintenance Management
+- Asset Management
+- Manufacturing
+- Facility Management
+- Work Orders
 created: '2026-06-05'
 modified: '2026-06-05'
 specificationVersion: '0.23'
 apis:
 - aid: limble-cmms:limble-api-v2
   name: Limble API V2
-  description: >-
-    The Limble CMMS REST API V2 provides HTTPS access to maintenance management data including assets,
-    locations, work orders, preventive maintenance tasks, parts, purchase orders, users, vendors, teams,
-    roles, budgets, and webhooks. Uses Basic authentication. Regional endpoints available for US, Canada,
-    Australia, and Europe, plus a dedicated 21 CFR Part 11 compliant endpoint for pharmaceutical and life
-    sciences manufacturing.
+  description: The Limble CMMS REST API V2 provides HTTPS access to maintenance management data including assets, locations, work orders, preventive maintenance tasks, parts, purchase orders, users, vendors, teams, roles, budgets, and webhooks. Uses Basic authentication. Regional endpoints available for US, Canada, Australia, and Europe, plus a dedicated 21 CFR Part 11 compliant endpoint for pharmaceutical and life sciences manufacturing.
   humanURL: https://apidocs.limblecmms.com/
   baseURL: https://api.limblecmms.com
   tags:
@@ -65,8 +55,7 @@ apis:
   properties:
   - url: https://apidocs.limblecmms.com/
     type: Documentation
-  - url: >-
-      https://www.postman.com/limbleapiqa/limble-solutions-llc-s-public-workspace/documentation/zskh2o7/limble-api-v2
+  - url: https://www.postman.com/limbleapiqa/limble-solutions-llc-s-public-workspace/documentation/zskh2o7/limble-api-v2
     type: Examples
 - aid: limble-cmms:limble-cmms-routes-api
   name: Limble CMMS Routes API
@@ -78,35 +67,123 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/limble-cmms-routes-api-openapi.yml
-common:
-  - type: AgenticAccess
-    url: agentic-access/limble-cmms-agentic-access.yml
-  - type: TrustCenter
-    url: security/limble-cmms-trust-center.yml
-  - type: DomainSecurity
-    url: security/limble-cmms-domain-security.yml
+- name: Limble MCP Server
+  description: Official hosted Model Context Protocol server at https://mcp.limblecmms.com/mcp (Streamable HTTP) that exposes Limble CMMS data and actions to MCP clients (Cursor, Claude Desktop, Claude Code, GitHub Copilot, Microsoft Copilot Studio). Authenticated with the same client ID and secret as the REST API, sent as Limble-Client-ID / Limble-Client-Secret headers or as an HTTP Basic Authorization header; the tool list (help, get_current_customer_info, get_tasks, list_mcp_tools, ...) is only enumerable after authentication. Available on the Premium+ and Enterprise plans.
+  humanURL: https://help.limblecmms.com/en/articles/12902567-limble-mcp-user-setup-guide
+  baseURL: https://mcp.limblecmms.com/mcp
+  tags:
+  - MCP
+  - CMMS
+  - Maintenance Management
+  - agent-native
+  properties:
+  - type: Documentation
+    url: https://help.limblecmms.com/en/articles/12902567-limble-mcp-user-setup-guide
+  - type: MCPServer
+    url: mcp/limble-cmms-mcp.yml
+  - type: MCPServer
+    url: https://mcp.limblecmms.com/mcp
+  - type: ToolCrosswalk
+    url: mcp/limble-cmms-tool-crosswalk.yml
   - type: Authentication
     url: authentication/limble-cmms-authentication.yml
-  - type: Website
-    url: https://limble.com
-  - type: Documentation
-    url: https://apidocs.limblecmms.com/
-  - type: Portal
-    url: https://help.limblecmms.com/en/collections/3322827-api
-  - type: Blog
-    url: https://limble.com/blog/
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/limble-cmms
-  - type: YouTube
-    url: https://www.youtube.com/@LimbleCMMS
-  - type: Pricing
-    url: https://limble.com/pricing/
-  - type: About
-    url: https://limble.com/company/
-  - type: Integrations
-    url: https://limble.com/integrations/
-  - type: Signup
-    url: https://limble.com/register/
+common:
+- type: DeveloperPortal
+  url: https://apidocs.limblecmms.com/
+- type: APIReference
+  url: https://apidocs.limblecmms.com/
+- type: GettingStarted
+  url: https://help.limblecmms.com/en/articles/11932574-managing-api-keys-in-limble
+- type: Support
+  url: https://help.limblecmms.com/en/
+- type: HelpCenter
+  url: https://help.limblecmms.com/en/
+- type: Community
+  url: https://community.limble.com/
+- type: GitHubOrganization
+  url: https://github.com/LimbleCMMS
+- type: SignUp
+  url: https://limble.com/demo-request
+- type: Login
+  url: https://auth.limblecmms.com/
+- type: TermsOfService
+  url: https://limble.com/terms-of-service
+- type: PrivacyPolicy
+  url: https://limble.com/privacy
+- type: DataProcessingAddendum
+  url: https://limble.com/data-processing-addendum
+- type: Postman
+  url: https://documenter.getpostman.com/view/5190375/SVfRsT5S
+- type: StatusPage
+  url: https://status.limblecmms.com/
+- type: ChangeLog
+  url: https://limble.com/releases
+- type: OpenAPI
+  url: openapi/limble-cmms-limble-api-v2-openapi.yml
+- type: MCPServer
+  url: mcp/limble-cmms-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/limble-cmms-tool-crosswalk.yml
+- type: LLMsTxt
+  url: llms/limble-cmms-llms.txt
+- type: Conventions
+  url: conventions/limble-cmms-conventions.yml
+- type: Lifecycle
+  url: lifecycle/limble-cmms-lifecycle.yml
+- type: Conformance
+  url: conformance/limble-cmms-conformance.yml
+- type: Compliance
+  url: security/limble-cmms-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/limble-cmms-vulnerability-disclosure.yml
+- type: Security
+  url: security/limble-cmms-vulnerability-disclosure.yml
+- type: ErrorCatalog
+  url: errors/limble-cmms-problem-types.yml
+- type: RateLimits
+  url: rate-limits/limble-cmms-rate-limits.yml
+- type: Plans
+  url: plans/limble-cmms-plans-pricing.yml
+- type: ChangeLog
+  url: changelog/limble-cmms-changelog.yml
+- type: Packages
+  url: packages/limble-cmms-packages.yml
+- type: Webhooks
+  url: asyncapi/limble-cmms-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/limble-cmms-data-model.yml
+- type: Overlay
+  url: overlays/limble-cmms-limble-api-v2-overlay.yaml
+- type: AgenticAccess
+  url: agentic-access/limble-cmms-agentic-access.yml
+- type: TrustCenter
+  url: security/limble-cmms-trust-center.yml
+- type: DomainSecurity
+  url: security/limble-cmms-domain-security.yml
+- type: Authentication
+  url: authentication/limble-cmms-authentication.yml
+- type: Website
+  url: https://limble.com
+- type: Documentation
+  url: https://apidocs.limblecmms.com/
+- type: Portal
+  url: https://help.limblecmms.com/en/collections/3322827-api
+- type: Blog
+  url: https://limble.com/blog/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/limble-cmms
+- type: YouTube
+  url: https://www.youtube.com/@LimbleCMMS
+- type: Pricing
+  url: https://limble.com/pricing/
+- type: About
+  url: https://limble.com/company/
+- type: Integrations
+  url: https://limble.com/integrations/
+- type: Signup
+  url: https://limble.com/register/
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com

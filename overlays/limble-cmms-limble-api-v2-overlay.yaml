@@ -1,0 +1,112 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Limble API V2
+  version: 1.0.0
+  x-generated: '2026-09-17'
+  x-method: generated
+  x-source: apis.yml, conventions/, rate-limits/, asyncapi/, errors/ artifacts in this repo
+extends: openapi/limble-solutions-limble-api-v2-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-api-evangelist:
+      profile: https://apis.io/providers/limble-solutions/
+      source: https://api.limblecmms.com/openapi.json
+      fetched: '2026-09-17'
+      pass: local-v3
+    contact:
+      name: Limble CMMS Support
+      email: support@limblecmms.com
+      url: https://help.limblecmms.com/en/
+    termsOfService: https://limble.com/terms-of-service
+    x-logo:
+      url: https://cdn.prod.website-files.com/695d658507ace930b906b9eb/695d65c78316216412d70e58_256x256.png
+- target: $
+  update:
+    servers:
+    - url: https://api.limblecmms.com
+      description: Default (US) - documented in info.description; the upstream servers[] block is the Postman placeholder {{server}}:{{port}}
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21CFR accounts
+- target: $
+  update:
+    externalDocs:
+      description: Limble API V2 documentation (Postman Documenter)
+      url: https://apidocs.limblecmms.com/
+- target: $
+  update:
+    tags:
+    - name: Assets
+    - name: Batch
+    - name: Bills
+    - name: Budgets
+    - name: Capacity
+    - name: Categories
+    - name: Comments
+    - name: Exceptions
+    - name: Fields
+    - name: Files
+    - name: General Ledgers
+    - name: Image
+    - name: Images
+    - name: Instructions
+    - name: Invoices
+    - name: Items
+    - name: Labor
+    - name: Locations
+    - name: Logs
+    - name: Me
+    - name: Options
+    - name: Parts
+    - name: Priorities
+    - name: Purchasables
+    - name: Purchase Orders
+    - name: Regions
+    - name: Roles
+    - name: Schedules
+    - name: State
+    - name: Statuses
+    - name: Steps
+    - name: Tags
+    - name: Tasks
+    - name: Teams
+    - name: Transactions
+    - name: Units of Measure
+    - name: Users
+    - name: Vendor Associations
+    - name: Vendors
+    - name: Webhooks
+    - name: Work Request Submissions
+- target: $
+  update:
+    x-rate-limits: rate-limits/limble-solutions-rate-limits.yml
+    x-webhooks: asyncapi/limble-solutions-webhooks.yml
+    x-conventions: conventions/limble-solutions-conventions.yml
+    x-error-catalog: errors/limble-solutions-problem-types.yml
+    x-mcp-server: https://mcp.limblecmms.com/mcp
+- target: $.paths['/v2/tasks'].get
+  update:
+    x-agent-hints:
+      pagination: prefer limit+page; orderBy+cursor is announced for deprecation in the next API version
+      limit_max: 1000
+      rate_limit: GET 4000/hour, 360/minute
+- target: $.paths['/v2/assets'].get
+  update:
+    x-agent-hints:
+      pagination: prefer limit+page; orderBy+cursor is announced for deprecation in the next API version
+      limit_max: 1000
+      rate_limit: GET 4000/hour, 360/minute
+- target: $.paths['/v2/po/{poID}/state'].patch
+  update:
+    x-agent-hints:
+      reversibility: irreversible - POs only move forward one state per request; call getPoByPoIDStateTransitions first
+- target: $.paths['/v2/tasks/{taskID}'].patch
+  update:
+    x-agent-hints:
+      reversibility: status 1 closes, status 0 reopens; closing requires assignment + assignmentType

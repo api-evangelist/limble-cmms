@@ -1,0 +1,76 @@
+generated: '2026-09-17'
+method: derived
+source: openapi/limble-solutions-limble-api-v2-openapi.yml
+docs: https://apidocs.limblecmms.com/#error-codes
+format: custom-json
+content_type: application/json
+envelope:
+  note: >-
+    Two body shapes coexist (components.schemas.ErrorResponse, oneOf): the standard `{ message, success?, raw? }`
+    from the central error handler and most controllers, and the legacy `{ error, success, msg }` from the auth
+    middleware (observed live: {"error":401,"success":false,"msg":"No Credentials Provided"}). Not RFC 9457.
+  shapes:
+    - fields: [message, success, raw]
+      required: [message]
+      note: raw carries the validation error object when present
+    - fields: [error, success, msg]
+      required: [error, msg]
+      note: error echoes the numeric HTTP status
+declared_per_operation:
+  - status: '400'
+    operations: 212
+  - status: '401'
+    operations: 212
+  - status: '403'
+    operations: 212
+  - status: '404'
+    operations: 145
+  - status: '409'
+    operations: 95
+  - status: '422'
+    operations: 1
+  - status: '429'
+    operations: 212
+  - status: '500'
+    operations: 212
+problem_types:
+  - status: 400
+    title: Data Validation Error
+    detail: Malformed JSON input or incorrect data type; on PATCH /v2/po/{poID}/state also an invalid state transition.
+    remediation: Fix the payload against the operation's documented parameter table; PO state can only move forward one step.
+  - status: 401
+    title: No Credentials Provided
+    detail: Authorization header missing or not a valid Basic client ID:secret pair.
+    remediation: "Send `Authorization: Basic base64(CLIENT_ID:CLIENT_SECRET)`; regenerate keys under Settings -> Configuration -> API Settings."
+  - status: 403
+    title: Forbidden
+    detail: The resource cannot be accessed with this key.
+    remediation: Check the key belongs to the right Limble account and region host (api / ca-api / au-api / eu-api / 21cfr-api).
+  - status: 404
+    title: Resource not found
+    detail: The resource you are targeting does not exist.
+  - status: 409
+    title: Resource Conflict
+    detail: A resource already exists with those parameters (declared on 95 operations, mostly creates and attachments).
+  - status: 422
+    title: Unprocessable Entity
+    detail: Request is syntactically valid but semantically wrong - notably a `limit` above the endpoint's server-side maximum.
+    remediation: Lower `limit`; a missing or non-positive limit defaults to 1000.
+  - status: 429
+    title: Too Many Requests
+    detail: Per-minute or per-hour method quota exhausted.
+    remediation: Read X-RateLimit-TTL / X-RateLimit-Minute-TTL and wait; see rate-limits/limble-solutions-rate-limits.yml.
+  - status: 500
+    title: Internal Server Error
+    detail: Contact Limble for assistance.
+  - status: 501
+    title: Method Not Supported
+    detail: Only GET, POST, PATCH, PUT and DELETE are supported; use the X-HTTP-Method-Override header on POST where a client cannot send PATCH/PUT.
+success_codes:
+  - status: 200
+    note: PUT, PATCH and DELETE always return an empty 200 on success.
+  - status: 201
+    note: POST creates return 201 with a Location header carrying the GET URL of the new resource.
+partial_failure:
+  operation: postAssetsFieldsBatchUpdate
+  note: "Returns `{ success: false, updates: [...] }` with a per-item `reason` when some field values in a batch fail."

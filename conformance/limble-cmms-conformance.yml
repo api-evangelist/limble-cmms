@@ -1,0 +1,64 @@
+generated: '2026-09-17'
+method: derived
+source: openapi/limble-solutions-limble-api-v2-openapi.yml
+docs: https://apidocs.limblecmms.com/
+trust_center: https://trust.limble.com/
+sector: maintenance-management (CMMS / EAM)
+domain_standard:
+  applicable: none identified
+  note: >-
+    No cross-industry interchange standard for CMMS/EAM data is declared in the contract (no ISO 55000 data
+    model, no MIMOSA OSA-EAI, no ISA-95 shape); the API is a bespoke JSON resource model. Reward-only: this
+    absence is not penalised.
+conformance:
+  - id: openapi-3.1
+    conforms: true
+    evidence: openapi/limble-solutions-limble-api-v2-openapi.yml declares openapi 3.1.0; served from https://api.limblecmms.com/openapi.json
+  - id: http-basic-auth
+    conforms: true
+    evidence: components.securitySchemes.BasicAuth (type http, scheme basic), RFC 7617
+  - id: oauth2
+    conforms: false
+    evidence: no oauth2 securityScheme; /.well-known/oauth-authorization-server on api.limblecmms.com returns 401, mcp.limblecmms.com returns 404
+  - id: oidc
+    conforms: false
+    evidence: no openIdConnect scheme; product SSO is OIDC-based for end users (pricing table) but not exposed to API consumers
+  - id: rfc9457
+    conforms: false
+    evidence: components.schemas.ErrorResponse is a custom { message } / { error, success, msg } envelope, application/json
+  - id: pagination
+    conforms: true
+    evidence: limit/page and orderBy/cursor query parameters with Last-Page, Next-Page, Previous-Page, X-Has-More headers (docs Pagination section)
+  - id: idempotency
+    conforms: false
+    evidence: no Idempotency-Key or replay-protection mechanism documented (conventions/limble-solutions-conventions.yml idempotency.coverage none)
+  - id: rate-limit-headers
+    conforms: true
+    evidence: X-RateLimit-* header family documented for every response; not the IETF RateLimit-* draft names
+  - id: webhook-signing
+    conforms: true
+    evidence: HMAC-SHA256 signature/timestamp/token headers documented (docs Securing Webhooks); not Standard Webhooks
+  - id: json:api
+    conforms: false
+    evidence: plain JSON arrays/objects, no data/attributes envelope
+  - id: odata
+    conforms: false
+    evidence: no $metadata or $filter surface
+  - id: scim
+    conforms: false
+    evidence: user provisioning is via /v2/users with a bespoke schema, no urn:ietf:params:scim URNs
+  - id: soc2-type2
+    conforms: true
+    evidence: https://trust.limble.com/ - annual SOC 2 Type II examination, report period 2024-08-01 to 2025-07-31, available under NDA
+  - id: gdpr
+    conforms: true
+    evidence: https://trust.limble.com/ GDPR compliance item; DPA at https://limble.com/data-processing-addendum
+  - id: eu-ai-act
+    conforms: true
+    evidence: https://trust.limble.com/ lists EU AI Act under Compliance with an AI Overview / AI Governance section
+  - id: 21-cfr-part-11
+    conforms: true
+    evidence: Enterprise plan "Regulatory Compliance (21 CFR)" and a dedicated 21cfr-api.limblecmms.com host in the OpenAPI description
+  - id: tls-1.2-plus
+    conforms: true
+    evidence: trust center Encryption-in-transit states TLS 1.2+; live probe negotiated TLSv1.3 on api.limblecmms.com (security/limble-solutions-domain-security.yml)

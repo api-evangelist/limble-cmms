@@ -1,0 +1,318 @@
+generated: '2026-09-17'
+method: derived
+source: openapi/limble-solutions-limble-api-v2-openapi.yml
+docs: https://apidocs.limblecmms.com/
+identifiers:
+  style: integer surrogate ids named <entity>ID (assetID, taskID, partID, poID, poItemID, userID, teamID, locationID, vendorID, billID, budgetID, glID, regionID, priorityID, statusID, valueID, fieldID, logID, instructionID, relationID, stepID, webhookID)
+  prefixes: none (plain integers)
+  timestamps: unix seconds
+entities:
+  - name: Location
+    schema: Location
+    key: locationID
+    root: true
+    note: every operational record belongs to a Location; Locations roll up into Regions (Enterprise multi-location)
+  - name: Region
+    key: regionID
+    schema: null
+  - name: Asset
+    schema: Asset
+    key: assetID
+    note: hierarchical via parentAssetID; carries custom fields (valueID/fieldID) and logs
+  - name: AssetField
+    key: valueID
+    note: custom field value attached to an Asset; field definitions (fieldID) carry dropdown options
+  - name: Task
+    schema: Task
+    key: taskID
+    note: work orders (type 2 unplanned, 4 planned), PMs (type 1) and work requests (type 6); templates spawn tasks
+  - name: TaskInstruction
+    schema: TaskInstruction
+    key: instructionID
+  - name: WorkRequestSubmission
+    schema: WorkRequestSubmission
+    note: pending request approved/declined into a Task
+  - name: Part
+    schema: Part
+    key: partID
+  - name: PartCategory
+    key: categoryID
+  - name: AssetPart
+    schema: AssetPart
+    key: relationID
+    note: join between Asset and Part (bill of materials)
+  - name: Vendor
+    schema: Vendor
+    key: vendorID
+  - name: VendorAssociation
+    key: relationID
+    note: join between Part and Vendor (purchasables)
+  - name: PurchaseOrder
+    schema: PurchaseOrder
+    key: poID
+    note: state machine 0 setup, 1-96 custom, 97 ready_to_receive, 98 partially_received, 99 fully_received, 100 closed, 101 disapproved
+  - name: POItem
+    schema: POItem
+    key: poItemID
+  - name: Bill
+    schema: Bill
+    key: billID
+  - name: Transaction
+    key: transactionID
+    note: payment against a Bill
+  - name: Budget
+    schema: Budget
+    key: budgetID
+  - name: BudgetStep
+    schema: BudgetStep
+    key: stepID
+  - name: GeneralLedger
+    key: glID
+  - name: User
+    schema: User
+    key: userID
+  - name: Team
+    key: teamID
+  - name: Role
+    key: roleID
+  - name: CapacitySchedule
+    key: scheduleID
+  - name: CapacityException
+    key: exceptionID
+  - name: Priority
+    key: priorityID
+  - name: Status
+    key: statusID
+  - name: Tag
+    key: name (tagRaw)
+  - name: UnitOfMeasure
+    key: unitCode
+  - name: LogEntry
+    schema: LogEntry
+    key: logID
+    note: activity/log records on Assets, Parts (PartLogEntry) and Vendors, each may carry a file
+  - name: Webhook
+    key: webhookID
+  - name: Me
+    schema: Me
+    note: the calling credential's account
+relationships:
+  - from: Location
+    to: Region
+    type: belongs_to
+    via: regionID
+  - from: Asset
+    to: Location
+    type: belongs_to
+    via: locationID
+  - from: Asset
+    to: Asset
+    type: belongs_to
+    via: parentAssetID
+    note: asset hierarchy
+  - from: Asset
+    to: AssetField
+    type: has_many
+    via: assetID (putAssetsByAssetIDFields)
+  - from: Asset
+    to: LogEntry
+    type: has_many
+    via: /v2/assets/{assetID}/logs
+  - from: Asset
+    to: Part
+    type: has_many
+    via: AssetPart.relationID (getAssetsParts)
+  - from: Task
+    to: Location
+    type: belongs_to
+    via: locationID
+  - from: Task
+    to: Asset
+    type: belongs_to
+    via: assetID
+  - from: Task
+    to: User
+    type: belongs_to
+    via: userID
+    note: mutually exclusive with teamID
+  - from: Task
+    to: Team
+    type: belongs_to
+    via: teamID
+  - from: Task
+    to: Priority
+    type: belongs_to
+    via: priorityID
+  - from: Task
+    to: Status
+    type: belongs_to
+    via: statusID
+  - from: Task
+    to: PurchaseOrder
+    type: has_many
+    via: poIDs
+  - from: Task
+    to: TaskInstruction
+    type: has_many
+    via: taskID
+  - from: TaskInstruction
+    to: TaskInstruction
+    type: belongs_to
+    via: parentInstructionID
+  - from: Task
+    to: Part
+    type: has_many
+    via: /v2/tasks/{taskID}/parts (parts usage)
+  - from: Task
+    to: Invoice
+    type: has_many
+    via: /v2/tasks/{taskID}/invoices
+  - from: Task
+    to: Tag
+    type: has_many
+    via: /v2/tasks/{taskID}/tags
+  - from: Task
+    to: Comment
+    type: has_many
+    via: /v2/tasks/{taskID}/comments
+  - from: WorkRequestSubmission
+    to: Task
+    type: has_one
+    via: postWorkRequestSubmissionsApprove
+  - from: Part
+    to: Location
+    type: belongs_to
+    via: locationID
+  - from: Part
+    to: PartCategory
+    type: belongs_to
+    via: categoryID
+  - from: Part
+    to: User
+    type: belongs_to
+    via: userID
+  - from: Part
+    to: Team
+    type: belongs_to
+    via: teamID
+  - from: Part
+    to: Vendor
+    type: has_many
+    via: VendorAssociation.relationID (getPartsVendorsAssociations, getPartsByPartIDPurchasables)
+  - from: Part
+    to: PartLogEntry
+    type: has_many
+    via: partID
+  - from: Vendor
+    to: Location
+    type: belongs_to
+    via: locationID
+  - from: Vendor
+    to: LogEntry
+    type: has_many
+    via: /v2/vendors/{vendorID}/logs
+  - from: PurchaseOrder
+    to: Vendor
+    type: belongs_to
+    via: vendorID
+  - from: PurchaseOrder
+    to: Budget
+    type: belongs_to
+    via: budgetID
+  - from: PurchaseOrder
+    to: Location
+    type: belongs_to
+    via: locationID
+  - from: PurchaseOrder
+    to: Task
+    type: belongs_to
+    via: taskID
+  - from: PurchaseOrder
+    to: User
+    type: belongs_to
+    via: userID / requestedByUserID
+  - from: PurchaseOrder
+    to: Team
+    type: belongs_to
+    via: teamID
+  - from: PurchaseOrder
+    to: POItem
+    type: has_many
+    via: poID
+  - from: PurchaseOrder
+    to: Comment
+    type: has_many
+    via: /v2/po/{poID}/comments
+  - from: POItem
+    to: Part
+    type: belongs_to
+    via: partID
+  - from: POItem
+    to: Task
+    type: belongs_to
+    via: taskID
+  - from: POItem
+    to: GeneralLedger
+    type: belongs_to
+    via: glID
+  - from: Bill
+    to: PurchaseOrder
+    type: belongs_to
+    via: poID
+  - from: Bill
+    to: User
+    type: belongs_to
+    via: userID
+  - from: Bill
+    to: Location
+    type: belongs_to
+    via: locationID
+  - from: Bill
+    to: Transaction
+    type: has_many
+    via: billID
+  - from: Bill
+    to: Comment
+    type: has_many
+    via: /v2/bills/{billID}/comments
+  - from: Budget
+    to: Location
+    type: belongs_to
+    via: locationID
+  - from: Budget
+    to: BudgetStep
+    type: has_many
+    via: budgetID
+  - from: Budget
+    to: User
+    type: belongs_to
+    via: awaitingUserID / prUserID
+  - from: User
+    to: Role
+    type: has_many
+    via: /v2/users/{userID}/roles
+  - from: User
+    to: Team
+    type: has_many
+    via: /v2/users/{userID}/teams
+  - from: User
+    to: CapacitySchedule
+    type: has_many
+    via: /v2/users/capacity/schedules
+  - from: User
+    to: CapacityException
+    type: has_many
+    via: /v2/users/capacity/exceptions/{userID}
+  - from: LogEntry
+    to: User
+    type: belongs_to
+    via: userID
+  - from: Webhook
+    to: Location
+    type: none
+    via: account-scoped, category-typed (asset, assetField, location, part, po, poItem, task, instruction)
+counts:
+  schemas: 19
+  entities: 30
+  relationships: 56
+render: none (no subway/ diagram in this repo)

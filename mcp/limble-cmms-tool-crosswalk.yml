@@ -1,0 +1,69 @@
+generated: '2026-09-17'
+method: derived
+source:
+  mcp: mcp/limble-solutions-mcp.yml
+  openapi: openapi/limble-solutions-limble-api-v2-openapi.yml
+surfaces:
+  openapi:
+    path: openapi/limble-solutions-limble-api-v2-openapi.yml
+    operations: 212
+    gated: false
+    note: served unauthenticated at https://api.limblecmms.com/openapi.json
+  mcp:
+    url: https://mcp.limblecmms.com/mcp
+    gated: true
+    note: tools/list returns -32001 Unauthorized without a client ID/secret; only four tool names are public (setup guide)
+  graphql: none
+crosswalk:
+  - tool: get_current_customer_info
+    category: identity
+    rest:
+      - getMe
+    binding: GET /v2/me
+    confidence: medium
+    note: Both verify the credential and return the calling account; mapped by semantics, the MCP inputSchema was not introspected.
+  - tool: get_tasks
+    category: tasks
+    rest:
+      - getTasks
+    binding: GET /v2/tasks
+    confidence: high
+    note: "The guide's example get_tasks({\"limit\": 1}) mirrors the REST `limit` query parameter of getTasks."
+mcp_only:
+  - tool: help
+    reason: MCP discovery/overview tool with no REST counterpart
+  - tool: list_mcp_tools
+    reason: MCP meta tool (lists the server's own tools); no REST counterpart
+rest_only:
+  note: >-
+    Every other REST operation (210 of 212) has no publicly named MCP tool. The MCP server very likely exposes more
+    than the four public names - the guide says list_mcp_tools "lists the available Limble MCP tools" - but no
+    further tool is asserted here because the list is auth-gated.
+  operations_by_tag:
+    Assets: 26
+    Parts: 30
+    Tasks: 39
+    Users: 18
+    Vendors: 22
+    Purchase Orders: 16
+    Bills: 13
+    Budgets: 8
+    Locations: 4
+    Roles: 4
+    Teams: 4
+    General Ledgers: 4
+    Priorities: 4
+    Tags: 4
+    Statuses: 4
+    Regions: 4
+    Webhooks: 4
+    Units of Measure: 3
+    Me: 1
+coverage:
+  mcp_tools_known: 4
+  mcp_tools_bound: 2
+  mcp_only: 2
+  rest_operations: 212
+  rest_bound: 2
+  rest_only: 210
+  introspected: false

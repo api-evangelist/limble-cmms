@@ -1,0 +1,53 @@
+generated: '2026-09-17'
+method: searched
+source: https://apidocs.limblecmms.com/#rate-limit
+also_in: openapi/limble-solutions-limble-api-v2-openapi.yml (info.description "Rate limit")
+limit_count: 6
+scope: per API key (client ID), two concurrent sliding windows (per-minute and per-hour), keyed by HTTP method
+status_on_exhaustion: 429
+retry_after_header: false
+limits:
+  - method: GET
+    per_hour: 4000
+    per_minute: 360
+  - method: PATCH
+    per_hour: 2000
+    per_minute: 240
+  - method: POST
+    per_hour: 1000
+    per_minute: 240
+  - method: PUT
+    per_hour: 1000
+    per_minute: 240
+  - method: DELETE
+    per_hour: 100
+    per_minute: 60
+  - method: BATCH REQUEST
+    per_hour: 20
+    per_minute: 5
+    note: POST /v2/assets/fields/batch/update (2-100 field values per call)
+headers:
+  - name: X-RateLimit-Limit
+    meaning: maximum requests permitted per hour
+  - name: X-RateLimit-Remaining
+    meaning: requests remaining in the current per-hour window
+  - name: X-RateLimit-First-Call
+    meaning: time of the first call in the current per-hour window
+  - name: X-RateLimit-TTL
+    meaning: time until more requests become available (only present once the hourly limit is hit)
+  - name: X-RateLimit-Minute-Limit
+    meaning: maximum requests permitted per minute
+  - name: X-RateLimit-Minute-Remaining
+    meaning: requests remaining in the current per-minute window
+  - name: X-RateLimit-Minute-First-Call
+    meaning: time of the first call in the current per-minute window
+  - name: X-RateLimit-Minute-TTL
+    meaning: time until more requests become available (only present once the minute limit is hit)
+window_semantics: >-
+  Sliding: a request made at 13:42:42 expires from the per-minute window at 13:43:42 and from the per-hour
+  window at 14:42:42. Every response carries the header set above.
+higher_limits: contact your Limble account manager
+pagination_limit:
+  note: >-
+    Separate from rate limiting - list endpoints enforce a server-side maximum on the `limit` query parameter;
+    exceeding it returns 422 Unprocessable Entity, and a missing or non-positive limit defaults to 1000.

@@ -1,0 +1,41 @@
+generated: '2026-09-17'
+method: searched
+source:
+  - https://registry.npmjs.org/-/v1/search?text=limble
+  - https://pypi.org/pypi/limble/json (404), limblecmms (404), limble-cmms (404), pylimble (404)
+  - https://rubygems.org/api/v1/gems/limble.json (404)
+  - https://packagist.org/search.json?q=limble (no match)
+  - https://crates.io/api/v1/crates?q=limble (no match)
+  - https://azuresearch-usnc.nuget.org/query?q=limble (no match)
+  - https://api.github.com/orgs/LimbleCMMS/repos (5 public repos)
+  - https://apidocs.limblecmms.com/ (PHP and NodeJS raw-HTTP samples only)
+official_api_clients: 0
+sdk_pointer_emitted: false
+note: >-
+  Limble ships no first-party API client library on any registry. The docs give raw curl-style PHP and NodeJS
+  snippets against api.limblecmms.com, and the MCP setup guide relies on the generic `mcp-remote` bridge.
+  The one first-party npm package under the @limble scope is an Angular UI tree component that does not touch
+  the API, recorded below for completeness and NOT counted as an SDK. The unscoped npm package `limble` is an
+  unrelated front-end framework by a third party.
+packages:
+  - language: typescript
+    registry: npm
+    name: '@limble/limble-tree'
+    url: https://www.npmjs.com/package/@limble/limble-tree
+    install: npm install @limble/limble-tree
+    official: true
+    api_client: false
+    version: 7.0.0
+    published: '2026-05-27'
+    repository: https://github.com/LimbleCMMS/limble-tree
+    note: Angular drag-and-drop tree library "built and used by the team at Limble"; a UI component, not an API SDK.
+not_ours:
+  - registry: npm
+    name: limble
+    version: 1.0.0
+    published: '2023-01-21'
+    note: unrelated front-end framework by a third-party author (github.com/limble/limble); name collision only
+github_org:
+  url: https://github.com/LimbleCMMS
+  public_repos: 5
+  api_related: none (limble-tree UI lib, Terraform/terragrunt modules, dbt Xero models, an archived backend-test)

@@ -1,0 +1,127 @@
+generated: '2026-09-17'
+method: searched
+source: https://apidocs.limblecmms.com/
+also_in: openapi/limble-solutions-limble-api-v2-openapi.yml (info.description)
+related:
+  authentication: authentication/limble-solutions-authentication.yml
+  errors: errors/limble-solutions-problem-types.yml
+  rate_limits: rate-limits/limble-solutions-rate-limits.yml
+  lifecycle: lifecycle/limble-solutions-lifecycle.yml
+  webhooks: asyncapi/limble-solutions-webhooks.yml
+base_url:
+  default: https://api.limblecmms.com/v2
+  regional:
+    Canada: https://ca-api.limblecmms.com/v2
+    Australia: https://au-api.limblecmms.com/v2
+    Europe: https://eu-api.limblecmms.com/v2
+    21CFR: https://21cfr-api.limblecmms.com/v2
+  note: Pick the host matching the account's region or type; keys are account-scoped.
+auth:
+  style: http-basic
+  header: Authorization
+  format: Basic base64(CLIENT_ID:CLIENT_SECRET)
+  see: authentication/limble-solutions-authentication.yml
+content_type: application/json on every request and response body
+methods:
+  supported: [GET, POST, PATCH, PUT, DELETE]
+  method_override:
+    header: X-HTTP-Method-Override
+    values: [PATCH, PUT]
+    carrier: POST
+    note: For clients that can only send GET/POST; 501 is returned for any other verb.
+identifiers:
+  style: integer ids per resource (assetID, taskID, partID, poID, userID, locationID, valueID, logID ...)
+  time: unix timestamps (seconds) for due, createdDate, dateCompleted, lastEdited, scheduledStart/End, start/end filters
+pagination:
+  styles:
+    - name: limit-page
+      params: [limit, page]
+      default_limit: 100
+      max_limit: 1000
+      response_headers: [Last-Page, Next-Page, Previous-Page]
+      note: page is required for this mode and is 1-based; beyond the last page the result is an empty array.
+    - name: orderBy-cursor
+      params: [orderBy, cursor, limit]
+      response_headers: [X-Has-More, Next-Page]
+      applies_to: [getTasks, getAssets]
+      note: >-
+        cursor must be a real record id; ordering by lastEdited (assets) or createdDate/dateCompleted/due (tasks)
+        resumes from that record regardless of id order. cursor and page cannot be combined. Limble says cursor
+        pagination will be deprecated in the next API version and recommends limit-page for new integrations.
+  limit_validation: a limit above the endpoint maximum returns 422; missing or non-positive limit defaults to 1000
+filtering:
+  style: comma-delimited id lists and unix-time windows as query params (tasks, assets, locations, type, start, end, completedStart, completedEnd, scheduledStart, scheduledEnd, name)
+field_expansion:
+  style: meta links
+  note: >-
+    List responses carry a `meta` object of URLs to related sub-resources (task.meta.invoices, labor, partsUsage,
+    instructions, status) rather than inline expansion; there is no fields/expand parameter.
+metadata: none (custom fields are first-class asset/part/vendor field resources, not a metadata bag)
+request_id:
+  header: none documented
+  note: No request-id or correlation header is documented in the spec or docs.
+versioning:
+  style: url-path
+  current: v2
+  header: none
+  note: info.version is 1.0.0 while every path is under /v2/; see lifecycle/limble-solutions-lifecycle.yml.
+error_envelope:
+  shapes:
+    - '{ message, success?, raw? }'
+    - '{ error, success, msg }'
+  format: custom-json
+  see: errors/limble-solutions-problem-types.yml
+success_semantics:
+  create: 201 with Location header pointing at the GET URL of the new resource
+  update_delete: empty 200 body
+rate_limit_signaling:
+  headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-First-Call, X-RateLimit-TTL, X-RateLimit-Minute-Limit, X-RateLimit-Minute-Remaining, X-RateLimit-Minute-First-Call, X-RateLimit-Minute-TTL]
+  status: 429
+  see: rate-limits/limble-solutions-rate-limits.yml
+batch:
+  operation: postAssetsFieldsBatchUpdate
+  path: POST /v2/assets/fields/batch/update
+  size: 2-100 field values
+  partial_failure: '{ success: false, updates: [{ valueID, reason }] }'
+  rate_limit: 20 per hour, 5 per minute
+idempotency:
+  coverage: none
+  header: null
+  scope: []
+  note: >-
+    No Idempotency-Key or equivalent replay-protection mechanism is documented anywhere in the spec or the
+    docs. PUT attachments (fields, tags, parts, roles, teams) are naturally idempotent by HTTP semantics, and
+    409 Resource Conflict is declared on 95 operations for duplicate creates, but a retried POST /v2/tasks or
+    POST /v2/po after a timeout will create a second record.
+dry_run_mode:
+  status: none
+  note: No test/sandbox mode or dry-run flag is published; every call runs against the live account.
+reversibility:
+  status: documented
+  note: >-
+    Limble documents reversal paths for state changes but not for deletes, and states no restore window
+    anywhere. Task close/reopen is a documented toggle; work-request approve/decline are separate calls;
+    purchase-order state changes can only move forward one step per request.
+  surfaces:
+    - write: close a task (patchTasksByTaskID with status 1)
+      reversal: patchTasksByTaskID with status 0 (opens the task)
+      reversal_operationId: patchTasksByTaskID
+      window: not stated
+      docs: https://apidocs.limblecmms.com/#tasks
+    - write: approve a work request submission (postWorkRequestSubmissionsApprove)
+      reversal: none documented; decline is a sibling terminal action (postWorkRequestSubmissionsDecline), not an undo
+      window: not stated
+      docs: https://apidocs.limblecmms.com/
+    - write: advance a purchase order state (patchPoByPoIDState)
+      reversal: none - "Currently POs can only move forward one state per state change request"; getPoByPoIDStateTransitions lists what is allowed next
+      window: n/a
+      docs: https://apidocs.limblecmms.com/#purchase-orders
+    - write: delete an asset, task, part, vendor, user, PO, bill, location, budget, role, team, webhook (delete* operations, 40 in total)
+      reversal: none documented; DELETE /v2/po/{poID} states it also deletes PO items, their part/task relationships and transaction history
+      window: not stated
+      docs: https://apidocs.limblecmms.com/
+    - write: disable a webhook (patchWebhooksByWebhookID enabled=0, or automatic disable after the retry schedule)
+      reversal: patchWebhooksByWebhookID with enabled=true, or Re-enable in Settings -> Configuration -> API Settings
+      reversal_operationId: patchWebhooksByWebhookID
+      window: not stated
+      docs: https://apidocs.limblecmms.com/#webhooks

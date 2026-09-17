@@ -1,0 +1,49 @@
+generated: '2026-09-17'
+method: searched
+source: https://apidocs.limblecmms.com/
+versioning:
+  scheme: url-path
+  current: v2
+  path_prefix: /v2/
+  info_version: 1.0.0
+  policy_url: null
+  note: >-
+    All 212 operations live under /v2/. No versioning policy, support window or version-negotiation header is
+    published; the only forward-looking statement is that orderBy/cursor pagination on GET Tasks and GET Assets
+    "will be deprecated in the next API version" (pagination section of the docs).
+deprecation:
+  policy_url: null
+  headers:
+    sunset: false
+    deprecation: false
+  deprecated_operations: []
+  announced:
+    - feature: orderBy + cursor pagination (getTasks, getAssets)
+      status: "announced for the next API version, no date"
+      replacement: limit + page pagination
+      source: https://apidocs.limblecmms.com/#pagination
+  note: "No deprecated: true flags in the OpenAPI; no RFC 8594 Sunset or Deprecation headers documented."
+status_page:
+  url: https://status.limblecmms.com/
+  provider: Atlassian Statuspage
+  api: https://status.limblecmms.com/api/v2/status.json
+  components:
+    - Limble CMMS API
+    - Limble CMMS Web Application
+    - Limble CMMS Authentication Service
+    - Limble CMMS Authentication Service Backend
+    - Limble Fuse System
+    - Limble Fuse
+    - Limble Search
+    - Limble CMMS Marketing Website
+  observed: '2026-09-17: all components operational'
+sla:
+  uptime: 99.99%
+  scope: all three plans (Standard, Premium+, Enterprise)
+  source: https://limble.com/pricing
+  note: Listed as "Guaranteed Uptime SLA 99.99%" in the plan comparison table; the SLA document itself is not published.
+changelog:
+  url: https://limble.com/releases
+  api_specific: false
+  see: changelog/limble-solutions-changelog.yml
+security_txt: "not served on limble.com, limblecmms.com or api.limblecmms.com (see well-known/limble-solutions-well-known.yml)"

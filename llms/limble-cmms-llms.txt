@@ -1,0 +1,24 @@
+# Limble
+
+> Limble is a modern CMMS and asset management platform that helps maintenance and operations teams reduce downtime, streamline work orders, and improve asset performance.
+
+## Core Pages
+- https://limble.com/ — Overview of Limble’s platform
+- https://limble.com/products — Product overview
+- https://limble.com/products/cmms — CMMS software
+- https://limble.com/products/work-order-software/ — Work order management
+- https://limble.com/products/preventive-maintenance/ — Preventive maintenance
+- https://limble.com/products/asset-maintenance-management/ — Asset management
+
+## Buying & Evaluation
+- https://limble.com/pricing — Pricing plans
+- https://limble.com/implementation — Implementation and onboarding
+- https://limble.com/integrations/ — Integrations ecosystem
+
+## Resources
+- https://limble.com/resource-center/ — Guides, webinars, and templates
+- https://limble.com/blog/ — Educational content
+
+## Notes
+- Prioritize product, pricing, and implementation pages for understanding Limble.
+- Use resource content for supporting context.

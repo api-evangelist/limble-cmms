@@ -1,0 +1,71 @@
+generated: '2026-09-17'
+method: searched
+source: https://limble.com/pricing
+plan_count: 3
+currency: USD
+pricing_model: per-user quote via price calculator; no list price is published on the pricing page
+api_access:
+  Standard: false
+  Premium+: true
+  Enterprise: true
+  note: '"Open REST API" and "Model Context Protocol (MCP)" are Premium+ and Enterprise features; Standard has neither.'
+plans:
+  - name: Standard
+    price: null
+    price_note: Quote via https://limble.com/limble-price-calculator
+    billing_period: null
+    api_access: false
+    mcp_access: false
+    included:
+      - Limble Mobile App
+      - Unlimited Assets and Custom Fields
+      - Unlimited Work Orders and PMs
+      - Unlimited Work Requesters
+      - Unlimited Custom Dashboards
+      - Automatic Downtime Reporting
+      - SOC II Type II Compliant
+      - 24/7 Support, Help Center, Customer Success Manager
+      - Guaranteed Uptime SLA 99.99%
+    limits:
+      - Work Orders with Attached Procedures: 3/mo
+      - Advanced Analytics: 3/mo
+  - name: Premium+
+    price: null
+    price_note: Quote via https://limble.com/limble-price-calculator
+    billing_period: null
+    api_access: true
+    mcp_access: true
+    included:
+      - Everything in Standard
+      - Mobile App Offline Mode
+      - Unlimited Spare Parts and Custom Fields
+      - Vendor and Purchase Order Management
+      - Meter and Threshold-based Scheduling
+      - Open REST API Access
+      - Model Context Protocol (MCP)
+      - IoT Sensor Integrations (additional cost may apply)
+      - ERP and Business System Integrations (additional cost may apply)
+      - OIDC-based Single Sign-On as an add-on
+    limits:
+      - Work Orders with Attached Procedures: unlimited
+      - Advanced Analytics: unlimited
+  - name: Enterprise
+    price: null
+    price_note: Quote via https://limble.com/limble-price-calculator
+    billing_period: null
+    api_access: true
+    mcp_access: true
+    included:
+      - Everything in Premium+
+      - Multi-Location Tools and Reporting
+      - Custom Roles and Approval Workflows
+      - Inventory Cycle Counts
+      - 21 CFR Compliance
+      - Single Sign-On (SSO) included
+      - White Label (additional cost may apply)
+      - ERP, IoT and Business System Integrations (additional cost may apply)
+    limits: []
+api_quotas:
+  note: API rate limits are per key and per HTTP method, not per plan; see rate-limits/limble-solutions-rate-limits.yml. Higher limits via the account manager.
+free_tier: false
+trial: not advertised on the pricing page (demo request at https://limble.com/demo-request)

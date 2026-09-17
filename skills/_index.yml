@@ -1,0 +1,28 @@
+generated: '2026-09-17'
+method: generated
+source: >-
+  openapi/limble-solutions-limble-api-v2-openapi.yml (every operationId verified against the spec) plus the
+  Limble API V2 docs at https://apidocs.limblecmms.com/. No provider-published skills, AGENTS.md or
+  /.well-known/agent-skills were found on limble.com, limblecmms.com, api.limblecmms.com or github.com/LimbleCMMS.
+skills:
+  - file: limble-solutions-work-order-lifecycle.md
+    name: limble-solutions-work-order-lifecycle
+    method: generated
+    description: Create a work order against a location and asset, add instructions, parts and a comment, close it, and reopen it if the closure was wrong.
+    operations: 10
+  - file: limble-solutions-work-request-intake.md
+    name: limble-solutions-work-request-intake
+    method: generated
+    description: File a work request on behalf of a requester, then approve it into a task or decline it.
+    operations: 7
+  - file: limble-solutions-asset-registry.md
+    name: limble-solutions-asset-registry
+    method: generated
+    description: Register an asset under a location and parent, attach and fill custom fields, and bulk-update values within the batch limits.
+    operations: 12
+  - file: limble-solutions-purchase-order-flow.md
+    name: limble-solutions-purchase-order-flow
+    method: generated
+    description: Raise a purchase order, add line items, advance it one legal state at a time, and record the bill.
+    operations: 12
+provider_published: []
