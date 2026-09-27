@@ -75,6 +75,11 @@ apis:
   - MCP
   - CMMS
   - Maintenance Management
+  - Agent-Native
+  tags_raw:
+  - MCP
+  - CMMS
+  - Maintenance Management
   - agent-native
   properties:
   - type: Documentation

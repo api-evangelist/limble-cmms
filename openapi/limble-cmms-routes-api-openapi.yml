@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Limble API V2 Routes API
+  title: Limble Cmms Routes API
   version: 1.0.0
-  description: Getting Started!
+  description: 'Operations tagged Routes across 2 of this provider''s published API definitions: limble-cmms-limble-api-v2.yaml, limble-cmms-limble-api-v2-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.limblecmms.com
   description: US (Default)
@@ -14,6 +14,7 @@ servers:
   description: Europe
 - url: https://21cfr-api.limblecmms.com
   description: 21 CFR Part 11 (Pharma/Life Sciences)
+- url: '{{server}}:{{port}}'
 security:
 - BasicAuth: []
 tags:
@@ -51,6 +52,17 @@ paths:
         customerName | The name of the customer that your API keys are valid for.
 
         customerPlan | The Limble plan the customer is currently subscribed to. The customerPlan can have one of following values:, starter, professional, business, enterprise, legacy - The plan the customer is currently subscribed to has been deprecated., For more information about various plans please visit the Limble website.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/{assetID}/image:
     parameters:
     - name: assetID
@@ -104,6 +116,17 @@ paths:
       tags:
       - Routes
       description: This request removes the main image from the asset.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/fields:
     get:
       operationId: getAssetsFields
@@ -324,6 +347,17 @@ paths:
         Parameter: name, Type: String, Required?: Required, Description: The name of the new Field. Some custom field names such as "Asset" are not allowed and reserved for internal use. This will result in a 409 error.
 
         Parameter: fieldType, Type: Int, Required?: Required, Description: The type of the new Field. You can choose from Text (1), Date (2), Pictures (3), Documents (4), Number (5), Currency (6).'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/fields/suggested:
     get:
       operationId: getAssetsFieldsSuggested
@@ -410,6 +444,17 @@ paths:
 
 
         Suggested fields are the full list of possible fields that can be added to assets at that location.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/fields/history:
     get:
       operationId: getAssetsFieldsHistory
@@ -495,6 +540,17 @@ paths:
 
 
         This request allows you to pull that information so you can see trends over time.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/{assetID}/fields:
     parameters:
     - name: assetID
@@ -544,6 +600,17 @@ paths:
         Parameter: locationID, Type: Int, Required?: Required, Description: The ID of the Location the Asset exists at.
 
         Parameter: fieldID, Type: Int, Required?: Required, Description: The ID of the existing Field to add to the Asset.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/fields/{valueID}:
     parameters:
     - name: valueID
@@ -600,6 +667,17 @@ paths:
 
 
         Parameter: value, Type: Varies depending on the Field''s type, Required?: Required, Description: The value that will be written to the field, overwriting the previous value and creating an entry in the field history. "value" must correspond to the fieldType of the field. For example, if the field is a "number" fieldType, then "value" must be a number.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/logs/file/{fileID}:
     parameters:
     - name: fileID
@@ -630,6 +708,17 @@ paths:
       tags:
       - Routes
       description: This requests deletes a file attached to a log.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/{assetID}/logs/{logID}/file:
     parameters:
     - name: assetID
@@ -675,6 +764,17 @@ paths:
 
 
         fileID | The ID of the file attached to the log.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/{assetID}/logs:
     parameters:
     - name: assetID
@@ -852,6 +952,17 @@ paths:
             example:
               userID: 342
               logEntry: Creating a log
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/logs/{logID}:
     parameters:
     - name: logID
@@ -915,6 +1026,17 @@ paths:
       tags:
       - Routes
       description: This requests deletes a manual log entry for an asset.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/fields/batch/update:
     post:
       operationId: postAssetsFieldsBatchUpdate
@@ -1074,6 +1196,17 @@ paths:
               valueID: 46460
             - value: '9'
               valueID: 46461
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/parts:
     get:
       operationId: getAssetsParts
@@ -1170,6 +1303,17 @@ paths:
         lastEdited | The unix timestamp at which this Relation last saw a change
 
         associationType | The method used to create this Relation. At this time, only "manual" is supported'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets:
     get:
       operationId: getAssets
@@ -1409,6 +1553,17 @@ paths:
         Parameter: locationID, Type: Int, Required?: Required, Description: The ID of the location this asset is located at.
 
         Parameter: geoLocation, Type: geoJSON, Required?: Optional, Description: The geoJSON Feature object that can be used to locate an asset on a Map.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/{assetID}:
     parameters:
     - name: assetID
@@ -1471,6 +1626,17 @@ paths:
         startedOn | Int | Optional | The new date this Asset was created. Must be a unix, timestamp.
 
         geoLocation | geoJSON | Optional | The geoJSON Feature object that can be used to locate an asset on a Map. To remove geoLocation from an Asset pass an empty object ( {}).'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/assets/{assetID}/move:
     parameters:
     - name: assetID
@@ -1558,6 +1724,17 @@ paths:
             example:
               locationID: 73
               transferParts: true
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/locations:
     post:
       operationId: postLocations
@@ -1733,6 +1910,17 @@ paths:
         geoLocation | The location of a Limble location on a Map.
 
         currencyCode | The ISO code for the currency at this location.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/locations/{locationID}:
     parameters:
     - name: locationID
@@ -1806,6 +1994,17 @@ paths:
       tags:
       - Routes
       description: This request removes a Location from your Limble account. This will also remove everything else at this locaiton including Assets, Parts, Tasks, etc. Be VERY careful using this call.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/{partID}/image:
     parameters:
     - name: partID
@@ -1859,6 +2058,17 @@ paths:
       tags:
       - Routes
       description: This request removes the main image from a Part.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/categories:
     post:
       operationId: postPartsCategories
@@ -1943,6 +2153,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       tags:
       - Routes
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/categories/{categoryID}:
     parameters:
     - name: categoryID
@@ -1999,6 +2220,17 @@ paths:
       tags:
       - Routes
       description: This request will remove the Part Category from all Parts and from possible Categories.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/fields:
     get:
       operationId: getPartsFields
@@ -2218,6 +2450,17 @@ paths:
         Parameter: name, Type: String, Required?: Required, Description: The name of the new Field. Some custom field names such as "Part Name" are not allowed and reserved for internal use. This will result in a 409 error.
 
         Parameter: fieldType, Type: Int, Required?: Required, Description: The type of the new Field. You can choose from Text (1), Date (2), Pictures (3), Documents (4), Number (5), Currency (6).'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/fields/suggested:
     get:
       operationId: getPartsFieldsSuggested
@@ -2287,6 +2530,17 @@ paths:
       tags:
       - Routes
       description: This request gets all possible fields a Part can pick from when deciding which fields it should have.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/fields/{valueID}:
     parameters:
     - name: valueID
@@ -2343,6 +2597,17 @@ paths:
       tags:
       - Routes
       description: This request deletes a custom field attached to a Part.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/{partID}/fields:
     parameters:
     - name: partID
@@ -2384,6 +2649,17 @@ paths:
       tags:
       - Routes
       description: This request attaches a Suggested Field to a Part.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/{partID}/logs:
     parameters:
     - name: partID
@@ -2572,6 +2848,17 @@ paths:
             example:
               userID: 342
               logEntry: Creating a log
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/logs/{logID}:
     parameters:
     - name: logID
@@ -2635,6 +2922,17 @@ paths:
       tags:
       - Routes
       description: This request deletes manual log entries (sourceID=4).
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/logs:
     get:
       operationId: getPartsLogs
@@ -2786,6 +3084,17 @@ paths:
         userID | The ID of the user that created the log.
 
         associatedID | The ID of the item associated with this log, if any. Current examples include:, sourceID: 5, associatedID type: Task, sourceID: 18, associatedID type: Bill, sourceID: 20, associatedID type: Bill'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/{partID}/purchasables:
     parameters:
     - name: partID
@@ -2914,6 +3223,17 @@ paths:
         | orderUnitCode | The unit that describes how this purchasable is ordered. E.g. "by the box", or "by the foot". |
 
         | sizeUnitCode | The unit that qualifies the size value. E.g. this tells you whether this purchasable is 10 liters, or cans, or feet, etc. |'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/vendors/associations:
     get:
       operationId: getPartsVendorsAssociations
@@ -3144,6 +3464,17 @@ paths:
 
 
         Returns `201 Created` with the new association details. Returns `409 Conflict` if the association already exists.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/vendors/associations/{relationID}:
     parameters:
     - name: relationID
@@ -3175,6 +3506,17 @@ paths:
 
 
         Returns `204 No Content` on success. Returns `404 Not Found` if the association does not exist or does not belong to your account.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts:
     get:
       operationId: getParts
@@ -3400,6 +3742,17 @@ paths:
         assignment | Int | Optional. Required if ''assignmentType'' is used. | The user or team to which the task will be assigned., Must be a user or team that exists at the specified location. Must be the unique ID number of the user or team. If this parameter is set, the assignmentType parameter must also be set.,
 
         assignmentType | Enum | Optional. Required if ''assignment'' is used. | Specifies wether this task will be assigned to a ''user'' or a ''team''. Those two strings are the only accepted input. If this parameter is set, the assignment parameter must also be set.,'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/{partID}:
     parameters:
     - name: partID
@@ -3486,6 +3839,17 @@ paths:
       tags:
       - Routes
       description: This request removes a Part from your inventory list.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/parts/usage:
     get:
       operationId: getPartsUsage
@@ -3616,6 +3980,17 @@ paths:
         Property: usedOn, Description: The date when the part was used. This is a unix timestamp.
 
         Property: poItemID, Description: The unique ID of the PO item associated with this usage record.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}/invoices/{invoiceID}/file:
     parameters:
     - name: taskID
@@ -3676,6 +4051,17 @@ paths:
       tags:
       - Routes
       description: This request removes a file attached to an invoice on an open Task (i.e. task status = 0).
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/invoices:
     get:
       operationId: getTasksInvoices
@@ -3798,6 +4184,17 @@ paths:
       tags:
       - Routes
       description: This request gets all Invoices associated with Tasks.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}/invoices:
     parameters:
     - name: taskID
@@ -3858,6 +4255,17 @@ paths:
             example:
               cost: 10.1
               description: testing
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}/invoices/{invoiceID}:
     parameters:
     - name: taskID
@@ -3936,6 +4344,17 @@ paths:
             example:
               cost: 10000
               description: new inovoice
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}/instructions/{instructionID}/options:
     parameters:
     - name: taskID
@@ -4043,6 +4462,17 @@ paths:
             example:
               instruction: 'Yes'
               instructionOptionOrder: 1
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/instructions/{instructionID}/options/{instructionOptionID}:
     parameters:
     - name: instructionID
@@ -4115,6 +4545,17 @@ paths:
             example:
               instruction: Not Allowed
               instructionOptionOrder: 1
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}/instructions:
     parameters:
     - name: taskID
@@ -4277,6 +4718,17 @@ paths:
         Parameter: parentInstructionID, Type: Int, Required?: Required, Description: If this is set this Instruction is a ''child'' or sub-instruction. This value is the id of the Instruction''s parent. A value of 0 means it does not have a parent.
 
         Parameter: parentInstructionOptionID, Type: Int, Required?: Optional, Description: If type is set to 2,4 and a parentInstructionID of an existing option/dropdown list is set then the parentInstructionOptionID needs to be set as the ID of the option for which a child option/dropdown list needs to be added.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/instructions/{instructionID}:
     parameters:
     - name: instructionID
@@ -4426,6 +4878,17 @@ paths:
         **Error Responses:**
 
         - 404: Instruction not found'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/instructions:
     get:
       operationId: getTasksInstructions
@@ -4489,6 +4952,17 @@ paths:
         response | This field is the "response" of an instruction i.e. what a user filled out when doing this instruction. The return value changes based on the instruction type:, 1 Check Box - true/false, 2 Radio List - if no option is selected, this will be 0. If an option is selected, this will be a number that maps to the itemOptionID of one of the members of the options array., 3 Text Box - string, 4 Dropdown Box - if no option is selected, this will be 0. If an option is selected, this will be a number that maps to the itemOptionID of one of the members of the options array., 5 Date Picker - unix time stamp, 7 Label - labels will never have a user response, 9 File or Picture Attachment - Array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link., 10 Assign PM - not supported yet., 13 Number - integer, 14 Start WO - not supported yet., 15 Capture Signature - Array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link., 16 Request Approval - Array of objects that have a file name and a link you can use to download that image. All links are only valid for 15 minutes, a new call will generate a new link.,
 
         meta | This property is useful to get more information related to the Task Instructions. Different instruction types may have different properties in the meta section., Instruction Type:, 14 Start WO - If this instruction is completed on the task, the meta property would have an "associatedTask" property on it. The associatedTask gives the route for the task created by this instruction. For example, if task 2 was created by a "Start WO" instruction on task 1. In GET Task Instruction for task 1, this instruction would have a meta associatedTask property pointing to task 2.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/instructions/{instructionID}/image:
     parameters:
     - name: instructionID
@@ -4563,6 +5037,17 @@ paths:
       tags:
       - Routes
       description: This request removes an instructional image from an Instruction.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}/image:
     parameters:
     - name: taskID
@@ -4644,6 +5129,17 @@ paths:
         - 200 OK: Image cleared.
 
         - 404 Not Found: No image exists for this task.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/labor:
     get:
       operationId: getTasksLabor
@@ -4812,6 +5308,17 @@ paths:
         taskPriorityID | The Priority ID of the task this labor entry is associated with.
 
         taskPriorityLevel | The Priority value of the task this labor entry is associated with.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/labor/categories:
     get:
       operationId: getTasksLaborCategories
@@ -4878,6 +5385,17 @@ paths:
         Property: categoryName, Description: The name of this billing category.
 
         Property: categoryRate, Description: The rate per hour of this billing category.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}/parts:
     parameters:
     - name: taskID
@@ -4975,6 +5493,17 @@ paths:
       tags:
       - Routes
       description: This request associates a part to a task.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/parts:
     get:
       operationId: getTasksParts
@@ -5091,6 +5620,17 @@ paths:
         Property: partName, Description: The name of the part.
 
         Property: poItemID, Description: The unique ID of the PO item associated with this record.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}/{partID}:
     parameters:
     - name: taskID
@@ -5126,6 +5666,17 @@ paths:
       tags:
       - Routes
       description: This request deletes a part from a task.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}/comments:
     parameters:
     - name: taskID
@@ -5320,6 +5871,17 @@ paths:
             example:
               comment: complete the task
               showExternalUsers: false
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}/tags:
     parameters:
     - name: taskID
@@ -5438,6 +6000,17 @@ paths:
         - Semicolons in input are rejected.
 
         - The availableTags field in 404 responses shows which tags can be used.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}/tags/{tagRaw}:
     parameters:
     - name: taskID
@@ -5494,6 +6067,17 @@ paths:
         - 404: { message: ''Tag not found'' }
 
         - 400: { removed: null, message: string } — Invalid input.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/work-requests/work-request-submissions:
     get:
       operationId: getWorkRequestsWorkRequestSubmissions
@@ -5748,6 +6332,17 @@ paths:
 
 
         `locationID` and `dueDateUnit` are required. All other fields are optional.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/work-requests/work-request-submissions/{workRequestSubmissionID}/approve:
     parameters:
     - name: workRequestSubmissionID
@@ -5782,6 +6377,17 @@ paths:
       tags:
       - Routes
       description: Approves a pending work request submission, generating a task from it.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/work-requests/work-request-submissions/{workRequestSubmissionID}/decline:
     parameters:
     - name: workRequestSubmissionID
@@ -5834,6 +6440,17 @@ paths:
 
 
         Both `declineReason` and `additionalNotes` are optional strings.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks:
     post:
       operationId: postTasks
@@ -6249,6 +6866,17 @@ paths:
       tags:
       - Routes
       description: This request gets top level information about Tasks such as completed date, assignment, assetID, etc.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tasks/{taskID}:
     parameters:
     - name: taskID
@@ -6348,6 +6976,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       tags:
       - Routes
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/users/{userID}/roles:
     parameters:
     - name: userID
@@ -6470,6 +7109,17 @@ paths:
       tags:
       - Routes
       description: This request removes a Role from a User.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/users/{userID}/teams:
     parameters:
     - name: userID
@@ -6591,6 +7241,17 @@ paths:
       tags:
       - Routes
       description: This request removes a Team from a User.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/users/capacity/exceptions/{userID}:
     parameters:
     - name: userID
@@ -6790,6 +7451,17 @@ paths:
               capacityMinutes: 300
               exceptionTitle: Training Week
               exceptionNotes: Limited availability
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/users/capacity/exceptions:
     get:
       operationId: getUsersCapacityExceptions
@@ -6916,6 +7588,17 @@ paths:
         Response fields include:
 
         `exceptionID`, `userID`, `createdByUserID`, `exceptionStartDate`, `exceptionEndDate`, `capacityMinutes`, `hoursPerDay`, `minutesPerDay`, `exceptionTitle`, `exceptionNotes`.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/users/capacity/exceptions/{userID}/{exceptionID}:
     parameters:
     - name: userID
@@ -7075,6 +7758,17 @@ paths:
               capacityMinutes: 240
               exceptionTitle: Updated availability
               exceptionNotes: Shortened due to meetings
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/users/capacity/schedules:
     get:
       operationId: getUsersCapacitySchedules
@@ -7438,6 +8132,17 @@ paths:
 
 
         Capacity values are in minutes per day (0-1440). Time values use HH:MM or HH:MM:SS format.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/users/capacity/schedules/{scheduleID}:
     parameters:
     - name: scheduleID
@@ -7468,6 +8173,17 @@ paths:
       tags:
       - Routes
       description: Deletes a capacity schedule by its ID.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/users:
     get:
       operationId: getUsers
@@ -7654,6 +8370,17 @@ paths:
         Parameter: emailNotificationActive, Type: Boolean, Required?: Optional, Description: The User''s email notification activation status. Should they receive email notifications?
 
         Parameter: pushNotificationActive, Type: Boolean, Required?: Optional, Description: The User''s push notification activation status. Should they receive push notifications?'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/users/{userID}:
     parameters:
     - name: userID
@@ -7729,6 +8456,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       tags:
       - Routes
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/vendors/fields:
     get:
       operationId: getVendorsFields
@@ -7915,6 +8653,17 @@ paths:
         Parameter: name, Type: String, Required?: Required, Description: The name of the new Field. Some custom field names such as "Vendor Name" are not allowed and reserved for internal use. This will result in a 409 error.
 
         Parameter: fieldType, Type: Int, Required?: Required, Description: The type of the new Field. You can choose from Text (1), Date (2), Pictures (3), Documents (4), Number (5), Currency (6).'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/vendors/fields/suggested:
     get:
       operationId: getVendorsFieldsSuggested
@@ -7984,6 +8733,17 @@ paths:
       tags:
       - Routes
       description: This request gets all possible fields a Vendor can pick from when deciding which fields it should have.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/vendors/fields/{valueID}:
     parameters:
     - name: valueID
@@ -8040,6 +8800,17 @@ paths:
       tags:
       - Routes
       description: This request deletes a custom field attached to a Vendor.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/vendors/{vendorID}/fields:
     parameters:
     - name: vendorID
@@ -8081,6 +8852,17 @@ paths:
       tags:
       - Routes
       description: This request attaches a Suggested Field to a Vendor.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/vendors/{vendorID}/image:
     parameters:
     - name: vendorID
@@ -8133,6 +8915,17 @@ paths:
       tags:
       - Routes
       description: This request removes the main image from a Vendor.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/vendors/logs/file/{fileID}:
     parameters:
     - name: fileID
@@ -8163,6 +8956,17 @@ paths:
       tags:
       - Routes
       description: This requests deletes a file attached to a log.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/vendors/{vendorID}/logs/{logID}/file:
     parameters:
     - name: vendorID
@@ -8208,6 +9012,17 @@ paths:
 
 
         fileID | The ID of the file attached to the log.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/vendors/{vendorID}/logs:
     parameters:
     - name: vendorID
@@ -8389,6 +9204,17 @@ paths:
             example:
               userID: 342
               logEntry: Creating a log
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/vendors/logs/{logID}:
     parameters:
     - name: logID
@@ -8452,6 +9278,17 @@ paths:
       tags:
       - Routes
       description: This request deleted a manual log entry for a vendor.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/vendors:
     get:
       operationId: getVendors
@@ -8600,6 +9437,17 @@ paths:
         phone | string | Optional | The Vendor''s phone number.
 
         address | string | Optional | The Vendor''s address.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/vendors/{vendorID}:
     parameters:
     - name: vendorID
@@ -8665,6 +9513,17 @@ paths:
       tags:
       - Routes
       description: This request deletes a Vendor.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/roles:
     get:
       operationId: getRoles
@@ -8758,6 +9617,17 @@ paths:
 
 
         Parameter: name, Type: String, Required?: Required, Description: The name of the role.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/roles/{roleID}:
     parameters:
     - name: roleID
@@ -8814,6 +9684,17 @@ paths:
       tags:
       - Routes
       description: This Request deletes a Role. This will also remove the Role from any User it is assigned to.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/teams:
     get:
       operationId: getTeams
@@ -8936,6 +9817,17 @@ paths:
         Parameter: name, Type: String, Required?: Required, Description: The name of the Team.
 
         Parameter: locationID, Type: string, Required?: Required, Description: The locationID of the Location the Team will be available at.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/teams/{teamID}:
     parameters:
     - name: teamID
@@ -8992,6 +9884,17 @@ paths:
       tags:
       - Routes
       description: This request deletes a Team. This will also remove the Team from any User it is assigned to.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/po/items:
     get:
       operationId: getPoItems
@@ -9138,6 +10041,17 @@ paths:
         lastEdited | Last time this PO item was edited, this field outputs a UNIX timestamp.
 
         orderUnitAbbreviation | The abbreviation for the unit of measure in which the PO item was ordered. (NULL for items not assigned to a unit of measure)'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/po/{poID}/items:
     parameters:
     - name: poID
@@ -9237,6 +10151,17 @@ paths:
               tax: 10
               discount: 3
               shipping: 1.2345
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/po/{poID}/items/{poItemID}:
     parameters:
     - name: poID
@@ -9422,6 +10347,17 @@ paths:
                   type: integer
             example:
               quantity: 100
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/po/{poID}/comments:
     parameters:
     - name: poID
@@ -9569,6 +10505,17 @@ paths:
         Responses:
 
         - 201 Created: Returns commentID.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/po/{poID}/comments/{commentID}/file:
     parameters:
     - name: poID
@@ -9668,6 +10615,17 @@ paths:
         - 200 OK: Deleted.
 
         - 404 Not Found: File not found.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/po/{poID}/comments/{commentID}:
     parameters:
     - name: poID
@@ -9722,6 +10680,17 @@ paths:
         - 200 OK: Deleted.
 
         - 404 Not Found: Comment not found.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/po/{poID}/state:
     parameters:
     - name: poID
@@ -9809,6 +10778,17 @@ paths:
         previousState | JSON object describing previous state.
 
         validNextStates | JSON object with a list of possible next states.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/po/{poID}/state/transitions:
     parameters:
     - name: poID
@@ -9906,6 +10886,17 @@ paths:
 
 
         Array of JSON objects listing possible next state transitions for the selected PO.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/po:
     get:
       operationId: getPo
@@ -10236,6 +11227,17 @@ paths:
               customField1: Test customField1
               customField2: Test customField2
               customField3: Test customField3
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/po/{poID}:
     parameters:
     - name: poID
@@ -10356,6 +11358,17 @@ paths:
       tags:
       - Routes
       description: This request deletes a PO. This will also delete any PO Items that belong to this PO, which will also remove any relationships between PO Items, Parts, and Tasks, and will clean up any history of transactions on these PO Items.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/gl:
     get:
       operationId: getGl
@@ -10524,6 +11537,17 @@ paths:
               abbr: OFF1
               name: Office 1
               description: Any general supplies for Office 1
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/gl/{glID}:
     parameters:
     - name: glID
@@ -10613,6 +11637,17 @@ paths:
       tags:
       - Routes
       description: This request deletes a GL. If any PO Items are associated to this GL, their glID will be set to 0.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/budgets/{budgetID}/steps:
     parameters:
     - name: budgetID
@@ -10691,6 +11726,17 @@ paths:
               emailSend: false
               allowPR: true
               allowPOEdit: true
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/budgets/{budgetID}/steps/{stepID}:
     parameters:
     - name: budgetID
@@ -10792,6 +11838,17 @@ paths:
               allowPOEdit: true
               allowPR: false
               order: 1
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/budgets/steps:
     get:
       operationId: getBudgetsSteps
@@ -10854,6 +11911,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       tags:
       - Routes
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/budgets:
     get:
       operationId: getBudgets
@@ -11054,6 +12122,17 @@ paths:
                 global: true
                 purchaseRequests: true
                 minPartQtyPOs: true
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/budgets/{budgetID}:
     parameters:
     - name: budgetID
@@ -11174,6 +12253,17 @@ paths:
                 global: true
                 purchaseRequests: false
                 minPartQtyPOs: true
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/priorities:
     get:
       operationId: getPriorities
@@ -11330,6 +12420,17 @@ paths:
               priorityLevel: 5
               color: '#000000'
               isDefault: true
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/priorities/{priorityID}:
     parameters:
     - name: priorityID
@@ -11426,6 +12527,17 @@ paths:
           application/json:
             schema:
               type: object
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tags:
     get:
       operationId: getTags
@@ -11550,6 +12662,17 @@ paths:
                   type: string
             example:
               name: '@Food Safety'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/tags/{oldName}:
     parameters:
     - name: oldName
@@ -11712,6 +12835,17 @@ paths:
 
 
         - 404 Not Found - Tag does not exist'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/statuses:
     get:
       operationId: getStatuses
@@ -11861,6 +12995,17 @@ paths:
               name: Blocked
               description: Task is blocked by external dependencies
               sortOrder: 3
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/statuses/{statusID}:
     parameters:
     - name: statusID
@@ -12006,6 +13151,17 @@ paths:
 
 
         - replacementStatusID must be valid for the customer'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/bills/{billID}/transactions:
     parameters:
     - name: billID
@@ -12065,6 +13221,17 @@ paths:
             example:
               poItemID: 358
               qtyReceived: 2
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/bills/transactions:
     get:
       operationId: getBillsTransactions
@@ -12163,6 +13330,17 @@ paths:
           application/json:
             schema:
               type: object
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/bills/{billID}/transactions/{transactionID}:
     parameters:
     - name: billID
@@ -12214,6 +13392,17 @@ paths:
             example:
               poItemID: 358
               qtyReceived: 100
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/bills/transactions/{transactionID}:
     parameters:
     - name: transactionID
@@ -12243,6 +13432,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       tags:
       - Routes
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/bills/{billID}/comments:
     parameters:
     - name: billID
@@ -12367,6 +13567,17 @@ paths:
         Responses:
 
         - 201 Created: Returns commentID.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/bills/{billID}/comments/{commentID}/file:
     parameters:
     - name: billID
@@ -12466,6 +13677,17 @@ paths:
         - 200 OK: Deleted.
 
         - 404 Not Found: File not found.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/bills/{billID}/comments/{commentID}:
     parameters:
     - name: billID
@@ -12520,6 +13742,17 @@ paths:
         - 200 OK: Deleted.
 
         - 404 Not Found: Comment not found.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/bills:
     get:
       operationId: getBills
@@ -12701,6 +13934,17 @@ paths:
             example:
               poID: 381
               userID: 340
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/bills/{billID}:
     parameters:
     - name: billID
@@ -12772,6 +14016,17 @@ paths:
       tags:
       - Routes
       description: This request deletes a Bill. This will also delete any Bill transactions for PO Items that were received on this Bill. The qty and price of the PO Items on the Bill will be recalculated.
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/regions:
     post:
       operationId: postRegions
@@ -12894,6 +14149,17 @@ paths:
         Property: regionName, Description: The name of the Region
 
         Property: parentRegionID, Description: The regionID of the parent of a region.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/regions/{regionID}:
     parameters:
     - name: regionID
@@ -12977,6 +14243,17 @@ paths:
         - 200 OK: Deleted.
 
         - 404 Not Found: Region does not exist.'
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/webhooks:
     get:
       operationId: getWebhooks
@@ -13150,6 +14427,17 @@ paths:
               endpoint: https://hello.com
               type: assetField
               enabled: 0
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/webhooks/{webhookID}:
     parameters:
     - name: webhookID
@@ -13270,6 +14558,17 @@ paths:
               endpoint: https://hello123wf
               type: task
               enabled: 0
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/uom:
     get:
       operationId: getUom
@@ -13552,6 +14851,17 @@ paths:
             example:
               name: Crate
               abbreviation: crt
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
   /v2/uom/{unitCode}:
     parameters:
     - name: unitCode
@@ -13642,58 +14952,619 @@ paths:
             example:
               name: Barrel
               abbreviation: BRL
+    servers:
+    - url: https://api.limblecmms.com
+      description: US (Default)
+    - url: https://ca-api.limblecmms.com
+      description: Canada
+    - url: https://au-api.limblecmms.com
+      description: Australia
+    - url: https://eu-api.limblecmms.com
+      description: Europe
+    - url: https://21cfr-api.limblecmms.com
+      description: 21 CFR Part 11 (Pharma/Life Sciences)
+  /v2/assets/fields/{fieldID}/options:
+    get:
+      operationId: getAssetsFieldOptions
+      summary: Get Asset Dropdown Field Options
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      responses:
+        '200':
+          description: List of options for the dropdown field.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  options:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+              example:
+                options:
+                - name: Active
+                - name: Inactive
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Returns the list of available options for a Dropdown custom field on assets.
+    post:
+      operationId: postAssetsFieldOptions
+      summary: Append Asset Dropdown Field Option(s)
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - title: Single option
+                type: object
+                required:
+                - name
+                properties:
+                  name:
+                    type: string
+                    maxLength: 255
+                    description: The name of the option to append.
+              - title: Multiple options
+                type: object
+                required:
+                - options
+                properties:
+                  options:
+                    type: array
+                    minItems: 1
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+                    description: List of options to append.
+      responses:
+        '201':
+          description: 'Option(s) appended successfully. Returns the full updated options list. Existing options are preserved; only the new names are added.
+
+            '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  options:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Appends one or more options to a Dropdown custom field on assets. Existing options are preserved. Returns 409 if any incoming name duplicates an existing option or another name in the same request (comparison is case-insensitive and trimmed). To replace the entire list, use PUT instead.
+    put:
+      operationId: putAssetsFieldOptions
+      summary: Replace Asset Dropdown Field Options
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - options
+              properties:
+                options:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DropdownOption'
+      responses:
+        '200':
+          description: Options replaced successfully. The full new options list is returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  options:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Replaces the entire list of options for a Dropdown custom field on assets. All existing options are discarded and replaced with the provided list. Returns 409 if the provided list contains duplicate names (case-insensitive). To append without replacing, use POST instead.
+    servers:
+    - url: '{{server}}:{{port}}'
+  /v2/assets/fields/{fieldID}/options/{optionName}:
+    delete:
+      operationId: deleteAssetsFieldOption
+      summary: Delete Asset Dropdown Field Option
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      - name: optionName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The URL-encoded name of the option to delete.
+      responses:
+        '204':
+          description: Option deleted successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Removes a single option from a Dropdown custom field on assets by name (URL-encoded). Returns 404 if the option does not exist.
+    servers:
+    - url: '{{server}}:{{port}}'
+  /v2/parts/fields/{fieldID}/options:
+    get:
+      operationId: getPartsFieldOptions
+      summary: Get Part Dropdown Field Options
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      responses:
+        '200':
+          description: List of options for the dropdown field.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  options:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+              example:
+                options:
+                - name: New
+                - name: Used
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Returns the list of available options for a Dropdown custom field on parts.
+    post:
+      operationId: postPartsFieldOptions
+      summary: Append Part Dropdown Field Option(s)
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - title: Single option
+                type: object
+                required:
+                - name
+                properties:
+                  name:
+                    type: string
+                    maxLength: 255
+                    description: The name of the option to append.
+              - title: Multiple options
+                type: object
+                required:
+                - options
+                properties:
+                  options:
+                    type: array
+                    minItems: 1
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+                    description: List of options to append.
+      responses:
+        '201':
+          description: 'Option(s) appended successfully. Returns the full updated options list. Existing options are preserved; only the new names are added.
+
+            '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  options:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Appends one or more options to a Dropdown custom field on parts. Existing options are preserved. Returns 409 if any incoming name duplicates an existing option or another name in the same request (comparison is case-insensitive and trimmed). To replace the entire list, use PUT instead.
+    put:
+      operationId: putPartsFieldOptions
+      summary: Replace Part Dropdown Field Options
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - options
+              properties:
+                options:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DropdownOption'
+      responses:
+        '200':
+          description: Options replaced successfully. The full new options list is returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  options:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Replaces the entire list of options for a Dropdown custom field on parts. All existing options are discarded and replaced with the provided list. Returns 409 if the provided list contains duplicate names (case-insensitive). To append without replacing, use POST instead.
+    servers:
+    - url: '{{server}}:{{port}}'
+  /v2/parts/fields/{fieldID}/options/{optionName}:
+    delete:
+      operationId: deletePartsFieldOption
+      summary: Delete Part Dropdown Field Option
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      - name: optionName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The URL-encoded name of the option to delete.
+      responses:
+        '204':
+          description: Option deleted successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Removes a single option from a Dropdown custom field on parts by name (URL-encoded). Returns 404 if the option does not exist.
+    servers:
+    - url: '{{server}}:{{port}}'
+  /v2/vendors/fields/{fieldID}/options:
+    get:
+      operationId: getVendorsFieldOptions
+      summary: Get Vendor Dropdown Field Options
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      responses:
+        '200':
+          description: List of options for the dropdown field.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  options:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+              example:
+                options:
+                - name: Preferred
+                - name: Standard
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Returns the list of available options for a Dropdown custom field on vendors.
+    post:
+      operationId: postVendorsFieldOptions
+      summary: Append Vendor Dropdown Field Option(s)
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - title: Single option
+                type: object
+                required:
+                - name
+                properties:
+                  name:
+                    type: string
+                    maxLength: 255
+                    description: The name of the option to append.
+              - title: Multiple options
+                type: object
+                required:
+                - options
+                properties:
+                  options:
+                    type: array
+                    minItems: 1
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+                    description: List of options to append.
+      responses:
+        '201':
+          description: 'Option(s) appended successfully. Returns the full updated options list. Existing options are preserved; only the new names are added.
+
+            '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  options:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Appends one or more options to a Dropdown custom field on vendors. Existing options are preserved. Returns 409 if any incoming name duplicates an existing option or another name in the same request (comparison is case-insensitive and trimmed). To replace the entire list, use PUT instead.
+    put:
+      operationId: putVendorsFieldOptions
+      summary: Replace Vendor Dropdown Field Options
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - options
+              properties:
+                options:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DropdownOption'
+      responses:
+        '200':
+          description: Options replaced successfully. The full new options list is returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  options:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DropdownOption'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Replaces the entire list of options for a Dropdown custom field on vendors. All existing options are discarded and replaced with the provided list. Returns 409 if the provided list contains duplicate names (case-insensitive). To append without replacing, use POST instead.
+    servers:
+    - url: '{{server}}:{{port}}'
+  /v2/vendors/fields/{fieldID}/options/{optionName}:
+    delete:
+      operationId: deleteVendorsFieldOption
+      summary: Delete Vendor Dropdown Field Option
+      parameters:
+      - name: fieldID
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The ID of the dropdown suggested field.
+      - name: optionName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The URL-encoded name of the option to delete.
+      responses:
+        '204':
+          description: Option deleted successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+      - Routes
+      description: Removes a single option from a Dropdown custom field on vendors by name (URL-encoded). Returns 404 if the option does not exist.
+    servers:
+    - url: '{{server}}:{{port}}'
 components:
   schemas:
-    BudgetStep:
-      type: object
-      properties:
-        stepID:
-          type: integer
-        budgetID:
-          type: integer
-        name:
-          type: string
-        sortOrder:
-          type: integer
-    Budget:
-      type: object
-      properties:
-        budgetID:
-          type: integer
-        name:
-          type: string
-        locationID:
-          type: integer
-        awaitingAllowPOEdit:
-          type: boolean
-        awaitingUserID:
-          type: integer
-        awaitingProfileID:
-          type: integer
-        awaitingEmailSend:
-          type: boolean
-        prUserID:
-          type: integer
-        prProfileID:
-          type: integer
-        prEmailSend:
-          type: boolean
-        defaultBudget:
-          type: object
-          properties:
-            global:
-              type: boolean
-            purchaseRequests:
-              type: boolean
-            minPartQtyPOs:
-              type: boolean
-        meta:
-          type: object
-          properties:
-            steps:
-              type: string
-            location:
-              type: string
     Location:
       type: object
       properties:
@@ -13740,182 +15611,184 @@ components:
           format: uri
         currencyCode:
           type: string
-    Asset:
+    Bill:
       type: object
       properties:
-        assetID:
+        billID:
           type: integer
-        name:
-          type: string
-        startedOn:
+        poID:
           type: integer
-        lastEdited:
+        status:
           type: integer
-        parentAssetID:
-          type: integer
-        locationID:
-          type: integer
-        hoursPerWeek:
-          type: integer
-        meta:
-          type: object
-          properties:
-            fields:
-              type: string
-            tasks:
-              type: string
-        workRequestPortal:
-          type: string
-          format: uri
-        image:
-          type: array
-    Vendor:
-      type: object
-      properties:
-        meta:
-          type: object
-          properties:
-            fields:
-              type: string
-        vendorID:
-          type: integer
-        name:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-        contact:
-          type: string
-        address:
-          type: string
-        locationID:
-          type: integer
-        startedOn:
-          type: integer
-        lastEdited:
-          type: integer
-        image:
-          type: array
-          items:
-            type: object
-            properties:
-              fileName:
-                type: string
-              link:
-                type: string
-                format: uri
-    User:
-      type: object
-      properties:
         userID:
           type: integer
-        username:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-          format: utc-millisec
-        firstName:
-          type: string
-        lastName:
-          type: string
-        wage:
+        userIDStarted:
           type: integer
-        active:
-          type: string
-        emailNotificationActive:
-          type: string
-        pushNotificationActive:
-          type: string
-        workdayHours:
+        userIDMarkPaid:
           type: integer
-        dateAdded:
+        billNumber:
           type: integer
-        teams:
-          type: array
-          items:
-            type: object
-            properties:
-              teamID:
-                type: integer
-              locationID:
-                type: integer
-              name:
-                type: string
-        roles:
-          type: array
-          items:
-            type: object
-            properties:
-              roleID:
-                type: integer
-              locationID:
-                type: integer
-              name:
-                type: string
-    AssetPart:
+        locationID:
+          type: integer
+        date:
+          type: integer
+        meta:
+          type: object
+          properties:
+            items:
+              type: string
+            po:
+              type: string
+            transactions:
+              type: string
+    Me:
       type: object
       properties:
-        relationID:
+        customerName:
+          type: string
+        customerPlan:
+          type: string
+          enum:
+          - starter
+          - professional
+          - business
+          - enterprise
+          - legacy
+    Budget:
+      type: object
+      properties:
+        budgetID:
           type: integer
-        partID:
+        name:
+          type: string
+        locationID:
           type: integer
-        assetID:
+        awaitingAllowPOEdit:
+          type: boolean
+        awaitingUserID:
           type: integer
-        qty:
+        awaitingProfileID:
+          type: integer
+        awaitingEmailSend:
+          type: boolean
+        prUserID:
+          type: integer
+        prProfileID:
+          type: integer
+        prEmailSend:
+          type: boolean
+        defaultBudget:
+          type: object
+          properties:
+            global:
+              type: boolean
+            purchaseRequests:
+              type: boolean
+            minPartQtyPOs:
+              type: boolean
+        meta:
+          type: object
+          properties:
+            steps:
+              type: string
+            location:
+              type: string
+    ErrorResponse:
+      description: 'Error response body. The API emits two shapes today: the standard `{ message }` shape returned by the central error handler and most controllers, and the legacy `{ error, success, msg }` shape returned by the auth middleware. Some controllers also include extra fields (e.g. `success`, conflict metadata).'
+      oneOf:
+      - type: object
+        required:
+        - message
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          raw:
+            description: Optional raw error object (validation errors).
+      - type: object
+        required:
+        - error
+        - msg
+        properties:
+          error:
+            type: integer
+            description: Numeric HTTP status echoed in the body.
+          success:
+            type: boolean
+          msg:
+            type: string
+    WorkRequestSubmission:
+      type: object
+      properties:
+        workRequestSubmissionId:
+          type: integer
+        status:
+          type: string
+          enum:
+          - Pending
+          - Approved
+          - Rejected
+        createdByUserId:
           type: integer
         createdAt:
-          type: integer
-        lastEdited:
-          type: integer
-        associationType:
           type: string
-    TaskInstruction:
-      type: object
-      properties:
-        instructionID:
-          type: integer
-        taskID:
-          type: integer
-        parentInstructionID:
-          type: integer
-        instruction:
+        updatedAt:
           type: string
-        type:
+        deletedAt:
+          type:
+          - string
+          - 'null'
+        reviewedByUserId:
+          type:
+          - integer
+          - 'null'
+        reviewedAt:
+          type:
+          - string
+          - 'null'
+        reviewedReason:
+          type:
+          - string
+          - 'null'
+        additionalNotes:
+          type:
+          - string
+          - 'null'
+        locationId:
           type: integer
-        options:
-          type: array
-        response:
-          type: boolean
-        instructionFiles:
-          type: array
-    LogEntry:
-      type: object
-      properties:
-        logID:
+        assetId:
+          type:
+          - integer
+          - 'null'
+        priorityId:
+          type:
+          - integer
+          - 'null'
+        dueDateUnit:
+          type:
+          - string
+          - 'null'
+        requestInformation:
+          type: object
+        customerID:
           type: integer
-        dateCreated:
-          type: integer
-        logEntry:
+        requestTitle:
           type: string
-        userID:
-          type: integer
-        logFiles:
-          type: array
-          items:
-            type: object
-            properties:
-              fileID:
-                type: integer
-              fileName:
-                type: string
-              link:
-                type: string
-                format: uri
+        assignedToProfileId:
+          type:
+          - integer
+          - 'null'
+        requestDescription:
+          type:
+          - string
+          - 'null'
+        checklistID:
+          type:
+          - integer
+          - 'null'
+        requesterName:
+          type: string
     Task:
       type: object
       properties:
@@ -14042,23 +15915,157 @@ components:
           type: integer
         status:
           type: integer
-    PartLogEntry:
+    LogEntry:
       type: object
       properties:
         logID:
           type: integer
         dateCreated:
           type: integer
-        partID:
-          type: integer
-        sourceID:
-          type: integer
         logEntry:
           type: string
         userID:
           type: integer
-        associatedID:
+        logFiles:
+          type: array
+          items:
+            type: object
+            properties:
+              fileID:
+                type: integer
+              fileName:
+                type: string
+              link:
+                type: string
+                format: uri
+    Asset:
+      type: object
+      properties:
+        assetID:
           type: integer
+        name:
+          type: string
+        startedOn:
+          type: integer
+        lastEdited:
+          type: integer
+        parentAssetID:
+          type: integer
+        locationID:
+          type: integer
+        hoursPerWeek:
+          type: integer
+        meta:
+          type: object
+          properties:
+            fields:
+              type: string
+            tasks:
+              type: string
+        workRequestPortal:
+          type: string
+          format: uri
+        image:
+          type: array
+    POItem:
+      type: object
+      properties:
+        poID:
+          type: integer
+        poItemID:
+          type: integer
+        itemType:
+          type: integer
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        glID:
+          type: integer
+        partID:
+          type: integer
+        taskID:
+          type: integer
+        poNumber:
+          type: integer
+        qty:
+          type: integer
+        rate:
+          type: integer
+        tax:
+          type: integer
+        discount:
+          type: integer
+        shipping:
+          type: integer
+        qtyReceived:
+          type: integer
+        orderUnitAbbreviation:
+          type:
+          - string
+          - 'null'
+        lastEdited:
+          type: integer
+        meta:
+          type: object
+          properties:
+            po:
+              type: string
+    User:
+      type: object
+      properties:
+        userID:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          format: utc-millisec
+        firstName:
+          type: string
+        lastName:
+          type: string
+        wage:
+          type: integer
+        active:
+          type: string
+        emailNotificationActive:
+          type: string
+        pushNotificationActive:
+          type: string
+        workdayHours:
+          type: integer
+        dateAdded:
+          type: integer
+        teams:
+          type: array
+          items:
+            type: object
+            properties:
+              teamID:
+                type: integer
+              locationID:
+                type: integer
+              name:
+                type: string
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              roleID:
+                type: integer
+              locationID:
+                type: integer
+              name:
+                type: string
     Part:
       type: object
       properties:
@@ -14115,193 +16122,36 @@ components:
                 type: integer
         image:
           type: array
-    ErrorResponse:
-      description: 'Error response body. The API emits two shapes today: the standard `{ message }` shape returned by the central error handler and most controllers, and the legacy `{ error, success, msg }` shape returned by the auth middleware. Some controllers also include extra fields (e.g. `success`, conflict metadata).'
-      oneOf:
-      - type: object
-        required:
-        - message
-        properties:
-          message:
-            type: string
-          success:
-            type: boolean
-          raw:
-            description: Optional raw error object (validation errors).
-      - type: object
-        required:
-        - error
-        - msg
-        properties:
-          error:
-            type: integer
-            description: Numeric HTTP status echoed in the body.
-          success:
-            type: boolean
-          msg:
-            type: string
-    WorkRequestSubmission:
+    BudgetStep:
       type: object
       properties:
-        workRequestSubmissionId:
+        stepID:
           type: integer
-        status:
-          type: string
-          enum:
-          - Pending
-          - Approved
-          - Rejected
-        createdByUserId:
-          type: integer
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-        deletedAt:
-          type:
-          - string
-          - 'null'
-        reviewedByUserId:
-          type:
-          - integer
-          - 'null'
-        reviewedAt:
-          type:
-          - string
-          - 'null'
-        reviewedReason:
-          type:
-          - string
-          - 'null'
-        additionalNotes:
-          type:
-          - string
-          - 'null'
-        locationId:
-          type: integer
-        assetId:
-          type:
-          - integer
-          - 'null'
-        priorityId:
-          type:
-          - integer
-          - 'null'
-        dueDateUnit:
-          type:
-          - string
-          - 'null'
-        requestInformation:
-          type: object
-        customerID:
-          type: integer
-        requestTitle:
-          type: string
-        assignedToProfileId:
-          type:
-          - integer
-          - 'null'
-        requestDescription:
-          type:
-          - string
-          - 'null'
-        checklistID:
-          type:
-          - integer
-          - 'null'
-        requesterName:
-          type: string
-    POItem:
-      type: object
-      properties:
-        poID:
-          type: integer
-        poItemID:
-          type: integer
-        itemType:
+        budgetID:
           type: integer
         name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        glID:
+          type: string
+        sortOrder:
           type: integer
-        partID:
+    TaskInstruction:
+      type: object
+      properties:
+        instructionID:
           type: integer
         taskID:
           type: integer
-        poNumber:
+        parentInstructionID:
           type: integer
-        qty:
-          type: integer
-        rate:
-          type: integer
-        tax:
-          type: integer
-        discount:
-          type: integer
-        shipping:
-          type: integer
-        qtyReceived:
-          type: integer
-        orderUnitAbbreviation:
-          type:
-          - string
-          - 'null'
-        lastEdited:
-          type: integer
-        meta:
-          type: object
-          properties:
-            po:
-              type: string
-    Me:
-      type: object
-      properties:
-        customerName:
+        instruction:
           type: string
-        customerPlan:
-          type: string
-          enum:
-          - starter
-          - professional
-          - business
-          - enterprise
-          - legacy
-    Bill:
-      type: object
-      properties:
-        billID:
+        type:
           type: integer
-        poID:
-          type: integer
-        status:
-          type: integer
-        userID:
-          type: integer
-        userIDStarted:
-          type: integer
-        userIDMarkPaid:
-          type: integer
-        billNumber:
-          type: integer
-        locationID:
-          type: integer
-        date:
-          type: integer
-        meta:
-          type: object
-          properties:
-            items:
-              type: string
-            po:
-              type: string
-            transactions:
-              type: string
+        options:
+          type: array
+        response:
+          type: boolean
+        instructionFiles:
+          type: array
     PurchaseOrder:
       type: object
       properties:
@@ -14416,23 +16266,358 @@ components:
                         type: string
         state:
           type: integer
+    Vendor:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            fields:
+              type: string
+        vendorID:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        contact:
+          type: string
+        address:
+          type: string
+        locationID:
+          type: integer
+        startedOn:
+          type: integer
+        lastEdited:
+          type: integer
+        image:
+          type: array
+          items:
+            type: object
+            properties:
+              fileName:
+                type: string
+              link:
+                type: string
+                format: uri
+    PartLogEntry:
+      type: object
+      properties:
+        logID:
+          type: integer
+        dateCreated:
+          type: integer
+        partID:
+          type: integer
+        sourceID:
+          type: integer
+        logEntry:
+          type: string
+        userID:
+          type: integer
+        associatedID:
+          type: integer
+    AssetPart:
+      type: object
+      properties:
+        relationID:
+          type: integer
+        partID:
+          type: integer
+        assetID:
+          type: integer
+        qty:
+          type: integer
+        createdAt:
+          type: integer
+        lastEdited:
+          type: integer
+        associationType:
+          type: string
+    Location_2:
+      type: object
+      properties:
+        locationID:
+          type: integer
+        name:
+          type: string
+        regionID:
+          type: integer
+        timezone:
+          type: string
+        weeklyOperationHours:
+          type: integer
+        address:
+          type: 'null'
+        address2:
+          type: 'null'
+        phone:
+          type: 'null'
+        metaField1:
+          type: 'null'
+        metaField2:
+          type: 'null'
+        metaField3:
+          type: 'null'
+        geoLocation:
+          type: 'null'
+        workRequestPortal:
+          type: string
+          format: uri
+        currencyCode:
+          type: string
+    Task_2:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            invoices:
+              type: string
+            labor:
+              type: string
+            partsUsage:
+              type: string
+            instructions:
+              type: string
+            status:
+              type: string
+        taskID:
+          type: integer
+        poIDs:
+          type: array
+          items:
+            type: integer
+        name:
+          type: string
+        userID:
+          type: integer
+        teamID:
+          type: integer
+        locationID:
+          type: integer
+        template:
+          type: boolean
+        createdDate:
+          type: integer
+        scheduledStart:
+          type: integer
+        scheduledEnd:
+          type: integer
+        due:
+          type: integer
+        description:
+          type: string
+        dateCompleted:
+          type: integer
+        lastEdited:
+          type: integer
+        lastEditedByUser:
+          type: integer
+        completedByUser:
+          type: integer
+        assetID:
+          type: integer
+        completedUserWage:
+          type: integer
+        priority:
+          type: integer
+        priorityID:
+          type: integer
+        downtime:
+          type: integer
+        completionNotes:
+          type: 'null'
+        requestorName:
+          type: 'null'
+        requestorEmail:
+          type: 'null'
+        requestorPhone:
+          type: 'null'
+        requestTitle:
+          type: 'null'
+        requestField1:
+          type: 'null'
+        requestField2:
+          type: 'null'
+        requestField3:
+          type: 'null'
+        requestDropdown1:
+          type: 'null'
+        requestDropdown2:
+          type: 'null'
+        requestDropdown3:
+          type: 'null'
+        requestorDescription:
+          type: 'null'
+        meta1:
+          type: 'null'
+        meta2:
+          type: 'null'
+        meta3:
+          type: 'null'
+        statusID:
+          type: integer
+        type:
+          type: integer
+        status:
+          type: integer
+    POItem_2:
+      type: object
+      properties:
+        poID:
+          type: integer
+        poItemID:
+          type: integer
+        itemType:
+          type: integer
+        name:
+          type: 'null'
+        description:
+          type: 'null'
+        glID:
+          type: integer
+        partID:
+          type: integer
+        taskID:
+          type: integer
+        poNumber:
+          type: integer
+        qty:
+          type: integer
+        rate:
+          type: integer
+        tax:
+          type: integer
+        discount:
+          type: integer
+        shipping:
+          type: integer
+        qtyReceived:
+          type: integer
+        orderUnitAbbreviation:
+          type: 'null'
+        lastEdited:
+          type: integer
+        meta:
+          type: object
+          properties:
+            po:
+              type: string
+    PurchaseOrder_2:
+      type: object
+      properties:
+        poID:
+          type: integer
+        taskID:
+          type: integer
+        budgetID:
+          type: integer
+        poNumber:
+          type: integer
+        vendorID:
+          type: integer
+        locationID:
+          type: integer
+        userIDStarted:
+          type: integer
+        userID:
+          type: integer
+        teamID:
+          type: integer
+        requestedByUserID:
+          type: integer
+        date:
+          type: integer
+        expectedDate:
+          type: 'null'
+        notesToVendor:
+          type: string
+        billTo:
+          type: 'null'
+        shipTo:
+          type: 'null'
+        status:
+          type: integer
+        customField1:
+          type: 'null'
+        customField2:
+          type: 'null'
+        customField3:
+          type: 'null'
+        customField4:
+          type: 'null'
+        customField5:
+          type: 'null'
+        customField6:
+          type: 'null'
+        lastEdited:
+          type: integer
+        poPrefix:
+          type: 'null'
+        meta:
+          type: object
+          properties:
+            items:
+              type: string
+            state:
+              type: string
+            stateTransitions:
+              type: string
+            budget:
+              type: string
+            budgetSteps:
+              type: string
+        stateDetails:
+          type: object
+          properties:
+            current:
+              type: object
+              properties:
+                number:
+                  type: integer
+                name:
+                  type: string
+                label:
+                  type: string
+                canModify:
+                  type: boolean
+            transitions:
+              type: object
+              properties:
+                available:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      state:
+                        type: integer
+                      name:
+                        type: string
+                      label:
+                        type: string
+        state:
+          type: integer
+    DropdownOption:
+      type: object
+      description: A single option in a Dropdown custom field.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: The display name of the dropdown option.
   responses:
-    EmptySuccess:
-      description: The operation completed successfully. The response body is empty.
-    InvalidStateTransition:
-      description: The requested state transition is not allowed from the resource's current state.
+    BadRequest:
+      description: The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-              message:
-                type: string
-          example:
-            success: false
-            message: Transition not allowed from current state
+            $ref: '#/components/schemas/ErrorResponse'
     ValidationLimitExceeded:
       description: A query parameter exceeds its allowed maximum (e.g. limit greater than 100).
       content:
@@ -14451,12 +16636,6 @@ components:
             error:
               status: 400
               message: '"limit" must be less than or equal to 100'
-    BadRequest:
-      description: The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
     InternalServerError:
       description: An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.
       content:
@@ -14469,14 +16648,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Conflict:
-      description: The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).
+    Unauthorized:
+      description: No `Authorization` header was provided on the request.
       content:
         application/json:
           schema:
@@ -14487,8 +16660,30 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: No `Authorization` header was provided on the request.
+    EmptySuccess:
+      description: The operation completed successfully. The response body is empty.
+    InvalidStateTransition:
+      description: The requested state transition is not allowed from the resource's current state.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              message:
+                type: string
+          example:
+            success: false
+            message: Transition not allowed from current state
+    Conflict:
+      description: The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.
       content:
         application/json:
           schema:
@@ -14507,7 +16702,16 @@ components:
           example:
             status: 404
             error: Vendor-part association not found
+    UnprocessableEntity:
+      description: The request is syntactically valid but cannot be processed due to a business rule (for example, completing a task while required steps are still open).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     BasicAuth:
       type: http
       scheme: basic
+x-refined-from:
+- limble-cmms-limble-api-v2.yaml
+- limble-cmms-limble-api-v2-openapi.yml
