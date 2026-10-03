@@ -1,63 +1,17 @@
 {
   "provider": "limble-cmms",
   "sources": [
-    "_original/limble-cmms-limble-api-v2.yaml",
-    "limble-cmms-limble-api-v2-openapi.yml"
+    "_original/limble-cmms-limble-api-v2-openapi.yml"
   ],
   "outputs": [
     "limble-cmms-routes-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/limble-cmms-limble-api-v2-openapi.yml"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "limble-cmms-limble-api-v2.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Assets",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Batch",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Bills",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Budgets",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Capacity",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Categories",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Comments",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Exceptions",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Fields",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Files",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: General Ledgers",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Image",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Images",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Instructions",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Invoices",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Items",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Labor",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Locations",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Logs",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Me",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Options",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Parts",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Priorities",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Purchasables",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Purchase Orders",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Regions",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Roles",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Routes",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Schedules",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: State",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Statuses",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Steps",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Tags",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Tasks",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Teams",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Transactions",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Units of Measure",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Users",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Vendor Associations",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Vendors",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Webhooks",
-    "limble-cmms-limble-api-v2.yaml: declared missing tag: Work Request Submissions",
-    "limble-cmms-limble-api-v2.yaml: multi-axis tagging (42 tags, 1 first tags, 2.72x duplication over 200 operations) \u2014 split on first tag, 200 operations narrowed",
     "limble-cmms-limble-api-v2-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "limble-cmms-limble-api-v2-openapi.yml: declared missing tag: Assets",
     "limble-cmms-limble-api-v2-openapi.yml: declared missing tag: Batch",
@@ -102,10 +56,10 @@
     "limble-cmms-limble-api-v2-openapi.yml: declared missing tag: Webhooks",
     "limble-cmms-limble-api-v2-openapi.yml: declared missing tag: Work Request Submissions",
     "limble-cmms-limble-api-v2-openapi.yml: multi-axis tagging (42 tags, 1 first tags, 2.74x duplication over 212 operations) \u2014 split on first tag, 212 operations narrowed",
-    "tag 'Routes' spans 2 source specs (limble-cmms-limble-api-v2.yaml, limble-cmms-limble-api-v2-openapi.yml): per-path servers applied",
     "apis.yml register: already-registered"
   ],
   "skipped": [
+    "_original/limble-cmms-limble-api-v2.yaml: archived document superseded by a larger archived document",
     "limble-cmms-routes-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]
 }
