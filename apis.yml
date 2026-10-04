@@ -29,6 +29,9 @@ name: Limble CMMS
 description: Limble CMMS is a cloud-based computerized maintenance management system (CMMS) for manufacturing, facilities, and fleet maintenance teams. The Limble REST API V2 provides programmatic access to assets, locations, work orders, preventive maintenance schedules, parts inventory, purchase orders, vendors, users, and webhooks across regionally distributed endpoints covering North America, Canada, Australia, and Europe.
 type: Index
 url: https://raw.githubusercontent.com/api-evangelist/limble-cmms/refs/heads/main/apis.yml
+x-docs-platform: postman
+x-docs-platform-confidence: high
+x-docs-platform-checked: 2026-10-03
 tags:
 - CMMS
 - Maintenance Management
