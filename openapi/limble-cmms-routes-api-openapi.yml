@@ -14792,275 +14792,104 @@ paths:
               name: Barrel
               abbreviation: BRL
 components:
-  schemas:
-    Location:
-      type: object
-      properties:
-        locationID:
-          type: integer
-        name:
-          type: string
-        regionID:
-          type: integer
-        timezone:
-          type: string
-        weeklyOperationHours:
-          type: integer
-        address:
-          type: 'null'
-        address2:
-          type: 'null'
-        phone:
-          type: 'null'
-        metaField1:
-          type: 'null'
-        metaField2:
-          type: 'null'
-        metaField3:
-          type: 'null'
-        geoLocation:
-          type: 'null'
-        workRequestPortal:
-          type: string
-          format: uri
-        currencyCode:
-          type: string
-    PartLogEntry:
-      type: object
-      properties:
-        logID:
-          type: integer
-        dateCreated:
-          type: integer
-        partID:
-          type: integer
-        sourceID:
-          type: integer
-        logEntry:
-          type: string
-        userID:
-          type: integer
-        associatedID:
-          type: integer
-    TaskInstruction:
-      type: object
-      properties:
-        instructionID:
-          type: integer
-        taskID:
-          type: integer
-        parentInstructionID:
-          type: integer
-        instruction:
-          type: string
-        type:
-          type: integer
-        options:
-          type: array
-        response:
-          type: boolean
-        instructionFiles:
-          type: array
-    Me:
-      type: object
-      properties:
-        customerName:
-          type: string
-        customerPlan:
-          type: string
-          enum:
-          - starter
-          - professional
-          - business
-          - enterprise
-          - legacy
-    AssetPart:
-      type: object
-      properties:
-        relationID:
-          type: integer
-        partID:
-          type: integer
-        assetID:
-          type: integer
-        qty:
-          type: integer
-        createdAt:
-          type: integer
-        lastEdited:
-          type: integer
-        associationType:
-          type: string
-    WorkRequestSubmission:
-      type: object
-      properties:
-        workRequestSubmissionId:
-          type: integer
-        status:
-          type: string
-          enum:
-          - Pending
-          - Approved
-          - Rejected
-        createdByUserId:
-          type: integer
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-        deletedAt:
-          type:
-          - string
-          - 'null'
-        reviewedByUserId:
-          type:
-          - integer
-          - 'null'
-        reviewedAt:
-          type:
-          - string
-          - 'null'
-        reviewedReason:
-          type:
-          - string
-          - 'null'
-        additionalNotes:
-          type:
-          - string
-          - 'null'
-        locationId:
-          type: integer
-        assetId:
-          type:
-          - integer
-          - 'null'
-        priorityId:
-          type:
-          - integer
-          - 'null'
-        dueDateUnit:
-          type:
-          - string
-          - 'null'
-        requestInformation:
-          type: object
-        customerID:
-          type: integer
-        requestTitle:
-          type: string
-        assignedToProfileId:
-          type:
-          - integer
-          - 'null'
-        requestDescription:
-          type:
-          - string
-          - 'null'
-        checklistID:
-          type:
-          - integer
-          - 'null'
-        requesterName:
-          type: string
-    LogEntry:
-      type: object
-      properties:
-        logID:
-          type: integer
-        dateCreated:
-          type: integer
-        logEntry:
-          type: string
-        userID:
-          type: integer
-        logFiles:
-          type: array
-          items:
+  responses:
+    UnprocessableEntity:
+      description: The request is syntactically valid but cannot be processed due to a business rule (for example, completing a task while required steps are still open).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    TooManyRequests:
+      description: The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InvalidStateTransition:
+      description: The requested state transition is not allowed from the resource's current state.
+      content:
+        application/json:
+          schema:
             type: object
             properties:
-              fileID:
+              success:
+                type: boolean
+              message:
+                type: string
+          example:
+            success: false
+            message: Transition not allowed from current state
+    ValidationLimitExceeded:
+      description: A query parameter exceeds its allowed maximum (e.g. limit greater than 100).
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string
+          example:
+            error:
+              status: 400
+              message: '"limit" must be less than or equal to 100'
+    BadRequest:
+      description: The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The referenced resource does not exist or is not visible to the authenticated customer.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    EmptySuccess:
+      description: The operation completed successfully. The response body is empty.
+    Forbidden:
+      description: The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: No `Authorization` header was provided on the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    AssociationNotFound:
+      description: The vendor-part association does not exist.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
                 type: integer
-              fileName:
+              error:
                 type: string
-              link:
-                type: string
-                format: uri
-    Budget:
-      type: object
-      properties:
-        budgetID:
-          type: integer
-        name:
-          type: string
-        locationID:
-          type: integer
-        awaitingAllowPOEdit:
-          type: boolean
-        awaitingUserID:
-          type: integer
-        awaitingProfileID:
-          type: integer
-        awaitingEmailSend:
-          type: boolean
-        prUserID:
-          type: integer
-        prProfileID:
-          type: integer
-        prEmailSend:
-          type: boolean
-        defaultBudget:
-          type: object
-          properties:
-            global:
-              type: boolean
-            purchaseRequests:
-              type: boolean
-            minPartQtyPOs:
-              type: boolean
-        meta:
-          type: object
-          properties:
-            steps:
-              type: string
-            location:
-              type: string
-    Vendor:
-      type: object
-      properties:
-        meta:
-          type: object
-          properties:
-            fields:
-              type: string
-        vendorID:
-          type: integer
-        name:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-        contact:
-          type: string
-        address:
-          type: string
-        locationID:
-          type: integer
-        startedOn:
-          type: integer
-        lastEdited:
-          type: integer
-        image:
-          type: array
-          items:
-            type: object
-            properties:
-              fileName:
-                type: string
-              link:
-                type: string
-                format: uri
+          example:
+            status: 404
+            error: Vendor-part association not found
+    InternalServerError:
+      description: An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
     PurchaseOrder:
       type: object
       properties:
@@ -15155,31 +14984,6 @@ components:
                         type: string
         state:
           type: integer
-    ErrorResponse:
-      description: 'Error response body. The API emits two shapes today: the standard `{ message }` shape returned by the central error handler and most controllers, and the legacy `{ error, success, msg }` shape returned by the auth middleware. Some controllers also include extra fields (e.g. `success`, conflict metadata).'
-      oneOf:
-      - type: object
-        required:
-        - message
-        properties:
-          message:
-            type: string
-          success:
-            type: boolean
-          raw:
-            description: Optional raw error object (validation errors).
-      - type: object
-        required:
-        - error
-        - msg
-        properties:
-          error:
-            type: integer
-            description: Numeric HTTP status echoed in the body.
-          success:
-            type: boolean
-          msg:
-            type: string
     DropdownOption:
       type: object
       description: A single option in a Dropdown custom field.
@@ -15190,6 +14994,23 @@ components:
           type: string
           maxLength: 255
           description: The display name of the dropdown option.
+    AssetPart:
+      type: object
+      properties:
+        relationID:
+          type: integer
+        partID:
+          type: integer
+        assetID:
+          type: integer
+        qty:
+          type: integer
+        createdAt:
+          type: integer
+        lastEdited:
+          type: integer
+        associationType:
+          type: string
     Part:
       type: object
       properties:
@@ -15275,6 +15096,96 @@ components:
           format: uri
         image:
           type: array
+    WorkRequestSubmission:
+      type: object
+      properties:
+        workRequestSubmissionId:
+          type: integer
+        status:
+          type: string
+          enum:
+          - Pending
+          - Approved
+          - Rejected
+        createdByUserId:
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        deletedAt:
+          type:
+          - string
+          - 'null'
+        reviewedByUserId:
+          type:
+          - integer
+          - 'null'
+        reviewedAt:
+          type:
+          - string
+          - 'null'
+        reviewedReason:
+          type:
+          - string
+          - 'null'
+        additionalNotes:
+          type:
+          - string
+          - 'null'
+        locationId:
+          type: integer
+        assetId:
+          type:
+          - integer
+          - 'null'
+        priorityId:
+          type:
+          - integer
+          - 'null'
+        dueDateUnit:
+          type:
+          - string
+          - 'null'
+        requestInformation:
+          type: object
+        customerID:
+          type: integer
+        requestTitle:
+          type: string
+        assignedToProfileId:
+          type:
+          - integer
+          - 'null'
+        requestDescription:
+          type:
+          - string
+          - 'null'
+        checklistID:
+          type:
+          - integer
+          - 'null'
+        requesterName:
+          type: string
+    TaskInstruction:
+      type: object
+      properties:
+        instructionID:
+          type: integer
+        taskID:
+          type: integer
+        parentInstructionID:
+          type: integer
+        instruction:
+          type: string
+        type:
+          type: integer
+        options:
+          type: array
+        response:
+          type: boolean
+        instructionFiles:
+          type: array
     POItem:
       type: object
       properties:
@@ -15317,57 +15228,59 @@ components:
           properties:
             po:
               type: string
-    User:
+    LogEntry:
       type: object
       properties:
+        logID:
+          type: integer
+        dateCreated:
+          type: integer
+        logEntry:
+          type: string
         userID:
           type: integer
-        username:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-          format: utc-millisec
-        firstName:
-          type: string
-        lastName:
-          type: string
-        wage:
-          type: integer
-        active:
-          type: string
-        emailNotificationActive:
-          type: string
-        pushNotificationActive:
-          type: string
-        workdayHours:
-          type: integer
-        dateAdded:
-          type: integer
-        teams:
+        logFiles:
           type: array
           items:
             type: object
             properties:
-              teamID:
+              fileID:
                 type: integer
-              locationID:
-                type: integer
-              name:
+              fileName:
                 type: string
-        roles:
-          type: array
-          items:
-            type: object
-            properties:
-              roleID:
-                type: integer
-              locationID:
-                type: integer
-              name:
+              link:
                 type: string
+                format: uri
+    Me:
+      type: object
+      properties:
+        customerName:
+          type: string
+        customerPlan:
+          type: string
+          enum:
+          - starter
+          - professional
+          - business
+          - enterprise
+          - legacy
+    PartLogEntry:
+      type: object
+      properties:
+        logID:
+          type: integer
+        dateCreated:
+          type: integer
+        partID:
+          type: integer
+        sourceID:
+          type: integer
+        logEntry:
+          type: string
+        userID:
+          type: integer
+        associatedID:
+          type: integer
     Task:
       type: object
       properties:
@@ -15464,6 +15377,201 @@ components:
           type: integer
         status:
           type: integer
+    BudgetStep:
+      type: object
+      properties:
+        stepID:
+          type: integer
+        budgetID:
+          type: integer
+        name:
+          type: string
+        sortOrder:
+          type: integer
+    User:
+      type: object
+      properties:
+        userID:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          format: utc-millisec
+        firstName:
+          type: string
+        lastName:
+          type: string
+        wage:
+          type: integer
+        active:
+          type: string
+        emailNotificationActive:
+          type: string
+        pushNotificationActive:
+          type: string
+        workdayHours:
+          type: integer
+        dateAdded:
+          type: integer
+        teams:
+          type: array
+          items:
+            type: object
+            properties:
+              teamID:
+                type: integer
+              locationID:
+                type: integer
+              name:
+                type: string
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              roleID:
+                type: integer
+              locationID:
+                type: integer
+              name:
+                type: string
+    Location:
+      type: object
+      properties:
+        locationID:
+          type: integer
+        name:
+          type: string
+        regionID:
+          type: integer
+        timezone:
+          type: string
+        weeklyOperationHours:
+          type: integer
+        address:
+          type: 'null'
+        address2:
+          type: 'null'
+        phone:
+          type: 'null'
+        metaField1:
+          type: 'null'
+        metaField2:
+          type: 'null'
+        metaField3:
+          type: 'null'
+        geoLocation:
+          type: 'null'
+        workRequestPortal:
+          type: string
+          format: uri
+        currencyCode:
+          type: string
+    Vendor:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            fields:
+              type: string
+        vendorID:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        contact:
+          type: string
+        address:
+          type: string
+        locationID:
+          type: integer
+        startedOn:
+          type: integer
+        lastEdited:
+          type: integer
+        image:
+          type: array
+          items:
+            type: object
+            properties:
+              fileName:
+                type: string
+              link:
+                type: string
+                format: uri
+    ErrorResponse:
+      description: 'Error response body. The API emits two shapes today: the standard `{ message }` shape returned by the central error handler and most controllers, and the legacy `{ error, success, msg }` shape returned by the auth middleware. Some controllers also include extra fields (e.g. `success`, conflict metadata).'
+      oneOf:
+      - type: object
+        required:
+        - message
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          raw:
+            description: Optional raw error object (validation errors).
+      - type: object
+        required:
+        - error
+        - msg
+        properties:
+          error:
+            type: integer
+            description: Numeric HTTP status echoed in the body.
+          success:
+            type: boolean
+          msg:
+            type: string
+    Budget:
+      type: object
+      properties:
+        budgetID:
+          type: integer
+        name:
+          type: string
+        locationID:
+          type: integer
+        awaitingAllowPOEdit:
+          type: boolean
+        awaitingUserID:
+          type: integer
+        awaitingProfileID:
+          type: integer
+        awaitingEmailSend:
+          type: boolean
+        prUserID:
+          type: integer
+        prProfileID:
+          type: integer
+        prEmailSend:
+          type: boolean
+        defaultBudget:
+          type: object
+          properties:
+            global:
+              type: boolean
+            purchaseRequests:
+              type: boolean
+            minPartQtyPOs:
+              type: boolean
+        meta:
+          type: object
+          properties:
+            steps:
+              type: string
+            location:
+              type: string
     Bill:
       type: object
       properties:
@@ -15494,114 +15602,6 @@ components:
               type: string
             transactions:
               type: string
-    BudgetStep:
-      type: object
-      properties:
-        stepID:
-          type: integer
-        budgetID:
-          type: integer
-        name:
-          type: string
-        sortOrder:
-          type: integer
-  responses:
-    EmptySuccess:
-      description: The operation completed successfully. The response body is empty.
-    BadRequest:
-      description: The request was malformed — either invalid JSON syntax or a validation failure (missing required field, wrong type, etc.).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    InternalServerError:
-      description: An unhandled server-side error. The body message is generic (`System unavailable...`) when the underlying cause is a database fault; otherwise it reflects the raised error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    InvalidStateTransition:
-      description: The requested state transition is not allowed from the resource's current state.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-              message:
-                type: string
-          example:
-            success: false
-            message: Transition not allowed from current state
-    Conflict:
-      description: The request conflicts with the current state of the resource (e.g. a uniqueness constraint or a referenced parent that is in the wrong state).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: The supplied credentials are invalid, the customer account is inactive, or the credentials do not have permission to perform this action.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    TooManyRequests:
-      description: The per-minute or per-hour rate limit for this credential and method has been exhausted. Inspect the `X-RateLimit-*` headers to determine when to retry.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    UnprocessableEntity:
-      description: The request is syntactically valid but cannot be processed due to a business rule (for example, completing a task while required steps are still open).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The referenced resource does not exist or is not visible to the authenticated customer.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    ValidationLimitExceeded:
-      description: A query parameter exceeds its allowed maximum (e.g. limit greater than 100).
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              error:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                  message:
-                    type: string
-          example:
-            error:
-              status: 400
-              message: '"limit" must be less than or equal to 100'
-    Unauthorized:
-      description: No `Authorization` header was provided on the request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    AssociationNotFound:
-      description: The vendor-part association does not exist.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: integer
-              error:
-                type: string
-          example:
-            status: 404
-            error: Vendor-part association not found
   securitySchemes:
     BasicAuth:
       type: http
