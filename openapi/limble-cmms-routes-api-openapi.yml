@@ -15609,3 +15609,9 @@ components:
 x-source: https://api.limblecmms.com/openapi.json
 x-fetched: '2026-09-17'
 x-original: openapi/_original/limble-solutions-openapi.json
+x-provenance:
+  method: harvested
+  publisher: Limble CMMS
+  source: https://api.limblecmms.com/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
